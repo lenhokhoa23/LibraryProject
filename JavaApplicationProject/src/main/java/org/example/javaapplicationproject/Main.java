@@ -9,6 +9,7 @@ public class Main {
         BookManagement bookManagement = new BookManagement();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Welcome to My Application");
+        bookManagement.loadBooksIntoMemory();
         try {
             boolean isUsing = true;
             while (isUsing) {
@@ -24,8 +25,11 @@ public class Main {
                 int num = Integer.parseInt(userAction);
                 switch (num) {
                     case 0: {
-                        System.out.println("hello");
-                        break;
+                        System.out.print("Nhập tài khoản: ");
+                        String username = br.readLine();
+                        System.out.println("Nhập mật khẩu: ");
+                        String password = br.readLine();
+
                     }
                     case 2: {
                         Book book = new Book(3335, "The Great Gatsby", "F. Scott Fitzgerald",
@@ -43,7 +47,7 @@ public class Main {
                         System.out.println("Enter password: ");
                         String password = br.readLine();
 
-                        Account account = new Account(username, password);
+                        Account account = new Account(username, password, "user");
                         AccountManagement.addAccount(account);
                         break;
                     }
@@ -61,6 +65,12 @@ public class Main {
                         if (userDecision.equals("yes")) {
                             AccountManagement.deleteAccount(username);
                         }
+                        break;
+                    }
+                    case 4: {
+                        System.out.println("Enter the name of book you want to find: ");
+                        String nameBook = br.readLine();
+                        bookManagement.findBookByTitleInMemory(nameBook);
                         break;
                     }
                     case 6: {

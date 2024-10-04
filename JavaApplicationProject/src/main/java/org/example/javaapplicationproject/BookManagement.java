@@ -2,11 +2,14 @@ package org.example.javaapplicationproject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.HashMap;
 
 
 public class BookManagement {
+    private static HashMap<String, Book> bookMapTitle = new HashMap<>();
+
     public static void addBook(Book book) {
         String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -49,6 +52,44 @@ public class BookManagement {
         } catch (SQLException e) {
             System.out.println("Lỗi khi xoá sách");
             e.printStackTrace();
+        }
+    }
+    public static void loadBooksIntoMemory() {
+        String sql = "SELECT * FROM books";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getInt("no"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getString("pubdate"),
+                        resultSet.getString("releaseDate"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getString("price"),
+                        resultSet.getString("subject"),
+                        resultSet.getString("category"),
+                        resultSet.getString("URL"),
+                        resultSet.getString("bookType"),
+                        resultSet.getString("quantity")
+                );
+                // Thêm sách vào HashMap
+                bookMapTitle.put(book.getTitle(), book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void findBookByTitleInMemory(String title) {
+        Book book = bookMapTitle.get(title);
+        if (book == null) {
+            System.out.println("Không tìm thấy sách có tựa đề " + title);
+        } else {
+            book.printInfoBook();
         }
     }
 }

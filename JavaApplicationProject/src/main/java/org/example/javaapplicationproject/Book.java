@@ -1,5 +1,7 @@
 package org.example.javaapplicationproject;
 
+import java.sql.SQLOutput;
+
 public class Book {
     private int no;          // Mã số sách
     private String title;       // Tên sách
@@ -127,6 +129,20 @@ public class Book {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public void printInfoBook() {
+        System.out.println("Tên cuốn sách: " + title);
+        System.out.println("Tác giả: " + author);
+        System.out.println("Ngày xuất bản: " + pubdate);
+        System.out.println("Ngày phát hành: " + releaseDate);
+        System.out.println("Mã số ISBN: " + ISBN);
+        System.out.println("Giá sách: " + price);
+        System.out.println("Chủ đề: " + subject);
+        System.out.println("Thuộc danh mục: " + category);
+        System.out.println("Loại sách: " + bookType);
+        System.out.println("Số sách còn lại: " + quantity);
+        System.out.println("Xem sách tại: " + URL);
     }
 }
 
