@@ -18,7 +18,8 @@ public class Main {
                 System.out.println("[2] Add document");
                 System.out.println("[3] Remove document");
                 System.out.println("[4] Find document");
-                System.out.println("[5] Exit");
+                System.out.println("[5] Remove user");
+                System.out.println("[6] Exit");
                 String userAction = br.readLine();
                 int num = Integer.parseInt(userAction);
                 switch (num) {
@@ -46,7 +47,23 @@ public class Main {
                         AccountManagement.addAccount(account);
                         break;
                     }
+                    case 3: {
+                        System.out.println("Enter the name of book you want to remove:");
+                        String bookName = br.readLine();
+                        BookManagement.deleteBook(bookName);
+                        break;
+                    }
                     case 5: {
+                        System.out.println("Enter the username that you want to remove:");
+                        String username = br.readLine();
+                        System.out.println("Are you sure you want to delete this account?, Type 'yes' or 'no'");
+                        String userDecision = br.readLine();
+                        if (userDecision.equals("yes")) {
+                            AccountManagement.deleteAccount(username);
+                        }
+                        break;
+                    }
+                    case 6: {
                         isUsing = false;
                         System.out.println("....");
                         break;

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+
+
 public class BookManagement {
     public static void addBook(Book book) {
         String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
@@ -30,6 +32,22 @@ public class BookManagement {
 
         } catch (SQLException e) {
             System.out.println("Lỗi khi thêm sách!");
+            e.printStackTrace();
+        }
+    }
+    public static void deleteBook (String title) {
+        String sql = "DELETE FROM books where title = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, title);
+            int rowAffected = statement.executeUpdate();
+            if (rowAffected > 0) {
+                System.out.println("Đã xoá thành công cuốn sách này!");
+            } else {
+                System.out.println("Không tồn tại cuốn sách này!");
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi xoá sách");
             e.printStackTrace();
         }
     }

@@ -18,4 +18,20 @@ public class AccountManagement {
             e.printStackTrace();
         }
     }
+    public static void deleteAccount(String username) {
+        String sql = "DELETE FROM accounts WHERE username = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            int rowAffected = statement.executeUpdate();
+            if (rowAffected > 0) {
+                System.out.println("Xoá tài khoản thành công!");
+            } else {
+                System.out.println("Không tồn tại tài khoản này!");
+            }
+        } catch (SQLException e) {
+            System.out.println("Đã xảy ra lỗi khi xoá tài khoản!");
+            e.printStackTrace();
+        }
+    }
 }
