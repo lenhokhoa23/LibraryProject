@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginManagement {
-    public static void login(String username, String password) {
+    public static int login(String username, String password) {
         String sql = "SELECT * FROM accounts WHERE username = ? AND password = ?";
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -19,8 +19,10 @@ public class LoginManagement {
                 System.out.println("Đăng nhập thành công với vai trò " + role);
                 if (role.equals("admin")) {
                     Menu.showAdminMenu();
+                    return 1;
                 } else {
                     Menu.showUserMenu();
+                    return 0;
                 }
             } else {
                 System.out.println("Sai tên đăng nhập hoặc mật khẩu!");
@@ -29,5 +31,6 @@ public class LoginManagement {
             System.out.println("Lỗi khi đăng nhập!");
             e.printStackTrace();
         }
+        return -1;
     }
 }

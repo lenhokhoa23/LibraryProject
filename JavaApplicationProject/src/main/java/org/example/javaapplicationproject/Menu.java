@@ -6,15 +6,15 @@ public class Menu {
         System.out.println("Chào Admin! Các chức năng khả dụng:");
         System.out.println("[1] Thêm sách");
         System.out.println("[2] Xóa sách");
-        System.out.println("[3] Cập nhật sách");
-        System.out.println("[4] Tìm sách");
-        System.out.println("[5] Xoá người dùng");
+        System.out.println("[3] Tìm sách");
+        System.out.println("[4] Xoá người dùng");
+        System.out.println("[5] Thoát");
     }
 
     // Hiển thị menu cho User
     public static void showUserMenu() {
         System.out.println("Chào User! Các chức năng khả dụng:");
         System.out.println("[1] Tìm sách");
-        System.out.println("[2] Xem thông tin sách");
+        System.out.println("[2] Thoát");
     }
 }
