@@ -21,7 +21,6 @@ public class DatabaseConnection {
             // Kết nối tới cơ sở dữ liệu
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
-            System.out.println("Kết nối thành công!");
         } catch (ClassNotFoundException e) {
             System.out.println("Không tìm thấy driver MySQL.");
             e.printStackTrace();
