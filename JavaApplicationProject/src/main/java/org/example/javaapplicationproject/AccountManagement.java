@@ -10,7 +10,7 @@ public class AccountManagement {
 
 
     public static void addAccount(Account account) {
-        String sql = "INSERT INTO accounts (username, password)" + "VALUES(?, ?, ?)";
+        String sql = "INSERT INTO accounts (username, password, role)" + "VALUES(?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, account.getUsername());
