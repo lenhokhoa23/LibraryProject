@@ -65,7 +65,7 @@ public class Main {
                                 }
                                 case 5: {
                                     isUsing = false;
-                                    System.out.println("....");
+                                    System.out.println("Goodbye...");
                                     break;
                                 }
                             }
@@ -81,7 +81,7 @@ public class Main {
                                 }
                                 case 2: {
                                     isUsing = false;
-                                    System.out.println("....");
+                                    System.out.println("Goodbye...");
                                     break;
                                 }
                             }
@@ -100,7 +100,7 @@ public class Main {
                     }
                     case 2: {
                         isUsing = false;
-                        System.out.println("....");
+                        System.out.println("Goodbye...");
                         break;
                     }
                 }
