@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class AccountManagement {
     private static HashMap<String, Account> accountMap = new HashMap<>();
 
+    /** addAccount method return. */
     public static void addAccount(Account account) {
         String sql = "INSERT INTO accounts (username, password, role)" + "VALUES(?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();

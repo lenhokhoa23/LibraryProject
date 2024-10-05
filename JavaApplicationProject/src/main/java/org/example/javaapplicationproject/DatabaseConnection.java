@@ -12,6 +12,7 @@ public class DatabaseConnection {
     private static final String PASSWORD = "";
 
     // Phương thức kết nối với cơ sở dữ liệu
+    @SuppressWarnings("exports")
     public static Connection getConnection() {
         Connection connection = null;
         try {
