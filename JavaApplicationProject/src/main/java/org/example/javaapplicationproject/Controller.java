@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class Controller {
+public class Controller {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Controller() {
@@ -33,10 +33,8 @@ public abstract class Controller {
                     String role = resultSet.getString("role");
                     System.out.println("Đăng nhập thành công với vai trò " + role);
                     if (role.equals("admin")) {
-                        Menu.showAdminMenu();
                         return 1;
                     } else {
-                        Menu.showUserMenu();
                         return 0;
                     }
                 } else {
@@ -71,7 +69,7 @@ public abstract class Controller {
             BookManagement.deleteBook(bookName);
 
         } catch (IOException e) {
-            System.out.println("An error occurred while reading the book name: " + e.getMessage());
+            System.out.println("Không tồn tại cuốn sách này!");
         }
     }
 
@@ -97,7 +95,18 @@ public abstract class Controller {
                 AccountManagement.deleteAccount(usernameRemove);
             }
         } catch (IOException e) {
-            System.out.println("An error occurred while finding the username: " + e.getMessage());
+            System.out.println();
         }
     }
+
+    public void findUser() {
+        try {
+            System.out.println("Enter the username that you want to find:");
+            String username = br.readLine();
+            AccountManagement.findUser(username);
+        } catch (IOException e) {
+            System.out.println();
+        }
+    }
+
 }

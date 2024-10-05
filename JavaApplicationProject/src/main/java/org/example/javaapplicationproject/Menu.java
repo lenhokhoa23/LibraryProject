@@ -8,13 +8,15 @@ public class Menu {
         System.out.println("[2] Xóa sách");
         System.out.println("[3] Tìm sách");
         System.out.println("[4] Xoá người dùng");
-        System.out.println("[5] Thoát");
+        System.out.println("[5] Tìm người dùng");
+        System.out.println("[6] Thoát");
     }
 
     // Hiển thị menu cho User
     public static void showUserMenu() {
         System.out.println("Chào User! Các chức năng khả dụng:");
         System.out.println("[1] Tìm sách");
-        System.out.println("[2] Thoát");
+        System.out.println("[2] Tìm người dùng");
+        System.out.println("[3] Thoát");
     }
 }

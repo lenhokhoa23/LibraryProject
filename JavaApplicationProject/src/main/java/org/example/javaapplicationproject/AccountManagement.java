@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class AccountManagement {
-
+    private static HashMap<String, Account> accountMap = new HashMap<>();
 
     public static void addAccount(Account account) {
         String sql = "INSERT INTO accounts (username, password, role)" + "VALUES(?, ?, ?)";
@@ -19,8 +19,7 @@ public class AccountManagement {
             statement.executeUpdate();
             System.out.println("Tạo tài khoản thành công!");
         } catch (SQLException e) {
-            System.out.println("Lỗi khi thêm tài khoản!");
-            e.printStackTrace();
+            System.out.println("Username này đã tồn tại, vui lòng chọn username khác!");
         }
     }
     public static void deleteAccount(String username) {
@@ -39,5 +38,65 @@ public class AccountManagement {
             e.printStackTrace();
         }
     }
+
+    public static void loadUserIntoMemory() {
+        String sql = "SELECT * FROM accounts";
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Account account = new Account(resultSet.getString(1),
+                        resultSet.getString(2), resultSet.getString(3));
+                accountMap.put(account.getUsername(), account);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi load user memory");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findUser(String username) {
+        Account account = accountMap.get(username);
+        if (account == null) {
+            System.out.println("Không tìm thấy tài khoản này!");
+        } else {
+            if (account.getRole().equals("admin")) {
+                String sql =  "SELECT * FROM librarian where username = ?";
+                try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);) {
+                    statement.setString(1, account.getUsername());
+                    ResultSet resultSet = statement.executeQuery();
+                    resultSet.next();
+                    Librarian librarian = new Librarian(resultSet.getString(1),
+                            resultSet.getString(2), resultSet.getString(3),
+                            resultSet.getString(4), resultSet.getInt(5),
+                            resultSet.getString(6));
+                    librarian.printInfo();
+                } catch (SQLException e) {
+                    System.out.println("Lỗi khi truy cập bảng librarian");
+                    e.printStackTrace();
+                }
+            } else {
+                if (account.getRole().equals("user")) {
+                    String sql = "SELECT * FROM user where username = ?";
+                    try (Connection connection = DatabaseConnection.getConnection();
+                         PreparedStatement statement = connection.prepareStatement(sql);) {
+                        statement.setString(1, account.getUsername());
+                        ResultSet resultSet = statement.executeQuery();
+                        resultSet.next();
+                        User user = new User(resultSet.getString(1),
+                                resultSet.getString(2), resultSet.getString(3),
+                                resultSet.getString(4), resultSet.getInt(5),
+                                resultSet.getInt(6), resultSet.getString(7));
+                        user.printInfo();
+                    } catch (SQLException e) {
+                        System.out.println("Lỗi khi truy cập bảng user");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
 
 }
