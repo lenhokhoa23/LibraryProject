@@ -1,19 +1,19 @@
 package org.example.javaapplicationproject;
 
 public class Person {
-    private Account account;
+    private String username;
     private String name;
     private String email;
     private String phoneNumber;
-    public Person(Account account, String name, String email, String phoneNumber) {
-        this.account = account;
+    public Person(String username, String name, String email, String phoneNumber) {
+        this.username = username;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
     public void setAccount(Account account) {
-        this.account = account;
+        this.username = username;
     }
 
     public String getName() {
@@ -41,7 +41,7 @@ public class Person {
     }
 
     public void printInfo() {
-        System.out.println("Account: " + account.getUsername());
+        System.out.println("username: " + username);
         System.out.println("Name: " + name);
         System.out.println("Email: " + email);
         System.out.println("Phone number: " + phoneNumber);

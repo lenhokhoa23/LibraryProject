@@ -5,14 +5,12 @@ public class User extends Person {
     private int borrowedBooks;
     private String membershipType;
 
-    public User() {
-        super();
-    }
-    public User(Account account, String name, String email, String phoneNumber, int id) {
-        super(account, name, email, phoneNumber);
+    public User(String username, String name, String email, String phoneNumber, int id,
+                int borrowedBooks, String membershipType) {
+        super(username, name, email, phoneNumber);
         this.UserID = id;
-        this.borrowedBooks = 0;
-        this.membershipType = "Normal";
+        this.borrowedBooks = borrowedBooks;
+        this.membershipType = membershipType;
     }
 
     public int getUserID() {
