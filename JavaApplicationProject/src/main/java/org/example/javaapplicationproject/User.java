@@ -5,6 +5,9 @@ public class User extends Person {
     private int borrowedBooks;
     private String membershipType;
 
+    public User() {
+        super();
+    }
     public User(Account account, String name, String email, String phoneNumber, int id) {
         super(account, name, email, phoneNumber);
         this.UserID = id;

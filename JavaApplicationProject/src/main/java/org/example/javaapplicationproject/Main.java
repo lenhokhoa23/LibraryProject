@@ -27,40 +27,26 @@ public class Main {
                         String password = br.readLine();
                         System.out.println();
                         int flag = LoginManagement.login(username, password);
+                        Controller controller = new Controller();
                         if (flag == 1) {
+                            Librarian librarian = new Librarian();
                             String adminAct = br.readLine();
                             int ops = Integer.parseInt(adminAct);
                             switch (ops) {
                                 case 1: {
-                                    Book book = new Book(3335, "The Great Gatsby", "F. Scott Fitzgerald",
-                                            "31-Jan-81", "1925-04-10",
-                                            "9780743273565", "10.99",
-                                            "Classic", "Fiction",
-                                            "http://example.com/gatsby",
-                                            "Novel", "5");
-                                    BookManagement.addBook(book);
+                                    controller.addBook();
                                     break;
                                 }
                                 case 2: {
-                                    System.out.println("Enter the name of book you want to remove:");
-                                    String bookName = br.readLine();
-                                    BookManagement.deleteBook(bookName);
+                                    controller.removeBook();
                                     break;
                                 }
                                 case 3: {
-                                    System.out.println("Enter the name of book you want to find: ");
-                                    String nameBook = br.readLine();
-                                    bookManagement.findBookByTitleInMemory(nameBook);
+                                    controller.findBook();
                                     break;
                                 }
                                 case 4: {
-                                    System.out.println("Enter the username that you want to remove:");
-                                    String usernameRemove = br.readLine();
-                                    System.out.println("Are you sure you want to delete this account?, Type 'yes' or 'no'");
-                                    String userDecision = br.readLine();
-                                    if (userDecision.equals("yes")) {
-                                        AccountManagement.deleteAccount(usernameRemove);
-                                    }
+                                    controller.removeUser();
                                     break;
                                 }
                                 case 5: {
@@ -74,10 +60,7 @@ public class Main {
                             int ops = Integer.parseInt(userAct);
                             switch (ops) {
                                 case 1: {
-                                    System.out.println("Enter the name of book you want to find: ");
-                                    String nameBook = br.readLine();
-                                    bookManagement.findBookByTitleInMemory(nameBook);
-                                    break;
+                                    controller.findBook();
                                 }
                                 case 2: {
                                     isUsing = false;

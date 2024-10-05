@@ -5,7 +5,6 @@ public class Person {
     private String name;
     private String email;
     private String phoneNumber;
-
     public Person(Account account, String name, String email, String phoneNumber) {
         this.account = account;
         this.name = name;
