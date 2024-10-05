@@ -21,12 +21,7 @@ public class Main {
                 int num = Integer.parseInt(userAction);
                 switch (num) {
                     case 0: {
-                        System.out.print("Nhập tài khoản: ");
-                        String username = br.readLine();
-                        System.out.print("Nhập mật khẩu: ");
-                        String password = br.readLine();
-                        System.out.println();
-                        int flag = LoginManagement.login(username, password);
+                        int flag = Controller.login();
                         if (flag == 1) {
                             String adminAct = br.readLine();
                             int ops = Integer.parseInt(adminAct);
