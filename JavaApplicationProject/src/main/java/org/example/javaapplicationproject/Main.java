@@ -41,7 +41,10 @@ public class Main {
                                         break;
                                     }
                                     case 3: {
-                                        controller.findBook();
+                                        boolean finding = true;
+                                        while (finding) {
+                                            finding = controller.findBook();
+                                        }
                                         break;
                                     }
                                     case 4: {

@@ -73,16 +73,40 @@ public class Controller {
         }
     }
 
-    public void findBook() {
+    public boolean findBook() {
         try {
-            System.out.println("Enter the name of the book you want to find:");
-            String bookName;
-            bookName = br.readLine();
-            BookManagement.findBookByTitleInMemory(bookName);
-
+            Menu.showFindMenu();
+            int ops = Integer.parseInt(br.readLine());
+            switch (ops) {
+                case 1: {
+                    System.out.println("Enter the name of the book you want to find:");
+                    String bookName;
+                    bookName = br.readLine();
+                    BookManagement.findBookByTitleInMemory(bookName);
+                    break;
+                }
+                case 2: {
+                    System.out.println("Enter the category you want to find:");
+                    String bookType;
+                    bookType = br.readLine();
+                    BookManagement.findBookByCategory(bookType);
+                    break;
+                }
+                case 3: {
+                    System.out.println("Enter the author you want to find:");
+                    String bookAuthor;
+                    bookAuthor = br.readLine();
+                    BookManagement.findBookByAuthor(bookAuthor);
+                    break;
+                }
+                case 4: {
+                    return false;
+                }
+            }
         } catch (IOException e) {
             System.out.println("An error occurred while finding the book name: " + e.getMessage());
         }
+        return true;
     }
 
     public void removeUser() {

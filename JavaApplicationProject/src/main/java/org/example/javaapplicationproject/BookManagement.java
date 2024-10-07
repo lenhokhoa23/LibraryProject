@@ -94,4 +94,60 @@ public class BookManagement {
             book.printInfoBook();
         }
     }
+
+    public static void findBookByCategory(String category) {
+        String sql = "SELECT * FROM books WHERE category = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, category);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getInt("no"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getString("pubdate"),
+                        resultSet.getString("releaseDate"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getString("price"),
+                        resultSet.getString("subject"),
+                        resultSet.getString("category"),
+                        resultSet.getString("URL"),
+                        resultSet.getString("bookType"),
+                        resultSet.getString("quantity")
+                );
+                book.printInfoBook();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void findBookByAuthor(String author) {
+        String sql = "SELECT * FROM books WHERE author = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, author);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getInt("no"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getString("pubdate"),
+                        resultSet.getString("releaseDate"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getString("price"),
+                        resultSet.getString("subject"),
+                        resultSet.getString("category"),
+                        resultSet.getString("URL"),
+                        resultSet.getString("bookType"),
+                        resultSet.getString("quantity")
+                );
+                book.printInfoBook();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
