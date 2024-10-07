@@ -17,6 +17,15 @@ public class Menu {
         System.out.println("Chào User! Các chức năng khả dụng:");
         System.out.println("[1] Tìm sách");
         System.out.println("[2] Tìm người dùng");
-        System.out.println("[3] Thoát");
+        System.out.println("[3] Mượn sách");
+        System.out.println("[4] Thoát");
+    }
+
+    public static void showFindMenu() {
+        System.out.println("Bạn muốn tìm sách như thế nào?:");
+        System.out.println("[1] Tìm sách theo tên");
+        System.out.println("[2] Tìm sách theo thể loại");
+        System.out.println("[3] Tìm sách theo tác giả");
+        System.out.println("[4] Trở lại :3");
     }
 }
