@@ -98,11 +98,35 @@ public class AccountManagement {
             }
         }
     }
+    public int fetchCartIdByUsername(String username) {
+        int cartId = -1;
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet result = null;
 
+        try {
+            String query = "SELECT Cart_ID FROM user WHERE username = ?";
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, username); // Gán giá trị username vào câu truy vấn
 
+            // Thực thi truy vấn
+            result = pstmt.executeQuery();
+            if (result.next()) {
+                cartId = result.getInt("Cart_ID"); // Gán giá trị nếu tìm thấy
+            }
 
-
-
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return cartId;
+    }
 
 }
