@@ -101,6 +101,10 @@ public class BookManagement {
         PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, category);
             ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
+            }
             while(resultSet.next()) {
                 Book book = new Book(
                         resultSet.getInt("no"),
@@ -129,6 +133,10 @@ public class BookManagement {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, author);
             ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
+            }
             while(resultSet.next()) {
                 Book book = new Book(
                         resultSet.getInt("no"),
@@ -150,4 +158,39 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
+
+    public static void findBookByComponentOfName(String component) {
+        String sql = "SELECT * FROM books WHERE title LIKE ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, "%" + component + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
+            }
+            while (resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getInt("no"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getString("pubdate"),
+                        resultSet.getString("releaseDate"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getString("price"),
+                        resultSet.getString("subject"),
+                        resultSet.getString("category"),
+                        resultSet.getString("URL"),
+                        resultSet.getString("bookType"),
+                        resultSet.getString("quantity")
+                );
+                book.printInfoBook();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
