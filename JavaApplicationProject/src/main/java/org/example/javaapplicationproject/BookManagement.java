@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 import java.util.HashMap;
 
-
-
 public class BookManagement {
     private static HashMap<String, Book> bookMapTitle = new HashMap<>();
 
@@ -40,6 +38,7 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
+
     public static void deleteBook (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -56,6 +55,7 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
+
     public static void loadBooksIntoMemory() {
         String sql = "SELECT * FROM books";
 
@@ -191,6 +191,37 @@ public class BookManagement {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public String fetchISBNFromBooks(String bookTitle) {
+        String isbn = null;
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT ISBN FROM books WHERE title = ?";
+
+            // Tạo PreparedStatement
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, bookTitle); // Gán giá trị bookTitle vào câu truy vấn
+
+            // Thực thi truy vấn
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                isbn = rs.getString("ISBN");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isbn;
     }
 
 }

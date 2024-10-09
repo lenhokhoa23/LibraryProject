@@ -3,10 +3,13 @@ package org.example.javaapplicationproject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BookManagement bookManagement = new BookManagement();
+        CartManagement cartManagement = new CartManagement();
         Controller controller = new Controller();
         AccountManagement accountManagement = new AccountManagement();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,7 +27,11 @@ public class Main {
                 int num = Integer.parseInt(userAction);
                 switch (num) {
                     case 0: {
-                        int flag = controller.login();
+                        StringBuilder usernameBuilder = new StringBuilder();
+                        StringBuilder passwordBuilder = new StringBuilder();
+                        int flag = controller.login(usernameBuilder, passwordBuilder);
+                        String username = usernameBuilder.toString();
+                        String password = passwordBuilder.toString();
                         if (flag == 1) {
                             boolean isAdminUsing = true;
                             while (isAdminUsing) {
@@ -78,7 +85,55 @@ public class Main {
                                         controller.findUser();
                                         break;
                                     }
+
                                     case 3: {
+                                        boolean found = false;
+                                        while (!found) {
+                                            System.out.println("Nhập tên sách bạn muốn mượn: ");
+                                            String bookTitle = br.readLine();
+                                            String isbn = bookManagement.fetchISBNFromBooks(bookTitle);
+                                            if (isbn != null) {
+                                                found = true;
+                                                Calendar calendar = Calendar.getInstance();
+                                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                                String startDate = dateFormat.format(calendar.getTime());
+                                                System.out.println("Chọn thời gian mượn sách:");
+                                                System.out.println("1. 1 tuần");
+                                                System.out.println("2. 2 tuần");
+                                                System.out.println("3. 1 tháng");
+                                                int choice = Integer.parseInt(br.readLine());
+                                                switch (choice) {
+                                                    case 1:
+                                                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                                                        break;
+                                                    case 2:
+                                                        calendar.add(Calendar.WEEK_OF_YEAR, 2);
+                                                        break;
+                                                    case 3:
+                                                        calendar.add(Calendar.MONTH, 1);
+                                                        break;
+                                                    default:
+                                                        System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
+                                                        return;
+                                                }
+                                                String endDate = dateFormat.format(calendar.getTime());
+                                                System.out.println("Ngày bắt đầu: " + startDate);
+                                                System.out.println("Ngày kết thúc: " + endDate);
+                                                int cart_id = accountManagement.fetchCartIdByUsername(username);
+                                                if (cart_id != -1) {
+                                                    // Thực hiện hành động với cartId
+                                                } else {
+                                                    System.out.println("Không tìm thấy Cart_ID cho username: " + username);
+                                                }
+                                                Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
+                                                cartManagement.addCart(cart);
+                                            } else {
+                                                System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    case 4: {
                                         isUsing = false;
                                         isUserUsing = false;
                                         System.out.println("Goodbye...");
@@ -87,7 +142,6 @@ public class Main {
                                 }
                             }
                         }
-
                         break;
                     }
                     case 1: {
