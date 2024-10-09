@@ -76,6 +76,7 @@ public class Main {
                                     }
                                     case 2: {
                                         controller.findUser();
+                                        break;
                                     }
                                     case 3: {
                                         isUsing = false;

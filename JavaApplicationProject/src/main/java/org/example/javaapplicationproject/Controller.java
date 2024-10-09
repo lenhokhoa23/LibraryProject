@@ -100,6 +100,13 @@ public class Controller {
                     break;
                 }
                 case 4: {
+                    System.out.println("Enter the component you remember:");
+                    String component;
+                    component = br.readLine();
+                    BookManagement.findBookByComponentOfName(component);
+                    break;
+                }
+                case 5: {
                     return false;
                 }
             }

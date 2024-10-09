@@ -26,6 +26,7 @@ public class Menu {
         System.out.println("[1] Tìm sách theo tên");
         System.out.println("[2] Tìm sách theo thể loại");
         System.out.println("[3] Tìm sách theo tác giả");
-        System.out.println("[4] Trở lại :3");
+        System.out.println("[4] Tìm sách nhưng chỉ nhớ 1 phần tên sách");
+        System.out.println("[5] Trở lại :3");
     }
 }

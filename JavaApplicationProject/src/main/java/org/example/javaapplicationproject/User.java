@@ -1,24 +1,24 @@
 package org.example.javaapplicationproject;
 
 public class User extends Person {
-    private int UserID;
+    private int Cart_ID;
     private int borrowedBooks;
     private String membershipType;
 
     public User(String username, String name, String email, String phoneNumber, int id,
                 int borrowedBooks, String membershipType) {
         super(username, name, email, phoneNumber);
-        this.UserID = id;
+        this.Cart_ID = id;
         this.borrowedBooks = borrowedBooks;
         this.membershipType = membershipType;
     }
 
     public int getUserID() {
-        return UserID;
+        return Cart_ID;
     }
 
-    public void setUserID(int userID) {
-        UserID = userID;
+    public void setCart_ID(int Cart_ID) {
+        Cart_ID = Cart_ID;
     }
 
     public int getBorrowedBook() {
@@ -40,7 +40,7 @@ public class User extends Person {
     @Override
     public void printInfo() {
         super.printInfo();
-        System.out.println("User ID " + UserID);
+        System.out.println("Cart ID: " + Cart_ID);
         System.out.println("Membership type: " + membershipType);
         System.out.println("Number of borrowed books: " + borrowedBooks);
     }

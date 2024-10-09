@@ -4,43 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    private List<Book> books;
+    private int Cart_ID;
+    private String startDate;
+    private String endDate;
+    private String ISBN;
+    private String title;
 
-    public Cart() {
-        this.books = new ArrayList<>();
+    public Cart(int cart_ID, String startDate, String endDate, String ISBN) {
+        Cart_ID = cart_ID;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.ISBN = ISBN;
     }
 
-    // Thêm sách vào giỏ
-    public void addBook(Book book) {
-        books.add(book);
-        System.out.println("Đã thêm sách \"" + book.getTitle() + "\" vào giỏ.");
+    public int getCart_ID() {
+        return Cart_ID;
     }
 
-    // Hiển thị danh sách sách trong giỏ
-    public void showCart() {
-        if (books.isEmpty()) {
-            System.out.println("Giỏ sách đang trống.");
-            return;
-        }
-
-        System.out.println("Sách trong giỏ:");
-        for (Book book : books) {
-            System.out.println("- " + book.getTitle());
-        }
+    public void setCart_ID(int cart_ID) {
+        Cart_ID = cart_ID;
     }
 
-    // Xóa sách khỏi giỏ
-    public void removeBook(Book book) {
-        if (books.remove(book)) {
-            System.out.println("Đã xóa sách \"" + book.getTitle() + "\" khỏi giỏ.");
-        } else {
-            System.out.println("Sách không có trong giỏ.");
-        }
+    public String getStartDate() {
+        return startDate;
     }
 
-    // Lấy danh sách sách trong giỏ
-    public List<Book> getBooks() {
-        return books;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
 }
 
