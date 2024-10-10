@@ -1,8 +1,5 @@
 package org.example.javaapplicationproject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Cart {
     private int Cart_ID;
     private String startDate;
@@ -10,10 +7,12 @@ public class Cart {
     private String ISBN;
     private String title;
 
-    public Cart(int cart_ID, String startDate, String endDate, String ISBN, String title) {
-        Cart_ID = cart_ID;
+
+    public Cart(int cart_ID, String startDate, String endDate, String title, String ISBN) {
+        this.Cart_ID = cart_ID;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.title = title;
         this.ISBN = ISBN;
         this.title = title;
     }
@@ -67,5 +66,13 @@ public class Cart {
 
     }
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
 

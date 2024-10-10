@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 import java.util.HashMap;
 
-
-
 public class BookManagement {
     private static HashMap<String, Book> bookMapTitle = new HashMap<>();
 
@@ -72,7 +70,9 @@ public class BookManagement {
         }
     }
 
+
     /** This function xoá sách ở database. */
+
     public static void deleteBook (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -89,6 +89,7 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
+
     public static void loadBooksIntoMemory() {
         String sql = "SELECT * FROM books";
 
@@ -229,6 +230,7 @@ public class BookManagement {
         }
     }
 
+
     /** This function return a string that contains infomations about the status
      * books that have the same name. */
     public static String getBooksStatus(String bookTitle) {
@@ -255,6 +257,128 @@ public class BookManagement {
             e.printStackTrace();
         }
         return statusBuilder.toString();
+      
+    public String fetchISBNFromBooks(String bookTitle) {
+        String isbn = null;
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT ISBN FROM books WHERE title = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, bookTitle);
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                isbn = resultSet.getString("ISBN");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isbn;
+    }
+
+    public int fetchQuantityFromBooks(String bookName) {
+        int quantity = -1;
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            String query = "SELECT quantity FROM books WHERE title = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, bookName);
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                quantity = resultSet.getInt("quantity");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return quantity;
+    }
+
+    public void updateQuantity(String bookName, String operation) {
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+        String updateQuery = "";
+
+        try {
+            connection = DatabaseConnection.getConnection();
+            if (operation.equals("BORROW")) {
+                updateQuery = "UPDATE books SET quantity = quantity - 1 WHERE title = ?";
+            } else {
+                updateQuery = "UPDATE books SET quantity = quantity + 1 WHERE title = ?";
+            }
+
+            statement = connection.prepareStatement(updateQuery);
+            statement.setString(1, bookName);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Đã cập nhật số lượng sách thành công.");
+            } else {
+                System.out.println("Không tìm thấy sách với tiêu đề: " + bookName);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteFromCart(String isbn, int cartId) {
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+
+        try {
+            String query = "DELETE FROM cart WHERE ISBN = ? AND Cart_ID = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, isbn);
+            statement.setInt(2, cartId);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Xóa thành công sách có ISBN " + isbn + " khỏi giỏ hàng với Cart_ID: " + cartId);
+            } else {
+                System.out.println("Không tìm thấy sách với ISBN " + isbn + " và Cart_ID " + cartId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

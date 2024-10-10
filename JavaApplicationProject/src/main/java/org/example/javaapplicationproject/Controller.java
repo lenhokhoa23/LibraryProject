@@ -18,18 +18,20 @@ public class Controller {
 
     }
 
-    public static int login() {
+    public static int login(StringBuilder username, StringBuilder password) {
         try {
             System.out.print("Nhập tài khoản: ");
-            String username = br.readLine();
+            String userN = br.readLine();
+            username.append(userN);
             System.out.print("Nhập mật khẩu: ");
-            String password = br.readLine();
+            String passwordN = br.readLine();
+            password.append(passwordN);
             System.out.println();
             String sql = "SELECT * FROM accounts WHERE username = ? AND password = ?";
             try (Connection connection = DatabaseConnection.getConnection();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, username);
-                statement.setString(2, password);
+                statement.setString(1, username.toString());
+                statement.setString(2, password.toString());
 
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
