@@ -144,7 +144,7 @@ public class Controller {
             System.out.println();
         }
     }
-    public static void checkCart(String username, String role, BufferedReader br) {
+    public static void checkCartUser(String username, String role) {
         int cartId = 0;
         if (role.equals("user")) {
             cartId = fetchCartIdByUsername(username);
@@ -152,17 +152,19 @@ public class Controller {
             System.out.println("Nhập tên người dùng bạn muốn xem: ");
             try {
                 username = br.readLine(); // Admin nhập tên người dùng
-                Connection conn = DatabaseConnection.getConnection();
-                try {
-                    String query = "SELECT borrowedBooks FROM cart WHERE Cart_ID = ?";
-                    PreparedStatement stmt = conn.prepareStatement(query);
-                    stmt.setInt(1, cartId); // Lấy số sách mượn từ cart có ID tương ứng.
+
+                String query = "SELECT username FROM accounts WHERE username = ?";
+                try (Connection conn = DatabaseConnection.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(query)) {
+                    stmt.setString(1, username);
                     ResultSet rs = stmt.executeQuery();
-                    if (rs.next()) {
-                        System.out.println(rs.getInt("borrowedBooks"));
+                    if (!rs.next()) {
+                        System.out.println("Người dùng \"" + username + "\" không tồn tại.");
+                        return;
                     }
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
+                    return;
                 }
                 cartId = fetchCartIdByUsername(username);
             } catch (IOException e) {
@@ -170,13 +172,48 @@ public class Controller {
                 return;
             }
         }
-        Cart cart = fetchCartByCartID(cartId);
-        if (cart != null) {
-            cart.printInfo(); // In ra giá sách người dùng
-        } else {
-            System.out.println("Giá sách cá nhân của người dùng \"" + username + "\"trống.");
+        // Lấy tổng số sách đã mượn và thông tin từng sách
+        String countQuery = "SELECT COUNT(*) AS totalBooks FROM cart WHERE Cart_ID = ?";
+        String query = "SELECT * FROM cart WHERE Cart_ID = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement countStmt = conn.prepareStatement(countQuery);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            // Lấy tổng số sách đã mượn
+            countStmt.setInt(1, cartId);
+            ResultSet countRs = countStmt.executeQuery();
+            if (countRs.next()) {
+                int totalBooks = countRs.getInt("totalBooks");
+                System.out.println("Số sách đã mượn: " + totalBooks);
+            }
+            // Lấy thông tin chi tiết từng sách
+            stmt.setInt(1, cartId);
+            ResultSet rs = stmt.executeQuery();
+            // Kiểm tra nếu giỏ hàng trống
+            if (!rs.isBeforeFirst()) {
+                System.out.println("Giá sách cá nhân của người dùng \"" + username + "\" trống.");
+                return;
+            }
+            // Duyệt qua tất cả các sách trong giỏ
+            System.out.println("Cart ID: " + cartId);
+            System.out.println("------------------------------");
+            while (rs.next()) {
+                Cart cart = new Cart(
+                        rs.getInt("Cart_ID"),
+                        rs.getString("startDate"),
+                        rs.getString("endDate"),
+                        rs.getString("ISBN"),
+                        rs.getString("title")
+                );
+                cart.printInfo(); // In ra thông tin
+                // Hiển thị trạng thái sách
+                System.out.println(CartManagement.getBookStatus(cartId));
+                System.out.println("+------------------------+");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        System.out.println(CartManagement.getBookStatus(cartId));
     }
 
     public static void CheckBookStatus() {

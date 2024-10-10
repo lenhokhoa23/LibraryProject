@@ -12,7 +12,6 @@ public class Cart {
         this.Cart_ID = cart_ID;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.title = title;
         this.ISBN = ISBN;
         this.title = title;
     }
@@ -58,21 +57,12 @@ public class Cart {
     }
 
     public void printInfo() {
-        System.out.println("Cart ID: " + Cart_ID);
-        System.out.println("Ngày mượn sách: " + startDate);
-        System.out.println("Ngày trả sách: " + endDate);
         System.out.println("Mã ISBN: " + ISBN);
         System.out.println("Tiêu đề: " + title);
-
+        System.out.println("Ngày mượn sách: " + startDate);
+        System.out.println("Ngày trả sách: " + endDate);
     }
 
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }
 
