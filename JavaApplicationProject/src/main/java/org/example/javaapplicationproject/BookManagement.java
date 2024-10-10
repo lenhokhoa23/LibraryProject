@@ -12,6 +12,37 @@ import java.util.HashMap;
 public class BookManagement {
     private static HashMap<String, Book> bookMapTitle = new HashMap<>();
 
+    public String fetchISBNFromBooks(String bookTitle) {
+        String isbn = null;
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT ISBN FROM books WHERE title = ?";
+
+            // Tạo PreparedStatement
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, bookTitle); // Gán giá trị bookTitle vào câu truy vấn
+
+            // Thực thi truy vấn
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                isbn = rs.getString("ISBN");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isbn;
+    }
+
     public static void addBook(Book book) {
         String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -40,6 +71,8 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
+
+    /** This function xoá sách ở database. */
     public static void deleteBook (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -86,6 +119,7 @@ public class BookManagement {
         }
     }
 
+    /** This function cải thiện tìm sách. */
     public static void findBookByTitleInMemory(String title) {
         Book book = bookMapTitle.get(title);
         if (book == null) {
@@ -95,6 +129,7 @@ public class BookManagement {
         }
     }
 
+    /** This function tìm sách dựa trên thể loại. */
     public static void findBookByCategory(String category) {
         String sql = "SELECT * FROM books WHERE category = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -127,6 +162,7 @@ public class BookManagement {
         }
     }
 
+    /** This function tìm sách dựa trên tác giả. */
     public static void findBookByAuthor(String author) {
         String sql = "SELECT * FROM books WHERE author = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -191,6 +227,34 @@ public class BookManagement {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /** This function return a string that contains infomations about the status
+     * books that have the same name. */
+    public static String getBooksStatus(String bookTitle) {
+        StringBuilder statusBuilder = new StringBuilder();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Truy vấn để lấy số lượng sách cùng tên và trạng thái của từng quyển sách
+            String query = "SELECT Cart_ID, endDate FROM cart WHERE title = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, bookTitle);
+            ResultSet rs = stmt.executeQuery();
+
+            int count = 0;
+            while (rs.next()) {
+                count++;
+                int cartId = rs.getInt("Cart_ID");
+                String status = CartManagement.getBookStatus(cartId); // Gọi hàm lấy trạng thái
+                statusBuilder.append("Cart ID: ").append(cartId)
+                        .append(" - ").append(status).append("\n");
+            }
+
+            // Thêm thông tin số lượng sách vào kết quả
+            statusBuilder.insert(0, "Số lượng sách \"" + bookTitle + "\": " + count + "\n");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statusBuilder.toString();
     }
 
 }
