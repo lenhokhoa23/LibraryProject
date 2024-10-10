@@ -2,6 +2,7 @@ package org.example.javaapplicationproject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CartManagement {
@@ -25,4 +26,36 @@ public class CartManagement {
             e.printStackTrace();
         }
     }
+
+    public String fetchISBNFromCart(String bookTitle, String username) {
+        String isbn = null;
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            String query = "SELECT ISBN FROM cart WHERE title = ? AND username = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, bookTitle);
+            statement.setString(2, username);
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                isbn = resultSet.getString("ISBN");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isbn;
+    }
+
 }
