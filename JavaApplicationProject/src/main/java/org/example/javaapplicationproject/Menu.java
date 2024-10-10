@@ -18,7 +18,8 @@ public class Menu {
         System.out.println("[1] Tìm sách");
         System.out.println("[2] Tìm người dùng");
         System.out.println("[3] Mượn sách");
-        System.out.println("[4] Thoát");
+        System.out.println("[4] Hủy mượn sách");
+        System.out.println("[5] Thoát");
     }
 
     public static void showFindMenu() {
