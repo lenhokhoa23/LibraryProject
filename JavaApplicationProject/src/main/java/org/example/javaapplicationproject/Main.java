@@ -63,17 +63,15 @@ public class Main {
                                         controller.findUser();
                                         break;
                                     }
-                                    case 7: {
-                                        String username = "admin1";
-                                        controller.checkCart(username, "admin", br);
+                                    case 6: {
+                                        controller.checkCartUser(username, "admin");
                                         break;
                                     }
-                                    case 8: {
-                                        String username = "admin1";
+                                    case 7: {
                                         controller.CheckBookStatus();
                                         break;
                                     }
-                                    case 6: {
+                                    case 8: {
                                         isUsing = false;
                                         isAdminUsing = false;
                                         System.out.println("Goodbye...");
@@ -95,11 +93,6 @@ public class Main {
                                     case 2: {
                                         controller.findUser();
                                         break;
-                                    }
-                                    case 5: {
-                                        String username = "viettran97";
-                                        controller.checkCart(username, "user", br);
-                                        break;  
                                     }
                                     case 3: {
                                         boolean found = false;
@@ -157,7 +150,8 @@ public class Main {
                                             System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
                                             String bookTitle = br.readLine();
                                             String isbn1 = bookManagement.fetchISBNFromBooks(bookTitle);
-                                            String isbn2 = cartManagement.fetchISBNFromCart(bookTitle, username);
+                                            int cart_id = accountManagement.fetchCartIdByUsername(username);
+                                            String isbn2 = cartManagement.fetchISBNFromCart(bookTitle, cart_id);
                                             if (isbn1 == null) {
                                                 System.out.println("Không tìm thấy sách trong thư viện!");
                                             }
@@ -166,7 +160,6 @@ public class Main {
                                             }
                                             else {
                                                 found = true;
-                                                int cart_id = accountManagement.fetchCartIdByUsername(username);
                                                 bookManagement.updateQuantity(bookTitle, "RETURN");
                                                 bookManagement.deleteFromCart(isbn2, cart_id);
                                                 System.out.println("Hủy mượn sách thành công!");
@@ -175,6 +168,10 @@ public class Main {
                                         break;
                                     }
                                     case 5: {
+                                        controller.checkCartUser(username, "user");
+                                        break;
+                                    }
+                                    case 6: {
                                         isUsing = false;
                                         isUserUsing = false;
                                         System.out.println("Goodbye...");

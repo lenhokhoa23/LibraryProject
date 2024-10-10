@@ -31,18 +31,18 @@ public class CartManagement {
         }
     }
 
-    public String fetchISBNFromCart(String bookTitle, String username) {
+    public String fetchISBNFromCart(String bookTitle, int cart_id) {
         String isbn = null;
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
-            String query = "SELECT ISBN FROM cart WHERE title = ? AND username = ?";
+            String query = "SELECT ISBN FROM cart WHERE cart_id = ? AND title = ?";
 
             statement = connection.prepareStatement(query);
-            statement.setString(1, bookTitle);
-            statement.setString(2, username);
+            statement.setInt(1, cart_id);
+            statement.setString(2, bookTitle);
 
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -63,7 +63,6 @@ public class CartManagement {
     }
 
 
-  public class CartManagement {
     /** This function finds CartID from username. */
     public static int fetchCartIdByUsername(String username) {
         int cartId = -1;
@@ -107,8 +106,8 @@ public class CartManagement {
                         resultSet.getInt("Cart_ID"),
                         resultSet.getString("startDate"),
                         resultSet.getString("endDate"),
-                        resultSet.getString("ISBN"),
-                        resultSet.getString("title")
+                        resultSet.getString("title"),
+                        resultSet.getString("ISBN")
                 );
             }
         } catch (SQLException e) {

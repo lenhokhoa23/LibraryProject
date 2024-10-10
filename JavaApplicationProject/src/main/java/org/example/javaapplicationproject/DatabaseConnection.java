@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     // Thông tin kết nối
-    private static final String URL = "jdbc:mysql://localhost:3306/bookdatabase";
+    private static final String URL = "jdbc:mysql://localhost:3307/bookdatabase";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 

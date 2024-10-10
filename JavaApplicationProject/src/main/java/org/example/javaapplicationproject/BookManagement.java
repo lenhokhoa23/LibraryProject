@@ -137,10 +137,7 @@ public class BookManagement {
         PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, category);
             ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
-                return;
-            }
+            boolean flag = true;
             while(resultSet.next()) {
                 Book book = new Book(
                         resultSet.getInt("no"),
@@ -156,7 +153,12 @@ public class BookManagement {
                         resultSet.getString("bookType"),
                         resultSet.getString("quantity")
                 );
+                flag = false;
                 book.printInfoBook();
+            }
+            if (flag) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -170,10 +172,7 @@ public class BookManagement {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, author);
             ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
-                return;
-            }
+            boolean flag = true;
             while(resultSet.next()) {
                 Book book = new Book(
                         resultSet.getInt("no"),
@@ -189,7 +188,12 @@ public class BookManagement {
                         resultSet.getString("bookType"),
                         resultSet.getString("quantity")
                 );
+                flag = false;
                 book.printInfoBook();
+            }
+            if (flag) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -202,12 +206,8 @@ public class BookManagement {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, "%" + component + "%");
-
             ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
-                return;
-            }
+            boolean flag = true;
             while (resultSet.next()) {
                 Book book = new Book(
                         resultSet.getInt("no"),
@@ -223,7 +223,12 @@ public class BookManagement {
                         resultSet.getString("bookType"),
                         resultSet.getString("quantity")
                 );
+                flag = false;
                 book.printInfoBook();
+            }
+            if (flag) {
+                System.out.println("Không tìm được cuốn sách nào như vậy cả!");
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -257,37 +262,9 @@ public class BookManagement {
             e.printStackTrace();
         }
         return statusBuilder.toString();
-      
-    public String fetchISBNFromBooks(String bookTitle) {
-        String isbn = null;
-        Connection connection = DatabaseConnection.getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            String query = "SELECT ISBN FROM books WHERE title = ?";
-
-            statement = connection.prepareStatement(query);
-            statement.setString(1, bookTitle);
-
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                isbn = resultSet.getString("ISBN");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (statement != null) statement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return isbn;
     }
 
-    public int fetchQuantityFromBooks(String bookName) {
+    public int fetchQuantityFromBooks(String bookTitle) {
         int quantity = -1;
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
@@ -296,7 +273,7 @@ public class BookManagement {
         try {
             String query = "SELECT quantity FROM books WHERE title = ?";
             statement = connection.prepareStatement(query);
-            statement.setString(1, bookName);
+            statement.setString(1, bookTitle);
 
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -317,7 +294,7 @@ public class BookManagement {
         return quantity;
     }
 
-    public void updateQuantity(String bookName, String operation) {
+    public static void updateQuantity(String bookName, String operation) {
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
         String updateQuery = "";
