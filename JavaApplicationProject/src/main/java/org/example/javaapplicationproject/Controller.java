@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static org.example.javaapplicationproject.CartManagement.fetchCartByCartID;
+import static org.example.javaapplicationproject.CartManagement.fetchCartIdByUsername;
+
 public class Controller {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -141,5 +144,49 @@ public class Controller {
             System.out.println();
         }
     }
+    public static void checkCart(String username, String role, BufferedReader br) {
+        int cartId = 0;
+        if (role.equals("user")) {
+            cartId = fetchCartIdByUsername(username);
+        } else if (role.equals("admin")) {
+            System.out.println("Nhập tên người dùng bạn muốn xem: ");
+            try {
+                username = br.readLine(); // Admin nhập tên người dùng
+                Connection conn = DatabaseConnection.getConnection();
+                try {
+                    String query = "SELECT borrowedBooks FROM cart WHERE Cart_ID = ?";
+                    PreparedStatement stmt = conn.prepareStatement(query);
+                    stmt.setInt(1, cartId); // Lấy số sách mượn từ cart có ID tương ứng.
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        System.out.println(rs.getInt("borrowedBooks"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                cartId = fetchCartIdByUsername(username);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        Cart cart = fetchCartByCartID(cartId);
+        if (cart != null) {
+            cart.printInfo(); // In ra giá sách người dùng
+        } else {
+            System.out.println("Giá sách cá nhân của người dùng \"" + username + "\"trống.");
+        }
+        System.out.println(CartManagement.getBookStatus(cartId));
+    }
 
+    public static void CheckBookStatus() {
+        try {
+            System.out.println("Nhập tên sách bạn muốn kiêm tra: ");
+            String book_title = br.readLine(); // Admin nhập tên sách
+            System.out.println(BookManagement.getBooksStatus(book_title));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
 }

@@ -18,6 +18,7 @@ public class Main {
         accountManagement.loadUserIntoMemory();
         try {
             boolean isUsing = true;
+
             while (isUsing) {
                 System.out.println("Let's choose your option!!!");
                 System.out.println("[0] Login");
@@ -62,6 +63,16 @@ public class Main {
                                         controller.findUser();
                                         break;
                                     }
+                                    case 7: {
+                                        String username = "admin1";
+                                        controller.checkCart(username, "admin", br);
+                                        break;
+                                    }
+                                    case 8: {
+                                        String username = "admin1";
+                                        controller.CheckBookStatus();
+                                        break;
+                                    }
                                     case 6: {
                                         isUsing = false;
                                         isAdminUsing = false;
@@ -84,6 +95,11 @@ public class Main {
                                     case 2: {
                                         controller.findUser();
                                         break;
+                                    }
+                                    case 5: {
+                                        String username = "viettran97";
+                                        controller.checkCart(username, "user", br);
+                                        break;  
                                     }
                                     case 3: {
                                         boolean found = false;

@@ -9,7 +9,9 @@ public class Menu {
         System.out.println("[3] Tìm sách");
         System.out.println("[4] Xoá người dùng");
         System.out.println("[5] Tìm người dùng");
-        System.out.println("[6] Thoát");
+        System.out.println("[6] Xem giá sách người dùng");
+        System.out.println("[7] Xem trạng thái sách trong kho");
+        System.out.println("[8] Thoát");
     }
 
     // Hiển thị menu cho User
@@ -19,7 +21,8 @@ public class Menu {
         System.out.println("[2] Tìm người dùng");
         System.out.println("[3] Mượn sách");
         System.out.println("[4] Hủy mượn sách");
-        System.out.println("[5] Thoát");
+        System.out.println("[5] Hiển thị giá sách cá nhân");
+        System.out.println("[6] Thoát");
     }
 
     public static void showFindMenu() {
