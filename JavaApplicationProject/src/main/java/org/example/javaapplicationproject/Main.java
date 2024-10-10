@@ -85,15 +85,18 @@ public class Main {
                                         controller.findUser();
                                         break;
                                     }
-
                                     case 3: {
                                         boolean found = false;
                                         while (!found) {
                                             System.out.println("Nhập tên sách bạn muốn mượn: ");
                                             String bookTitle = br.readLine();
                                             String isbn = bookManagement.fetchISBNFromBooks(bookTitle);
-                                            if (isbn != null) {
+                                            int currentQuantity = bookManagement.fetchQuantityFromBooks(bookTitle);
+                                            if (currentQuantity <= 0) {
+                                                System.out.println("Sách này hiện trong kho đã hết, vui lòng thực hiện lại.");
+                                            } else if (isbn != null) {
                                                 found = true;
+                                                bookManagement.updateQuantityAfterBorrow(bookTitle);
                                                 Calendar calendar = Calendar.getInstance();
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                                 String startDate = dateFormat.format(calendar.getTime());
@@ -121,12 +124,11 @@ public class Main {
                                                 System.out.println("Ngày kết thúc: " + endDate);
                                                 int cart_id = accountManagement.fetchCartIdByUsername(username);
                                                 if (cart_id != -1) {
-                                                    // Thực hiện hành động với cartId
+                                                    Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
+                                                    cartManagement.addCart(cart);
                                                 } else {
                                                     System.out.println("Không tìm thấy Cart_ID cho username: " + username);
                                                 }
-                                                Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
-                                                cartManagement.addCart(cart);
                                             } else {
                                                 System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
                                             }

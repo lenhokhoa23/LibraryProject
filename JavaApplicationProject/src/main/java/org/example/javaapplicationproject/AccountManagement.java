@@ -100,28 +100,28 @@ public class AccountManagement {
     }
     public int fetchCartIdByUsername(String username) {
         int cartId = -1;
-        Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement pstmt = null;
-        ResultSet result = null;
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
         try {
             String query = "SELECT Cart_ID FROM user WHERE username = ?";
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, username); // Gán giá trị username vào câu truy vấn
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username); // Gán giá trị username vào câu truy vấn
 
             // Thực thi truy vấn
-            result = pstmt.executeQuery();
-            if (result.next()) {
-                cartId = result.getInt("Cart_ID"); // Gán giá trị nếu tìm thấy
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                cartId = resultSet.getInt("Cart_ID"); // Gán giá trị nếu tìm thấy
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (result != null) result.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
