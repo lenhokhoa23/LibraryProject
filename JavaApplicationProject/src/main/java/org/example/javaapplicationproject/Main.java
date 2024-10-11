@@ -14,8 +14,8 @@ public class Main {
         AccountManagement accountManagement = new AccountManagement();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Welcome to My Application");
-        bookManagement.loadBooksIntoMemory();
-        accountManagement.loadUserIntoMemory();
+        BookManagement.loadBooksIntoMemory();
+        AccountManagement.loadUserIntoMemory();
         try {
             boolean isUsing = true;
 
@@ -30,7 +30,7 @@ public class Main {
                     case 0: {
                         StringBuilder usernameBuilder = new StringBuilder();
                         StringBuilder passwordBuilder = new StringBuilder();
-                        int flag = controller.login(usernameBuilder, passwordBuilder);
+                        int flag = Controller.login(usernameBuilder, passwordBuilder);
                         String username = usernameBuilder.toString();
                         String password = passwordBuilder.toString();
                         if (flag == 1) {
@@ -64,11 +64,11 @@ public class Main {
                                         break;
                                     }
                                     case 6: {
-                                        controller.checkCartUser(username, "admin");
+                                        Controller.checkCartUser(username, "admin");
                                         break;
                                     }
                                     case 7: {
-                                        controller.CheckBookStatus();
+                                        Controller.CheckBookStatus();
                                         break;
                                     }
                                     case 8: {
@@ -97,50 +97,7 @@ public class Main {
                                     case 3: {
                                         boolean found = false;
                                         while (!found) {
-                                            System.out.println("Nhập tên sách bạn muốn mượn: ");
-                                            String bookTitle = br.readLine();
-                                            String isbn = bookManagement.fetchISBNFromBooks(bookTitle);
-                                            int currentQuantity = bookManagement.fetchQuantityFromBooks(bookTitle);
-                                            if (currentQuantity <= 0) {
-                                                System.out.println("Sách này hiện trong kho đã hết, vui lòng thực hiện lại.");
-                                            } else if (isbn != null) {
-                                                found = true;
-                                                bookManagement.updateQuantity(bookTitle, "BORROW");
-                                                Calendar calendar = Calendar.getInstance();
-                                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                                String startDate = dateFormat.format(calendar.getTime());
-                                                System.out.println("Chọn thời gian mượn sách:");
-                                                System.out.println("1. 1 tuần");
-                                                System.out.println("2. 2 tuần");
-                                                System.out.println("3. 1 tháng");
-                                                int choice = Integer.parseInt(br.readLine());
-                                                switch (choice) {
-                                                    case 1:
-                                                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                                                        break;
-                                                    case 2:
-                                                        calendar.add(Calendar.WEEK_OF_YEAR, 2);
-                                                        break;
-                                                    case 3:
-                                                        calendar.add(Calendar.MONTH, 1);
-                                                        break;
-                                                    default:
-                                                        System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
-                                                        return;
-                                                }
-                                                String endDate = dateFormat.format(calendar.getTime());
-                                                System.out.println("Ngày bắt đầu: " + startDate);
-                                                System.out.println("Ngày kết thúc: " + endDate);
-                                                int cart_id = accountManagement.fetchCartIdByUsername(username);
-                                                if (cart_id != -1) {
-                                                    Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
-                                                    cartManagement.addCart(cart);
-                                                } else {
-                                                    System.out.println("Không tìm thấy Cart_ID cho username: " + username);
-                                                }
-                                            } else {
-                                                System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
-                                            }
+                                            found = Controller.borrowBook(bookManagement, cartManagement, username);
                                         }
                                         break;
                                     }
@@ -150,25 +107,23 @@ public class Main {
                                             System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
                                             String bookTitle = br.readLine();
                                             String isbn1 = bookManagement.fetchISBNFromBooks(bookTitle);
-                                            int cart_id = accountManagement.fetchCartIdByUsername(username);
+                                            int cart_id = AccountManagement.fetchCartIdByUsername(username);
                                             String isbn2 = cartManagement.fetchISBNFromCart(bookTitle, cart_id);
                                             if (isbn1 == null) {
                                                 System.out.println("Không tìm thấy sách trong thư viện!");
-                                            }
-                                            else if (isbn2 == null) {
+                                            } else if (isbn2 == null) {
                                                 System.out.println("Không tìm thấy sách trong giỏ hàng hiện tại!");
-                                            }
-                                            else {
+                                            } else {
                                                 found = true;
-                                                bookManagement.updateQuantity(bookTitle, "RETURN");
-                                                bookManagement.deleteFromCart(isbn2, cart_id);
+                                                BookManagement.updateQuantity(bookTitle, "RETURN");
+                                                cartManagement.deleteCart(isbn2, cart_id);
                                                 System.out.println("Hủy mượn sách thành công!");
                                             }
                                         }
                                         break;
                                     }
                                     case 5: {
-                                        controller.checkCartUser(username, "user");
+                                        Controller.checkCartUser(username, "user");
                                         break;
                                     }
                                     case 6: {

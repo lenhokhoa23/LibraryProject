@@ -33,4 +33,11 @@ public class Menu {
         System.out.println("[4] Tìm sách nhưng chỉ nhớ 1 phần tên sách");
         System.out.println("[5] Trở lại :3");
     }
+
+    public static void showBorrowingPeriod() {
+        System.out.println("Chọn thời gian mượn sách:");
+        System.out.println("1. 1 tuần");
+        System.out.println("2. 2 tuần");
+        System.out.println("3. 1 tháng");
+    }
 }

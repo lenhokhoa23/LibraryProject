@@ -93,29 +93,6 @@ public class CartManagement {
         return cartId;
     }
 
-    /** This function finds Cart from CartID. */
-    public static Cart fetchCartByCartID(int cartId) {
-        String sql = "SELECT * FROM cart WHERE Cart_ID = ?";
-        Cart cart = null;
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, cartId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                cart = new Cart(
-                        resultSet.getInt("Cart_ID"),
-                        resultSet.getString("startDate"),
-                        resultSet.getString("endDate"),
-                        resultSet.getString("title"),
-                        resultSet.getString("ISBN")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cart;
-    }
-
     /** This function cho biết trạng thái của quyển sách trong giỏ hàng. */
     public static String getBookStatus(int Cart_ID) {
         try {
@@ -145,5 +122,34 @@ public class CartManagement {
             e.printStackTrace();
         }
         return "Không xác định.";
+    }
+
+    public void deleteCart(String isbn, int cartId) {
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+
+        try {
+            String query = "DELETE FROM cart WHERE ISBN = ? AND Cart_ID = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, isbn);
+            statement.setInt(2, cartId);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Xóa thành công sách có ISBN " + isbn + " khỏi giỏ hàng với Cart_ID: " + cartId);
+            } else {
+                System.out.println("Không tìm thấy sách với ISBN " + isbn + " và Cart_ID " + cartId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

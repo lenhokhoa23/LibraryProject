@@ -98,7 +98,7 @@ public class AccountManagement {
             }
         }
     }
-    public int fetchCartIdByUsername(String username) {
+    public static int fetchCartIdByUsername(String username) {
         int cartId = -1;
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
