@@ -13,17 +13,36 @@ public class AccountManagement {
     private static HashMap<String, Account> accountMap = new HashMap<>();
 
     /** addAccount method return. */
-    public static void addAccount(Account account) {
-        String sql = "INSERT INTO accounts (username, password, role)" + "VALUES(?, ?, ?)";
+    public static void addAccount(Account account) throws IOException {
+        String sql1 = "INSERT INTO accounts (username, password, role)" + "VALUES(?, ?, ?)";
+        String sql2 ="INSERT INTO `user` (username, name, email, phoneNumber, borrowedBooks, membershipType)"
+                + "VALUES(?, ?, ?, ?, ?, ?)";
+        System.out.println("Chúc mừng bạn đã đăng kí thành công, hãy hoàn thiện việc" +
+                " đăng kí bằng cách điền thêm thông tin của bạn!!!");
+        System.out.println("Nhập tên của bạn: ");
+        String name = br.readLine();
+        System.out.println("Nhập email của bạn: ");
+        String email = br.readLine();
+        System.out.println("Nhập số điện thoại của bạn: ");
+        String phoneNumber = br.readLine();
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, account.getUsername());
-            statement.setString(2, account.getPassword());
-            statement.setString(3, account.getRole());
-            statement.executeUpdate();
+             PreparedStatement statement1 = connection.prepareStatement(sql1);
+        PreparedStatement statement2 = connection.prepareStatement(sql2)){
+            statement1.setString(1, account.getUsername());
+            statement1.setString(2, account.getPassword());
+            statement1.setString(3, account.getRole());
+            statement2.setString(1, account.getUsername());
+            statement2.setString(2, name);
+            statement2.setString(3, email);
+            statement2.setString(4, phoneNumber);
+            statement2.setInt(5, 0);
+            statement2.setString(6, "Standard");
+            statement1.executeUpdate();
+            statement2.executeUpdate();
             System.out.println("Tạo tài khoản thành công!");
         } catch (SQLException e) {
-            System.out.println("Username này đã tồn tại, vui lòng chọn username khác!");
+            e.printStackTrace();
+            System.out.println("Tạo tài khoản không thành công!, Vui lòng nhập đúng định dạng thông tin!");
         }
     }
 

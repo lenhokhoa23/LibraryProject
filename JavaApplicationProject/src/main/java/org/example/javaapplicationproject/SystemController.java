@@ -94,50 +94,7 @@ public class SystemController {
                                     case 3: {
                                         boolean found = false;
                                         while (!found) {
-                                            System.out.println("Nhập tên sách bạn muốn mượn: ");
-                                            String bookTitle = br.readLine();
-                                            String isbn = bookManagement.fetchISBNFromBooks(bookTitle);
-                                            int currentQuantity = bookManagement.fetchQuantityFromBooks(bookTitle);
-                                            if (currentQuantity <= 0) {
-                                                System.out.println("Sách này hiện trong kho đã hết, vui lòng thực hiện lại.");
-                                            } else if (isbn != null) {
-                                                found = true;
-                                                bookManagement.updateQuantity(bookTitle, "BORROW");
-                                                Calendar calendar = Calendar.getInstance();
-                                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                                String startDate = dateFormat.format(calendar.getTime());
-                                                System.out.println("Chọn thời gian mượn sách:");
-                                                System.out.println("1. 1 tuần");
-                                                System.out.println("2. 2 tuần");
-                                                System.out.println("3. 1 tháng");
-                                                int choice = Integer.parseInt(br.readLine());
-                                                switch (choice) {
-                                                    case 1:
-                                                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                                                        break;
-                                                    case 2:
-                                                        calendar.add(Calendar.WEEK_OF_YEAR, 2);
-                                                        break;
-                                                    case 3:
-                                                        calendar.add(Calendar.MONTH, 1);
-                                                        break;
-                                                    default:
-                                                        System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
-                                                        return;
-                                                }
-                                                String endDate = dateFormat.format(calendar.getTime());
-                                                System.out.println("Ngày bắt đầu: " + startDate);
-                                                System.out.println("Ngày kết thúc: " + endDate);
-                                                int cart_id = accountManagement.fetchCartIdByUsername(username);
-                                                if (cart_id != -1) {
-                                                    Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
-                                                    cartManagement.addCart(cart);
-                                                } else {
-                                                    System.out.println("Không tìm thấy Cart_ID cho username: " + username);
-                                                }
-                                            } else {
-                                                System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
-                                            }
+                                            found = Controller.borrowBook(bookManagement, cartManagement, username);
                                         }
                                         break;
                                     }
