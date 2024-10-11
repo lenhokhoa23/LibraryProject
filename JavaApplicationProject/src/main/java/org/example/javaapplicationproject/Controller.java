@@ -7,8 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-import static org.example.javaapplicationproject.CartManagement.fetchCartByCartID;
 import static org.example.javaapplicationproject.CartManagement.fetchCartIdByUsername;
 
 public class Controller {
@@ -226,6 +227,55 @@ public class Controller {
             return;
         }
     }
+
+
+    public static boolean borrowBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
+        System.out.println("Nhập tên sách bạn muốn mượn: ");
+        String bookTitle = br.readLine();
+        String isbn = bookManagement.fetchISBNFromBooks(bookTitle);
+        int currentQuantity = bookManagement.fetchQuantityFromBooks(bookTitle);
+        int cart_id = AccountManagement.fetchCartIdByUsername(username);
+        String isbn2 = cartManagement.fetchISBNFromCart(bookTitle, cart_id);
+        if (isbn2 != null) {
+            System.out.println("Bạn đã mượn sách này rồi!");
+            return true;
+        } else if (currentQuantity <= 0) {
+            System.out.println("Sách này hiện trong kho đã hết, vui lòng thực hiện lại.");
+            return true;
+        } else if (isbn != null) {
+            BookManagement.updateQuantity(bookTitle, "BORROW");
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String startDate = dateFormat.format(calendar.getTime());
+            Menu.showBorrowingPeriod();
+            int choice = Integer.parseInt(br.readLine());
+            switch (choice) {
+                case 1:
+                    calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                    break;
+                case 2:
+                    calendar.add(Calendar.WEEK_OF_YEAR, 2);
+                    break;
+                case 3:
+                    calendar.add(Calendar.MONTH, 1);
+                    break;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
+                    return false;
+            }
+            String endDate = dateFormat.format(calendar.getTime());
+            System.out.println("Ngày bắt đầu: " + startDate);
+            System.out.println("Ngày kết thúc: " + endDate);
+            if (cart_id != -1) {
+                Cart cart = new Cart(cart_id, startDate, endDate, bookTitle, isbn);
+                cartManagement.addCart(cart);
+            } else {
+                System.out.println("Không tìm thấy Cart_ID cho username: " + username);
+            }
+            return true;
+        } else {
+            System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
+
     public static boolean returnBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
         System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
         String bookTitle = br.readLine();
@@ -242,6 +292,7 @@ public class Controller {
             bookManagement.updateQuantity(bookTitle, "RETURN");
             bookManagement.deleteFromCart(isbn2, cart_id);
             System.out.println("Hủy mượn sách thành công!");
+
         }
         return true;
     }

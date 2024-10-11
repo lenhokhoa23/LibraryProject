@@ -325,34 +325,4 @@ public class BookManagement {
             }
         }
     }
-
-    public void deleteFromCart(String isbn, int cartId) {
-        Connection connection = DatabaseConnection.getConnection();
-        PreparedStatement statement = null;
-
-        try {
-            String query = "DELETE FROM cart WHERE ISBN = ? AND Cart_ID = ?";
-
-            statement = connection.prepareStatement(query);
-            statement.setString(1, isbn);
-            statement.setInt(2, cartId);
-
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Xóa thành công sách có ISBN " + isbn + " khỏi giỏ hàng với Cart_ID: " + cartId);
-            } else {
-                System.out.println("Không tìm thấy sách với ISBN " + isbn + " và Cart_ID " + cartId);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) statement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 }

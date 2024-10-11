@@ -102,7 +102,6 @@ public class AccountManagement {
             }
         }
     }
-
     public static int fetchCartIdByUsername(String username) {
         int cartId = -1;
         Connection connection = DatabaseConnection.getConnection();
