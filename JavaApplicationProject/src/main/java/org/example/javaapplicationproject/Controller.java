@@ -228,6 +228,7 @@ public class Controller {
         }
     }
 
+
     public static boolean borrowBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
         System.out.println("Nhập tên sách bạn muốn mượn: ");
         String bookTitle = br.readLine();
@@ -274,6 +275,24 @@ public class Controller {
             return true;
         } else {
             System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
+
+    public static boolean returnBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
+        System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
+        String bookTitle = br.readLine();
+        String isbn1 = bookManagement.fetchISBNFromBooks(bookTitle);
+        int cart_id = AccountManagement.fetchCartIdByUsername(username);
+        String isbn2 = cartManagement.fetchISBNFromCart(bookTitle, cart_id);
+        if (isbn1 == null) {
+            System.out.println("Không tìm thấy sách trong thư viện!");
+        }
+        else if (isbn2 == null) {
+            System.out.println("Không tìm thấy sách trong giỏ hàng hiện tại!");
+        }
+        else {
+            bookManagement.updateQuantity(bookTitle, "RETURN");
+            bookManagement.deleteFromCart(isbn2, cart_id);
+            System.out.println("Hủy mượn sách thành công!");
+
         }
         return true;
     }

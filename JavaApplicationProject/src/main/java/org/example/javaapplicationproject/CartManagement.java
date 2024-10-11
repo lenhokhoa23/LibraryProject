@@ -62,7 +62,6 @@ public class CartManagement {
         return isbn;
     }
 
-
     /** This function finds CartID from username. */
     public static int fetchCartIdByUsername(String username) {
         int cartId = -1;

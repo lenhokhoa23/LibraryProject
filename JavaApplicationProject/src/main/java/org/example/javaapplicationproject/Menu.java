@@ -34,10 +34,18 @@ public class Menu {
         System.out.println("[5] Trở lại :3");
     }
 
+
     public static void showBorrowingPeriod() {
         System.out.println("Chọn thời gian mượn sách:");
         System.out.println("1. 1 tuần");
         System.out.println("2. 2 tuần");
         System.out.println("3. 1 tháng");
+
+    public static void showLoginMenu() {
+        System.out.println("Let's choose your option!!!");
+        System.out.println("[0] Login");
+        System.out.println("[1] Register");
+        System.out.println("[2] Exit");
+
     }
 }
