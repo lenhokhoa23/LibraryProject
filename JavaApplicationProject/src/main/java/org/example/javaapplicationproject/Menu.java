@@ -33,4 +33,11 @@ public class Menu {
         System.out.println("[4] Tìm sách nhưng chỉ nhớ 1 phần tên sách");
         System.out.println("[5] Trở lại :3");
     }
+
+    public static void showLoginMenu() {
+        System.out.println("Let's choose your option!!!");
+        System.out.println("[0] Login");
+        System.out.println("[1] Register");
+        System.out.println("[2] Exit");
+    }
 }

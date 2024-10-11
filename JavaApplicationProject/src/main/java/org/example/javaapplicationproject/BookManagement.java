@@ -70,9 +70,7 @@ public class BookManagement {
         }
     }
 
-
     /** This function xoá sách ở database. */
-
     public static void deleteBook (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -234,7 +232,6 @@ public class BookManagement {
             e.printStackTrace();
         }
     }
-
 
     /** This function return a string that contains infomations about the status
      * books that have the same name. */

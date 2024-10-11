@@ -1,10 +1,13 @@
 package org.example.javaapplicationproject;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+
+import static org.example.javaapplicationproject.Controller.br;
 
 public class AccountManagement {
     private static HashMap<String, Account> accountMap = new HashMap<>();
@@ -23,6 +26,7 @@ public class AccountManagement {
             System.out.println("Username này đã tồn tại, vui lòng chọn username khác!");
         }
     }
+
     public static void deleteAccount(String username) {
         String sql = "DELETE FROM accounts WHERE username = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -98,7 +102,8 @@ public class AccountManagement {
             }
         }
     }
-    public int fetchCartIdByUsername(String username) {
+
+    public static int fetchCartIdByUsername(String username) {
         int cartId = -1;
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
@@ -129,6 +134,15 @@ public class AccountManagement {
         return cartId;
     }
 
+    public static void register() throws IOException {
+        System.out.println("Enter username: ");
+        String username = br.readLine();
+        System.out.println("Enter password: ");
+        String password = br.readLine();
+
+        Account account = new Account(username, password, "user");
+        AccountManagement.addAccount(account);
+    }
 
 }
 
