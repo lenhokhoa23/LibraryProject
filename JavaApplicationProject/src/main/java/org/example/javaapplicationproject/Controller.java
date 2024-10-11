@@ -57,13 +57,45 @@ public class Controller {
         return -1;
     }
 
-    public void addBook() {
-        Book book = new Book(3335, "The Great Gatsby", "F. Scott Fitzgerald",
-                "31-Jan-81", "1925-04-10",
-                "9780743273565", "10.99",
-                "Classic", "Fiction",
-                "http://example.com/gatsby",
-                "Novel", "5");
+    public void addBook() throws IOException {
+        System.out.println("Hãy nhập ID của sách:");
+        int no = Integer.parseInt(br.readLine());
+
+        System.out.println("Hãy nhập tiêu đề của sách:");
+        String title = br.readLine();
+
+        System.out.println("Hãy nhập tên tác giả:");
+        String author = br.readLine();
+
+        System.out.println("Hãy nhập ngày xuất bản :");
+        String pubdate = br.readLine();
+
+        System.out.println("Hãy nhập ngày phát hành :");
+        String releaseDate = br.readLine();
+
+        System.out.println("Hãy nhập ISBN:");
+        String isbn = br.readLine();
+
+        System.out.println("Hãy nhập giá:");
+        String price = br.readLine();
+
+        System.out.println("Hãy nhập môn học:");
+        String subject = br.readLine();
+
+        System.out.println("Hãy nhập danh mục:");
+        String category = br.readLine();
+
+        System.out.println("Hãy nhập URL:");
+        String url = br.readLine();
+
+        System.out.println("Hãy nhập loại sách:");
+        String bookType = br.readLine();
+
+        System.out.println("Hãy nhập số lượng:");
+        String quantity = br.readLine();
+
+        // Sau khi nhập các thông tin, khởi tạo đối tượng Book
+        Book book = new Book(no, title, author, pubdate, releaseDate, isbn, price, subject, category, url, bookType, quantity);
         BookManagement.addBook(book);
     }
 
@@ -272,10 +304,11 @@ public class Controller {
             } else {
                 System.out.println("Không tìm thấy Cart_ID cho username: " + username);
             }
-            return true;
         } else {
             System.out.println("Không tìm thấy cuốn sách '" + bookTitle + "' trong cơ sở dữ liệu. Vui lòng nhập lại: ");
-
+        }
+        return true;
+    }
     public static boolean returnBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
         System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
         String bookTitle = br.readLine();
@@ -290,7 +323,7 @@ public class Controller {
         }
         else {
             bookManagement.updateQuantity(bookTitle, "RETURN");
-            bookManagement.deleteFromCart(isbn2, cart_id);
+            cartManagement.deleteCart(isbn2, cart_id);
             System.out.println("Hủy mượn sách thành công!");
 
         }
