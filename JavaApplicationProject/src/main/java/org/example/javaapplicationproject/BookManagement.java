@@ -42,24 +42,23 @@ public class BookManagement {
     }
 
     public static void addBook(Book book) {
-        String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO books (title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, book.getNo());
-            statement.setString(2, book.getTitle());
-            statement.setString(3, book.getAuthor());
-            statement.setString(4, book.getPubdate());
-            statement.setString(5, book.getReleaseDate());
-            statement.setString(6, book.getISBN());
-            statement.setString(7, book.getPrice());
-            statement.setString(8, book.getSubject());
-            statement.setString(9, book.getCategory());
-            statement.setString(10, book.getURL());
-            statement.setString(11, book.getBookType());
-            statement.setString(12, book.getQuantity());
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setString(3, book.getPubdate());
+            statement.setString(4, book.getReleaseDate());
+            statement.setString(5, book.getISBN());
+            statement.setString(6, book.getPrice());
+            statement.setString(7, book.getSubject());
+            statement.setString(8, book.getCategory());
+            statement.setString(9, book.getURL());
+            statement.setString(10, book.getBookType());
+            statement.setString(11, book.getQuantity());
 
             statement.executeUpdate();
             System.out.println("Thêm sách thành công!");
