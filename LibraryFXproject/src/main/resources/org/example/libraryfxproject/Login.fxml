@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="221.0" layoutY="38.0" prefHeight="57.0" prefWidth="159.0" text="ĐĂNG NHẬP" />
+      <VBox layoutX="141.0" layoutY="132.0" prefHeight="110.0" prefWidth="265.0">
+         <children>
+            <HBox prefHeight="41.0" prefWidth="265.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="79.0" text="Username" />
+                  <TextField />
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="265.0">
+               <children>
+                  <Label prefHeight="34.0" prefWidth="122.0" text="Password" />
+                  <TextField prefHeight="23.0" prefWidth="230.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Button layoutX="253.0" layoutY="234.0" mnemonicParsing="false" text="GO" />
+   </children>
+</AnchorPane>
