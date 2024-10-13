@@ -27,7 +27,9 @@ public class Account {
         this.password = password;
     }
 
-    public static String getRole() {
+
+
+    public String getRole() {
         return role;
     }
 
