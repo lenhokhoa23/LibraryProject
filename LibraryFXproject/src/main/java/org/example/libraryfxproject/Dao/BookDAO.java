@@ -6,19 +6,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
-public class BookDAO {
-    private static HashMap<String, Book> bookMapTitle = new HashMap<>();
-    public final int titleType = 1;
-    public final int authorType = 2;
-    public final int categoryType = 3;
 
-    public static void loadBooksIntoMemory() {
+public class BookDAO extends GeneralDao<String, Book> {
+
+    @Override
+    public void loadData() {
         String sql = "SELECT * FROM books";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -26,7 +22,7 @@ public class BookDAO {
                         resultSet.getInt("no"),
                         resultSet.getString("title"),
                         resultSet.getString("author"),
-                        resultSet.getString("pubDate"),
+                        resultSet.getString("pubdate"),
                         resultSet.getString("releaseDate"),
                         resultSet.getString("ISBN"),
                         resultSet.getString("price"),
@@ -36,12 +32,15 @@ public class BookDAO {
                         resultSet.getString("bookType"),
                         resultSet.getString("quantity")
                 );
-                bookMapTitle.put(book.getTitle(), book);
+
+                // Thêm sách vào HashMap
+                dataMap.put(book.getTitle(), book);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public Book findBookByType(String type, int searchType) {
         Book book = null;
@@ -67,7 +66,7 @@ public class BookDAO {
                 book.setNo(resultSet.getInt("no"));
                 book.setTitle(resultSet.getString("title"));
                 book.setAuthor(resultSet.getString("author"));
-                book.setPubDate(resultSet.getString("pubdate"));
+                book.setPubdate(resultSet.getString("pubdate"));
                 book.setReleaseDate(resultSet.getString("releaseDate"));
                 book.setISBN(resultSet.getString("ISBN"));
                 book.setPrice(resultSet.getString("price"));
@@ -101,5 +100,6 @@ public class BookDAO {
     public String fetchISBNFromBooks(String type, int searchType) {
         return findBookByType(type, searchType).getISBN();
     }
+
 
 }
