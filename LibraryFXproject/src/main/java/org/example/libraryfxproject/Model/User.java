@@ -17,17 +17,22 @@ public class User extends Person{
         return Cart_ID;
     }
 
-    public void setCart_ID(int Cart_ID) {
-        Cart_ID = Cart_ID;
+    public int getCart_ID() {
+        return Cart_ID;
     }
 
-    public int getBorrowedBook() {
+    public int getBorrowedBooks() {
         return borrowedBooks;
     }
 
-    public void setBorrowedBook(int borrowedBook) {
-        this.borrowedBooks = borrowedBook;
+    public void setBorrowedBooks(int borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
     }
+
+    public void setCart_ID(int Cart_ID) {
+        this.Cart_ID = Cart_ID;
+    }
+
 
     public String getMembershipType() {
         return membershipType;
