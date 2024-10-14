@@ -98,7 +98,7 @@ public class CartDAO {
     public String checkCartUser(Account account, String user) {
         int cartId = 0;
         // Determine cartId based on user role
-        String role = Account.getRole();
+        String role = account.getRole();
         String username = account.getUsername();
         if (role.equals("user")) {
             Cart userCart = fetchCartByUsername(username);
