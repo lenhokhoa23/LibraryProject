@@ -32,6 +32,9 @@ public class Book {
         this.quantity = quantity;
     }
 
+    public Book() {
+
+    }
     // Getters and Setters
     public int getNo() {
         return no;

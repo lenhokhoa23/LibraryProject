@@ -41,7 +41,6 @@ public class BookDAO extends GeneralDao<String, Book> {
         }
     }
 
-
     public Book findBookByType(String type, int searchType) {
         Book book = null;
         Connection connection = DatabaseConnection.getConnection();
