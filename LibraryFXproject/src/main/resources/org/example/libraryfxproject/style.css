@@ -1,0 +1,66 @@
+/* style.css */
+
+.root {
+    -fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);
+}
+
+.label-title {
+    -fx-font-size: 28px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+/* Làm cho TextField trong suốt */
+.text-field, .password-field {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 15;
+    -fx-padding: 8 20 8 20;
+    -fx-text-fill: white; /* Màu chữ trắng */
+}
+
+/* Đặt mặc định cho nút login */
+#loginButton {
+    -fx-background-color: rgba(255, 255, 255, 0.2); /* Nền trong suốt với màu trắng */
+    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-font-size: 16px; /* Kích thước chữ */
+    -fx-background-radius: 25px; /* Bo góc */
+    -fx-padding: 10 20; /* Padding cho nút */
+    -fx-border-color: white; /* Màu viền trắng */
+    -fx-border-radius: 25px; /* Bo góc viền */
+    -fx-border-width: 2px; /* Độ dày của viền */
+    -fx-transition: all 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
+}
+#registerButton {
+    -fx-background-color: rgba(255, 255, 255, 0.2); /* Nền trong suốt với màu trắng */
+    -fx-background-radius: 25px; /* Bo góc */
+    -fx-text-fill: white;
+    -fx-border-color: white; /* Màu viền trắng */
+    -fx-border-radius: 25px; /* Bo góc viền */
+    -fx-border-width: 2px; /* Độ dày của viền */
+    -fx-padding: 10 20; /* Padding cho nút */
+    -fx-transition: all 0.3s ease;
+}
+/* Hiệu ứng khi di chuột vào nút */
+#loginButton:hover, #registerButton:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.5); /* Đổi màu nền khi hover */
+    -fx-cursor: hand; /* Thay đổi con trỏ chuột */
+}
+
+/* Hiệu ứng khi nhấn giữ */
+#loginButton:pressed, #registerButton:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* Màu khi nhấn giữ nút với độ trong suốt */
+}
+
+.hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.vbox {
+    -fx-spacing: 20px;
+}
