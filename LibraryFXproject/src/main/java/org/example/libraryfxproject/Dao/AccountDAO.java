@@ -26,6 +26,8 @@ public class AccountDAO extends GeneralDao<String, Account> {
             e.printStackTrace();
         }
     }
-
+    public Account getAccountByUsername(String username) {
+        return dataMap.get(username);
+    }
 
 }

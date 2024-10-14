@@ -7,6 +7,8 @@ public class Cart {
     private String ISBN;
     private String title;
 
+    public Cart() {
+    }
 
     public Cart(int cart_ID, String startDate, String endDate, String title, String ISBN) {
         this.Cart_ID = cart_ID;

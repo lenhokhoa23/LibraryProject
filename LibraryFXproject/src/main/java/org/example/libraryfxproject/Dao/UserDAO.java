@@ -25,8 +25,17 @@ public class UserDAO extends GeneralDao<String, User> {
             e.printStackTrace();
         }
     }
-    public int fetchCartIdByUsername(String username) {
-        return dataMap.get(username).getCart_ID();
+
+    public User findUserByUsername(String username) {
+        return dataMap.get(username);
     }
+    public int fetchCartIdByUsername(String username) {
+        if (dataMap.get(username) == null) {
+            return -1;
+        } else {
+            return dataMap.get(username).getCart_ID();
+        }
+    }
+
 
 }
