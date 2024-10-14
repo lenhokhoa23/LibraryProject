@@ -9,9 +9,32 @@ import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class CartDAO {
-    public Connection conn = DatabaseConnection.getConnection();
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+public class CartDAO extends GeneralDao<Integer, Cart> {
+
+    @Override
+    public void loadData() {
+        String sql = "SELECT * FROM cart";
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                // Lấy dữ liệu từ ResultSet
+                int cartId = resultSet.getInt("Cart_ID");
+                String startDate = resultSet.getString("startDate");
+                String endDate = resultSet.getString("endDate");
+                String isbn = resultSet.getString("ISBN");
+                String title = resultSet.getString("title");
+
+                // Tạo đối tượng Cart
+                Cart cart = new Cart(cartId, startDate, endDate, isbn, title);
+
+                // Thêm cart vào HashMap (giả sử dataMap là một HashMap<Integer, Cart>)
+                dataMap.put(cartId, cart);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Cart fetchCartByUsername(String username) {
         Cart cart = null;
@@ -22,7 +45,7 @@ public class CartDAO {
             String query = "SELECT c.Cart_ID, c.startDate, c.endDate, c.ISBN, c.title " +
                     "FROM user u JOIN cart c ON u.Cart_ID = c.Cart_ID " +
                     "WHERE u.username = ?";
-            pstmt = conn.prepareStatement(query);
+            pstmt = connection.prepareStatement(query);
             pstmt.setString(1, username); // Set the username parameter
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -72,7 +95,7 @@ public class CartDAO {
         int Cart_ID = cart.getCart_ID();
         try {
             String query = "SELECT endDate FROM cart WHERE Cart_ID = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, Cart_ID); // Lấy endDate từ cart có ID tương ứng.
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -164,6 +187,5 @@ public class CartDAO {
         }
         return result.toString();
     }
-
 
 }
