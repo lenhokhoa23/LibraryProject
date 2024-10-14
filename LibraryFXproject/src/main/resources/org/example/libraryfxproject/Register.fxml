@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="241.0" layoutY="20.0" style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-weight: bold;" text="VNU NIC" />
+        <VBox layoutX="175.0" layoutY="81.0" prefHeight="216.0" prefWidth="250.0" spacing="20.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="300.0" spacing="10.0">
+               <children>
+                        <TextField prefHeight="32.0" prefWidth="300.0" promptText="Name" style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-color: white;" />
+               </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="300.0" spacing="10.0">
+               <children>
+                  <TextField prefHeight="32.0" prefWidth="300.0" promptText="Email" style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-color: white;" />
+               </children>
+                </HBox>
+            <TextField prefHeight="27.0" prefWidth="237.0" promptText="Phone number" style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-color: white;" />
+            <TextField prefHeight="27.0" prefWidth="205.0" promptText="Username" style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-color: white;" />
+            <PasswordField prefHeight="30.0" prefWidth="300.0" promptText="Password" style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-color: white;" />
+            </children>
+        </VBox>
+      <Button layoutX="270.0" layoutY="318.0" mnemonicParsing="false" text="Register">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <ButtonBar layoutX="382.0" layoutY="14.0" prefHeight="40.0" prefWidth="200.0" />
+      <Button layoutX="351.0" layoutY="358.0" mnemonicParsing="false" text="Login">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <Label layoutX="202.0" layoutY="362.0" text="Already have an account?" />
+    </children>
+</AnchorPane>

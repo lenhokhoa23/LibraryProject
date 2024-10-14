@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class LibrarianDAO extends GeneralDao<String, Librarian>{
     @Override
     public void loadData() {
@@ -77,4 +78,4 @@ public class LibrarianDAO extends GeneralDao<String, Librarian>{
         return librarian;
     }
 
-}
+
