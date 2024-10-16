@@ -28,12 +28,17 @@ public class LoginController {
         loginView.getLoginButton().setOnAction(event -> {
             String username = loginView.getUsername().getText();
             String password = loginView.getPassword().getText();
-            if (loginService.authenticate(username, password)) {
+            if (username.isEmpty() || password.isEmpty()) {
+                loginView.showErrorMessFill();
+            } else if (loginService.authenticate(username, password)) {
                 loginView.showSuccessMessage();
                 openLibraryView((Stage) ((Node) event.getSource()).getScene().getWindow());
             } else {
-                loginView.showErrorMessage();
+                loginView.showErrorMessWrong();
             }
+        });
+        loginView.getRegisterButton().setOnAction(event -> {
+            openRegisterView((Stage)((Node)event.getSource()).getScene().getWindow());
         });
     }
 
@@ -49,5 +54,15 @@ public class LoginController {
         }
     }
 
-
+    private void openRegisterView(Stage stage) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/Register.fxml"));
+        try {
+            Parent mainViewParent = fxmlLoader.load();
+            Scene scene = new Scene(mainViewParent);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
