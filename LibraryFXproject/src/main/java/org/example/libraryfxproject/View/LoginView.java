@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -76,16 +77,31 @@ public class LoginView implements Initializable {
         return password;
     }
 
-    // Hiển thị thông báo thành công
+    // Hiển thị thông báo thành công.
     public void showSuccessMessage() {
-        System.out.println("Đăng nhập thành công!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Successfully login!");
+        alert.show();
     }
 
-    // Hiển thị thông báo thất bại
-    public void showErrorMessage() {
-        System.out.println("Đăng nhập thất bại!");
+    // Hiển thị thông báo cần điền thêm.
+    public void showErrorMessFill() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Please fill all blank fields!");
+        alert.show();
     }
 
+    public void showErrorMessWrong() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Wrong Username / Password!");
+        alert.show();
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

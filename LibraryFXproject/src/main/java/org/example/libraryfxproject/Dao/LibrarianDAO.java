@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class LibrarianDAO extends GeneralDao<String, Librarian>{
+public class LibrarianDAO extends GeneralDao<String, Librarian> {
     @Override
     public void loadData() {
         String sql = "SELECT * FROM Librarian";
@@ -55,11 +55,11 @@ public class LibrarianDAO extends GeneralDao<String, Librarian>{
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 librarian = new Librarian(resultSet.getString("username"),
-                                          resultSet.getString("name"),
-                                          resultSet.getString("email"),
-                                          resultSet.getString("phoneNumber"),
-                                          resultSet.getInt("id"),
-                                          resultSet.getString("workShift"));
+                        resultSet.getString("name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("workShift"));
             } else {
                 System.out.println("Không tìm thấy thủ thư" + type);
             }
@@ -77,5 +77,6 @@ public class LibrarianDAO extends GeneralDao<String, Librarian>{
         }
         return librarian;
     }
+}
 
 
