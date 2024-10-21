@@ -14,5 +14,4 @@ public class LoadService {
     public void loadData(GeneralDao<?, ?> generalDao) {
         generalDao.loadData();
     }
-
 }

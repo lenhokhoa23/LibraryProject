@@ -1,7 +1,9 @@
 /* style.css */
 
-.root {
+.login-root {
     -fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);
+    -fx-background-image: url("images/login.png");
+    -fx-background-size: cover; /* Đảm bảo hình nền phủ kín */
 }
 
 .label-title {
@@ -11,8 +13,12 @@
 }
 
 .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-size: 16px;
+}
+.label#defaultRegister {
+    -fx-text-fill: #3346d3;
+    -fx-font-size: 18px;
 }
 
 /* Làm cho TextField trong suốt */
@@ -21,7 +27,7 @@
     -fx-border-color: white;
     -fx-border-radius: 15;
     -fx-padding: 8 20 8 20;
-    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-text-fill: black; /* Màu chữ trắng */
 }
 
 /* Đặt mặc định cho nút login */
@@ -36,7 +42,7 @@
     -fx-border-width: 2px; /* Độ dày của viền */
     -fx-transition: all 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
 }
-#registerButton {
+#registerButton, #backButton {
     -fx-background-color: rgba(255, 255, 255, 0.2); /* Nền trong suốt với màu trắng */
     -fx-background-radius: 25px; /* Bo góc */
     -fx-text-fill: white;
@@ -47,13 +53,13 @@
     -fx-transition: all 0.3s ease;
 }
 /* Hiệu ứng khi di chuột vào nút */
-#loginButton:hover, #registerButton:hover {
+#loginButton:hover, #registerButton:hover, #backButton:hover{
     -fx-background-color: rgba(255, 255, 255, 0.5); /* Đổi màu nền khi hover */
     -fx-cursor: hand; /* Thay đổi con trỏ chuột */
 }
 
 /* Hiệu ứng khi nhấn giữ */
-#loginButton:pressed, #registerButton:pressed {
+#loginButton:pressed, #registerButton:pressed, #backButton:pressed{
     -fx-background-color: rgba(255, 255, 255, 0.7); /* Màu khi nhấn giữ nút với độ trong suốt */
 
 }
@@ -65,4 +71,205 @@
 
 .vbox {
     -fx-spacing: 20px;
+}
+
+
+
+
+.main-container {
+    -fx-background-color: #f4f4f4;
+}
+
+.top-bar {
+    -fx-background-color: linear-gradient(to right, #1e3c72, #2a5298);
+    -fx-padding: 10 20 10 20;
+    -fx-spacing: 15;
+    -fx-alignment: center-left;
+}
+
+.logo-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.search-bar {
+    -fx-background-color: white;
+    -fx-padding: 10 20 10 20;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.search-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.search-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.main-tabs {
+    -fx-background-color: transparent;
+}
+
+.main-tabs .tab-header-area .tab-header-background {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);
+}
+
+.main-tabs .tab {
+    -fx-background-color: #f8f8f8;
+    -fx-padding: 10 15 10 15;
+}
+
+.main-tabs .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-background-insets: 0, 0 0 2 0;
+    -fx-background-radius: 0;
+}
+
+.main-tabs .tab-label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+
+.dashboard-scroll {
+    -fx-background-color: transparent;
+}
+
+.dashboard-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.dashboard-container {
+    -fx-padding: 20;
+    -fx-background-color: white;
+}
+
+.stat-box {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-alignment: center;
+}
+
+.stat-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7f8c8d;
+}
+
+.stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.chart-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.action-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+}
+
+.action-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.view-toggle {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #34495e;
+    -fx-font-weight: bold;
+}
+
+.view-toggle:selected {
+    -fx-background-color: #bdc3c7;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #ecf0f1;
+    -fx-border-width: 1;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f8f8f8;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #3498db;
+}
+
+.table-view .table-row-cell:selected .text {
+    -fx-fill: white;
+}
+
+.status-bar {
+    -fx-background-color: #34495e;
+    -fx-padding: 5 20 5 20;
+    -fx-alignment: center-left;
+}
+
+.status-text {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+}
+
+.date-picker {
+    -fx-background-color: white;
+}
+
+.combo-box {
+    -fx-background-color: white;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 2;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 2;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
 }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.chart.PieChart?>
+
+<?import java.net.URL?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           styleClass="main-container">
+   <stylesheets>
+      <URL value="@style.css"/>
+   </stylesheets>
+   <VBox>
+      <HBox styleClass="top-bar">
+         <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+            <Image url="@images/book_daitails.png"/>
+         </ImageView>
+         <Label text="LMS Pro" styleClass="logo-text"/>
+         <Region HBox.hgrow="ALWAYS" />
+         <Button fx:id="notificationButton" styleClass="icon-button">
+            <graphic>
+               <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                  <Image url="@images/search.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Button fx:id="settingsButton" styleClass="icon-button">
+            <graphic>
+               <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                  <Image url="@images/setting_black.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Label fx:id="userLabel" text="Welcome, Admin" styleClass="user-label"/>
+      </HBox>
+
+      <HBox styleClass="search-bar">
+         <TextField fx:id="searchField" promptText="Search books..." HBox.hgrow="ALWAYS"/>
+         <ComboBox fx:id="searchCategory" promptText="Category"/>
+         <Button text="Search" styleClass="search-button"/>
+      </HBox>
+
+      <TabPane VBox.vgrow="ALWAYS" styleClass="main-tabs">
+         <Tab text="Dashboard" closable="false">
+            <ScrollPane fitToWidth="true" styleClass="dashboard-scroll">
+               <VBox spacing="20" styleClass="dashboard-container">
+                  <HBox spacing="20" alignment="CENTER">
+                     <VBox styleClass="stat-box" HBox.hgrow="ALWAYS">
+                        <Label text="Total Books" styleClass="stat-label"/>
+                        <Label fx:id="totalBooksValue" text="0" styleClass="stat-value"/>
+                     </VBox>
+                     <VBox styleClass="stat-box" HBox.hgrow="ALWAYS">
+                        <Label text="Borrowed Books" styleClass="stat-label"/>
+                        <Label fx:id="borrowedBooksValue" text="0" styleClass="stat-value"/>
+                     </VBox>
+                     <VBox styleClass="stat-box" HBox.hgrow="ALWAYS">
+                        <Label text="Available Books" styleClass="stat-label"/>
+                        <Label fx:id="availableBooksValue" text="0" styleClass="stat-value"/>
+                     </VBox>
+                  </HBox>
+                  <HBox spacing="20">
+                     <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Book Status Distribution" styleClass="chart-title"/>
+                        <PieChart fx:id="bookStatusChart" legendVisible="false" />
+                     </VBox>
+                     <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Books by Category" styleClass="chart-title"/>
+                        <PieChart fx:id="bookCategoryChart" legendVisible="false" />
+                     </VBox>
+                  </HBox>
+                  <VBox>
+                     <Label text="Recent Activities" styleClass="section-title"/>
+                     <TableView fx:id="recentActivitiesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                           <TableColumn fx:id="activityDateColumn" text="Date" prefWidth="150"/>
+                           <TableColumn fx:id="activityDescriptionColumn" text="Activity" prefWidth="350"/>
+                        </columns>
+                     </TableView>
+                  </VBox>
+               </VBox>
+            </ScrollPane>
+         </Tab>
+         <Tab text="Book Catalog" closable="false">
+            <VBox spacing="10">
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Button text="Add New Book"  styleClass="action-button"/>
+                  <Button text="Edit Selected"  styleClass="action-button"/>
+                  <Button text="Remove Selected"  styleClass="action-button"/>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <ToggleButton fx:id="gridViewToggle" text="Grid View" styleClass="view-toggle"/>
+               </HBox>
+               <StackPane VBox.vgrow="ALWAYS">
+                  <TableView fx:id="bookTable" visible="true">
+                     <columns>
+                        <TableColumn fx:id="coverColumn" text="Cover" prefWidth="100"/>
+                        <TableColumn fx:id="titleColumn" text="Title" prefWidth="200"/>
+                        <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+                        <TableColumn fx:id="categoryColumn" text="Category" prefWidth="100"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                     </columns>
+                  </TableView>
+                  <GridPane fx:id="bookGrid" visible="false" hgap="10" vgap="10"/>
+               </StackPane>
+            </VBox>
+         </Tab>
+         <Tab text="Borrowed Books" closable="false">
+            <VBox spacing="10">
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Button text="Return Selected"  styleClass="action-button"/>
+                  <Button text="Extend Loan"  styleClass="action-button"/>
+               </HBox>
+               <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS">
+                  <columns>
+                     <TableColumn fx:id="borrowedTitleColumn" text="Title" prefWidth="200"/>
+                     <TableColumn fx:id="borrowerColumn" text="Borrower" prefWidth="150"/>
+                     <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150"/>
+                     <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="150"/>
+                  </columns>
+               </TableView>
+            </VBox>
+         </Tab>
+         <Tab text="Reports" closable="false">
+            <VBox spacing="20">
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <ComboBox fx:id="reportTypeComboBox" promptText="Select Report Type"/>
+                  <DatePicker fx:id="startDatePicker" promptText="Start Date"/>
+                  <DatePicker fx:id="endDatePicker" promptText="End Date"/>
+                  <Button text="Generate Report"  styleClass="action-button"/>
+               </HBox>
+               <TableView fx:id="reportTable" VBox.vgrow="ALWAYS"/>
+            </VBox>
+         </Tab>
+      </TabPane>
+
+      <HBox styleClass="status-bar">
+         <Label fx:id="statusLabel" text="Ready" HBox.hgrow="ALWAYS" styleClass="status-text"/>
+         <Label fx:id="dateTimeLabel" text="Date and Time" styleClass="status-text"/>
+      </HBox>
+   </VBox>
+</StackPane>
