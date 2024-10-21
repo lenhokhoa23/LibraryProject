@@ -1,8 +1,10 @@
 module org.example.libraryfxproject {
-    requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
     requires mysql.connector.j;
+    requires com.jfoenix;
+    requires javafx.graphics;
+    requires javafx.controls;
 
 
     opens org.example.libraryfxproject to javafx.fxml;

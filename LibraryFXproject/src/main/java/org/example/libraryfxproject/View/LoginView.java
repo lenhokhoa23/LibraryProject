@@ -48,9 +48,7 @@ public class LoginView implements Initializable {
             password.setPromptText("Password");
 
             // Thêm CSS
-            scene.getStylesheets().add(getClass().getResource("/org/example/libraryfxproject/style.css").toExternalForm());
             stage.show();
-
             // Tạo LoginController và đăng ký các sự kiện điều khiển
             LoginController loginController = new LoginController(this);
             loginController.registerEvent();

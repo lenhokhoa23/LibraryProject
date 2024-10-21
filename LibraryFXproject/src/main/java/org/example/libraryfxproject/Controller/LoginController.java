@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.LoginService;
 import org.example.libraryfxproject.View.LoginView;
+import org.example.libraryfxproject.View.MainMenuView;
+import org.example.libraryfxproject.View.RegisterView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,26 +45,10 @@ public class LoginController {
     }
 
     private void openLibraryView(Stage stage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenuView.fxml"));
-        try {
-            Parent mainViewParent = fxmlLoader.load();
-            Scene scene = new Scene(mainViewParent);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MainMenuView menuView = new MainMenuView(stage);
     }
 
     private void openRegisterView(Stage stage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/Register.fxml"));
-        try {
-            Parent mainViewParent = fxmlLoader.load();
-            Scene scene = new Scene(mainViewParent);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RegisterView registerView = new RegisterView(stage);
     }
 }
