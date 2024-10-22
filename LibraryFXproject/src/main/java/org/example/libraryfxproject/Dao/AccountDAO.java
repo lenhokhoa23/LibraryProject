@@ -26,6 +26,31 @@ public class AccountDAO extends GeneralDao<String, Account> {
             e.printStackTrace();
         }
     }
+
+    public void saveUserToDatabase(String name, String email, String phoneNumber, String username, String password) {
+        String insertUserSQL = "INSERT INTO user (username, name, email, phoneNumber, borrowedBooks, membershipType) VALUES (?, ?, ?, ?, 0, 'Basic')";
+        String insertAccountSQL = "INSERT INTO accounts (username, password, role) VALUES (?, ?, 'user')";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatementUser = connection.prepareStatement(insertUserSQL);
+             PreparedStatement preparedStatementAccount = connection.prepareStatement(insertAccountSQL)) {
+
+            preparedStatementAccount.setString(1, username);
+            preparedStatementAccount.setString(2, password);
+            preparedStatementAccount.executeUpdate();
+
+            preparedStatementUser.setString(1, username);
+            preparedStatementUser.setString(2, name);
+            preparedStatementUser.setString(3, email);
+            preparedStatementUser.setString(4, phoneNumber);
+            preparedStatementUser.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public Account getAccountByUsername(String username) {
         return dataMap.get(username);
     }

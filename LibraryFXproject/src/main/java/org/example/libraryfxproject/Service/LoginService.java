@@ -7,8 +7,9 @@ import org.example.libraryfxproject.Model.User;
 
 public class LoginService {
     private final AccountDAO accountDAO = new AccountDAO();
-    private final LoadService loadService = new LoadService();
+
     public LoginService() {
+        LoadService loadService = new LoadService();
         loadService.loadData(accountDAO);
     }
 
@@ -17,11 +18,7 @@ public class LoginService {
         if (account == null) {
             return false;
         } else {
-            if (password.equals(account.getPassword())) {
-                return true;
-            } else {
-                return false;
-            }
+            return password.equals(account.getPassword());
         }
     }
 }

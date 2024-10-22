@@ -275,7 +275,7 @@ public class Controller {
             System.out.println("Sách này hiện trong kho đã hết, vui lòng thực hiện lại.");
             return true;
         } else if (isbn != null) {
-            BookManagement.updateQuantity(bookTitle, "BORROW");
+            BookManagement.updateQuantity(username, bookTitle, "BORROW");
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String startDate = dateFormat.format(calendar.getTime());
@@ -322,7 +322,7 @@ public class Controller {
             System.out.println("Không tìm thấy sách trong giỏ hàng hiện tại!");
         }
         else {
-            bookManagement.updateQuantity(bookTitle, "RETURN");
+            BookManagement.updateQuantity(username, bookTitle, "RETURN");
             cartManagement.deleteCart(isbn2, cart_id);
             System.out.println("Hủy mượn sách thành công!");
 
