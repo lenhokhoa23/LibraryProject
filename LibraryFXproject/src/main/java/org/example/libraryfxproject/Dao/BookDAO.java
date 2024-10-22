@@ -1,6 +1,9 @@
 package org.example.libraryfxproject.Dao;
 
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Trie;
+import org.example.libraryfxproject.Model.TrieNode;
+import org.example.libraryfxproject.Service.LoadService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +12,27 @@ import java.sql.SQLException;
 
 
 public class BookDAO extends GeneralDao<String, Book> {
+    private Trie trie = new Trie();
+    private TrieNode trieNode = new TrieNode();
 
+    public Trie getTrie() {
+        return trie;
+    }
+
+    public void setTrie(Trie trie) {
+        this.trie = trie;
+    }
+
+    public BookDAO() {
+        LoadService.loadData(this);
+    }
+    public void insert(String word) {
+        TrieNode current = trie.getRoot();
+        for (char ch : word.toCharArray()) {
+            current = current.getChildren().computeIfAbsent(ch, c -> new TrieNode());
+        }
+        current.setEndOfWord(true);
+    }
     @Override
     public void loadData() {
         String sql = "SELECT * FROM books";
@@ -35,11 +58,13 @@ public class BookDAO extends GeneralDao<String, Book> {
 
                 // Thêm sách vào HashMap
                 dataMap.put(book.getTitle(), book);
+                insert(book.getTitle());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public Book findBookByType(String type, int searchType) {
         Book book = null;
