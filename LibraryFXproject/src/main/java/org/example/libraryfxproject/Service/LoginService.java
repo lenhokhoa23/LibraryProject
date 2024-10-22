@@ -12,16 +12,16 @@ public class LoginService {
         loadService.loadData(accountDAO);
     }
 
-    public boolean authenticate(String username, String password) {
+    public int authenticate(String username, String password) {
         Account account = accountDAO.getAccountByUsername(username);
         if (account == null) {
-            return false;
+            return - 1;
+        } else if (!account.getPassword().equals(password)){
+            return - 1;
+        } else if (account.getRole().equals("admin")) {
+            return 0;
         } else {
-            if (password.equals(account.getPassword())) {
-                return true;
-            } else {
-                return false;
-            }
+            return 1;
         }
     }
 }

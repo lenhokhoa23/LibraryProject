@@ -1,0 +1,372 @@
+.main-container {
+    -fx-background-color: #f0f2f5;
+}
+
+.header {
+    -fx-background-color: linear-gradient(to right, #1a237e, #283593);
+    -fx-padding: 15 20;
+    -fx-spacing: 15;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 2);
+}
+
+.logo-container {
+    -fx-padding: 5;
+}
+
+.logo-background {
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 10, 0, 0, 0);
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.app-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #c5cae9;
+}
+
+.search-container {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 20;
+    -fx-padding: 5 10;
+}
+
+.search-container .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #c5cae9;
+}
+
+.search-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.6), 10, 0, 0, 0);
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.6), 10, 0, 0, 0);
+}
+
+.notification-badge {
+    -fx-fill: #ff4081;
+}
+
+.profile-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.profile-button .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.main-tabs {
+    -fx-background-color: transparent;
+}
+
+.main-tabs .tab-header-area .tab-header-background {
+    -fx-background-color: #e8eaf6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.main-tabs .tab {
+    -fx-background-color: #c5cae9;
+    -fx-background-radius: 5 5 0 0;
+    -fx-padding: 10 15;
+}
+
+.main-tabs .tab:selected {
+    -fx-background-color: white;
+}
+
+.main-tabs .tab-label {
+    -fx-text-fill: #3f51b5;
+    -fx-font-weight: bold;
+}
+
+.content-scroll {
+    -fx-background-color: transparent;
+}
+
+.content-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-container {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.welcome-banner {
+    -fx-background-color: linear-gradient(to right, #3f51b5, #5c6bc0);
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+}
+
+.welcome-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.welcome-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #c5cae9;
+}
+
+.cta-button {
+    -fx-background-color: #ff4081;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+}
+
+.cta-button:hover {
+    -fx-background-color: #f50057;
+}
+
+.quick-actions {
+    -fx-padding: 10 0;
+}
+
+.action-button {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 15;
+    -fx-background-radius: 5;
+}
+
+.action-button:hover {
+    -fx-background-color: #303f9f;
+}
+
+.section {
+    -fx-padding: 20 0;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3f51b5;
+}
+
+.see-all-button, .refresh-button, .create-list-button, .join-challenge-button, .update-progress-button, .suggest-event-button, .join-club-button, .new-topic-button, .find-buddy-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3f51b5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.book-carousel {
+    -fx-padding: 20 0;
+}
+
+.reading-challenges {
+    -fx-padding: 20 0;
+}
+
+.challenge-card {
+    -fx-background-color: #e8eaf6;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.challenge-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3f51b5;
+}
+
+.challenge-progress {
+    -fx-accent: #4caf50;
+}
+
+.challenge-status {
+    -fx-text-fill: #7986cb;
+}
+
+.challenge-button {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 15;
+}
+
+.challenge-button:hover {
+    -fx-background-color: #303f9f;
+}
+
+.reading-stats {
+    -fx-padding: 20 0;
+}
+
+.stat-chart {
+    -fx-background-color: transparent;
+    -fx-legend-visible: false;
+}
+
+.reading-list-card {
+    -fx-background-color: #e8eaf6;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.list-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3f51b5;
+}
+
+.list-count {
+    -fx-text-fill: #7986cb;
+}
+
+.view-list-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3f51b5;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-border-color: #3f51b5;
+    -fx-border-radius: 15;
+}
+
+.view-list-button:hover {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+}
+
+.catalog-controls, .events-controls {
+    -fx-background-color: #e8eaf6;
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+}
+
+.view-toggle {
+    -fx-background-color: #c5cae9;
+    -fx-background-radius: 5;
+}
+
+.view-toggle:selected {
+    -fx-background-color: #3f51b5;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #e8eaf6;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.table-view .column-header {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+}
+
+.table-view .table-row-cell {
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f5f5f5;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #c5cae9;
+    -fx-text-fill: #3f51b5;
+}
+
+.catalog-pagination {
+    -fx-padding: 10 0;
+}
+
+.catalog-pagination .pagination-control .button {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+}
+
+.add-calendar-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 15;
+}
+
+.add-calendar-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.footer {
+    -fx-background-color: #303f9f;
+    -fx-padding: 15 20;
+    -fx-alignment: center-left;
+}
+
+.footer .label {
+    -fx-text-fill: #c5cae9;
+}
+
+.footer .hyperlink {
+    -fx-text-fill: #7986cb;
+    -fx-border-color: transparent;
+}
+
+.footer .hyperlink:hover {
+    -fx-text-fill: white;
+}
+
+.notification-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Community Tab Styles */
+.book-clubs-grid, .reading-buddies-grid {
+    -fx-hgap: 15;
+    -fx-vgap: 15;
+}
+
+.forum-actions {
+    -fx-padding: 10 0 0 0;
+}
+
+/* Animations */
+.book-carousel .image-view, .book-clubs-grid .image-view, .reading-buddies-grid .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.book-carousel .image-view:hover, .book-clubs-grid .image-view:hover, .reading-buddies-grid .image-view:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 15, 0, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.challenge-card, .reading-list-card {
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.challenge-card:hover, .reading-list-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-translate-y: -3;
+}
+
