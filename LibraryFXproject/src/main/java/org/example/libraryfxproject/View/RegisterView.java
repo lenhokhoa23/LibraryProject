@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -103,8 +104,24 @@ public class RegisterView implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    public void showSuccessMessage() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Successfully register!");
+        alert.show();
+    }
+
+    public void showErrorMessFill() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Please fill all blank fields!");
+        alert.show();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         RegisterController registerController = new RegisterController(this);
