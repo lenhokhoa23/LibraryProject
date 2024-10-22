@@ -108,9 +108,9 @@ public class AccountManagement {
                         statement.setString(1, account.getUsername());
                         ResultSet resultSet = statement.executeQuery();
                         resultSet.next();
-                        User user = new User(resultSet.getString(1),
-                                resultSet.getString(2), resultSet.getString(3),
-                                resultSet.getString(4), resultSet.getInt(5),
+                        User user = new User(resultSet.getString(2),
+                                resultSet.getString(3), resultSet.getString(4),
+                                resultSet.getString(5), resultSet.getInt(1),
                                 resultSet.getInt(6), resultSet.getString(7));
                         user.printInfo();
                     } catch (SQLException e) {

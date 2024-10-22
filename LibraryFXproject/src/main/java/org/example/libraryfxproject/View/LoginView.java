@@ -47,7 +47,6 @@ public class LoginView implements Initializable {
             username.setPromptText("Username");
             password.setPromptText("Password");
 
-            // Thêm CSS
             stage.show();
             // Tạo LoginController và đăng ký các sự kiện điều khiển
             LoginController loginController = new LoginController(this);

@@ -8,10 +8,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.LoginService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 import org.example.libraryfxproject.View.RegisterView;
+import org.example.libraryfxproject.View.UserView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,9 +34,13 @@ public class LoginController {
             String password = loginView.getPassword().getText();
             if (username.isEmpty() || password.isEmpty()) {
                 loginView.showErrorMessFill();
-            } else if (loginService.authenticate(username, password)) {
+            } else if (loginService.authenticate(username, password) > -1) {
                 loginView.showSuccessMessage();
-                openLibraryView((Stage) ((Node) event.getSource()).getScene().getWindow());
+                if (loginService.authenticate(username, password) == 0) {
+                    openLibrarianView((Stage) ((Node) event.getSource()).getScene().getWindow());
+                } else {
+                    openUserView((Stage) ((Node)event.getSource()).getScene().getWindow());
+                }
             } else {
                 loginView.showErrorMessWrong();
             }
@@ -44,11 +50,15 @@ public class LoginController {
         });
     }
 
-    private void openLibraryView(Stage stage) {
+    private void openLibrarianView(Stage stage) {
         MainMenuView menuView = new MainMenuView(stage);
     }
 
     private void openRegisterView(Stage stage) {
         RegisterView registerView = new RegisterView(stage);
+    }
+
+    private void openUserView(Stage stage) {
+        UserView userView = new UserView(stage);
     }
 }

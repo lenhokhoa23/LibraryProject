@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class LoadService {
-    public void loadData(GeneralDao<?, ?> generalDao) {
+    public static void loadData(GeneralDao<?, ?> generalDao) {
         generalDao.loadData();
     }
 }
