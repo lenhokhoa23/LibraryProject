@@ -19,7 +19,6 @@ import java.sql.SQLException;
 
 public class RegisterController {
     private final RegisterView registerView;
-    private final AccountDAO accountDAO = new AccountDAO();
     private final RegisterService registerService = new RegisterService();
 
     public RegisterController(RegisterView registerView) {
@@ -39,10 +38,18 @@ public class RegisterController {
             String password = registerView.getPassword().getText();
 
             if (!name.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
-                if (registerService.validateInput(username, phoneNumber, email)) {
+                if (registerService.validateInput(username, phoneNumber, email) == 0) {
                     this.registerView.showSuccessMessage();
-                    accountDAO.saveUserToDatabase(name, email, phoneNumber, username, password);
+                    AccountDAO.saveUserToDatabase(name, email, phoneNumber, username, password);
                     openLoginView((Stage) ((Node) event.getSource()).getScene().getWindow());
+                } else if (registerService.validateInput(username, phoneNumber, email) == 1) {
+                    RegisterView.showAlert("Username không được có dấu cách, phải chứa 8-20 ký tự, bao gồm cả chữ cái và số!");
+                } else if (registerService.validateInput(username, phoneNumber, email) == 2) {
+                    RegisterView.showAlert("Số điện thoại phải là dãy số, bắt đầu với số 0 và có ít nhất 10 ký tự!");
+                } else if (registerService.validateInput(username, phoneNumber, email) == 3) {
+                    RegisterView.showAlert("Email phải có định dạng hợp lệ và đuôi là @gmail.com!");
+                } else if (registerService.validateInput(username, phoneNumber, email) == 4) {
+                    RegisterView.showAlert("Username này đã được sử dụng, vui lòng sử dụng một username khác!");
                 }
             } else {
                 this.registerView.showErrorMessFill();
