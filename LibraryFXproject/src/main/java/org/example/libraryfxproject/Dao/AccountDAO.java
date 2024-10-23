@@ -27,7 +27,7 @@ public class AccountDAO extends GeneralDao<String, Account> {
         }
     }
 
-    public void saveUserToDatabase(String name, String email, String phoneNumber, String username, String password) {
+    public static void saveUserToDatabase(String name, String email, String phoneNumber, String username, String password) {
         String insertUserSQL = "INSERT INTO user (username, name, email, phoneNumber, borrowedBooks, membershipType) VALUES (?, ?, ?, ?, 0, 'Basic')";
         String insertAccountSQL = "INSERT INTO accounts (username, password, role) VALUES (?, ?, 'user')";
 
