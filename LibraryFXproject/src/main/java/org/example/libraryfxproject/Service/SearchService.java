@@ -1,6 +1,9 @@
 package org.example.libraryfxproject.Service;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.example.libraryfxproject.Dao.BookDAO;
+import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.TrieNode;
 
 import java.util.ArrayList;
@@ -37,5 +40,10 @@ public class SearchService {
             findAllWordsOfBook(entry.getValue(), prefix, results);
             prefix.deleteCharAt(prefix.length() - 1);  // Backtrack
         }
+    }
+
+    public ObservableList<Book> searchBookByAttribute(String attribute, String value) {
+        List<Book> books = bookDAO.findBooksByAttribute(attribute, value);
+        return FXCollections.observableArrayList(books);
     }
 }

@@ -8,6 +8,7 @@ module org.example.libraryfxproject {
 
 
     opens org.example.libraryfxproject to javafx.fxml;
-    exports org.example.libraryfxproject;
     opens org.example.libraryfxproject.View to javafx.fxml;
+    opens org.example.libraryfxproject.Model to javafx.base;
+    exports org.example.libraryfxproject;
 }
