@@ -7,10 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterService {
-    private final AccountDAO accountDAO = new AccountDAO();
+    AccountDAO accountDAO = new AccountDAO();
 
     public RegisterService() {
-        LoadService.loadData(accountDAO);
+        LoadService loadService = new LoadService();
+        loadService.loadData(accountDAO);
     }
 
     public int validateInput(String username, String phoneNumber, String email) {

@@ -4,10 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.MainMenuController;
 
@@ -19,17 +17,39 @@ public class MainMenuView {
     private TextField searchField;
     @FXML
     private Button searchButton;
-
     @FXML
     private ListView<String> suggestions = new ListView<>();
+    @FXML
+    private MenuItem logoutItem;
+    @FXML
+    private MenuButton profileButton;
+    private boolean isSelecting = false;
 
-    public ListView<String> getSuggestions() {
-        return suggestions;
-    }
+
 
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
+    }
+
+    public boolean isSelecting() {
+        return isSelecting;
+    }
+
+    public void setSelecting(boolean selecting) {
+        isSelecting = selecting;
+    }
+
+    public MenuButton getProfileButton() {
+        return profileButton;
+    }
+
+    public MenuItem getLogoutItem() {
+        return logoutItem;
+    }
+
+    public ListView<String> getSuggestions() {
+        return suggestions;
     }
 
     public Stage getStage() {
@@ -58,8 +78,13 @@ public class MainMenuView {
         try {
             Parent mainViewParent = fxmlLoader.load();
             Scene scene = new Scene(mainViewParent);
+            stage.setX(-5);
+            stage.setY(-5);
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
             stage.setScene(scene);
             stage.show();
+            stage.setResizable(false);
             MainMenuController mainMenuController = new MainMenuController(this);
             mainMenuController.registerEvent();
         } catch (IOException e) {
