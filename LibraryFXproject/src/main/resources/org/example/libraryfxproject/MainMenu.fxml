@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -57,20 +68,6 @@
                   </StackPane>
                   <Label styleClass="app-title" text="LibraryPro" />
                   <Region HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" styleClass="search-container">
-                     <children>
-                        <TextField fx:id="searchField" prefHeight="31.0" prefWidth="520.0" promptText="Search books, students, or resources..." HBox.hgrow="ALWAYS" />
-                        <Button fx:id="searchButton" styleClass="search-button">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@images/search.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </HBox>
                   <Button fx:id="notificationButton" styleClass="icon-button">
                      <graphic>
                         <StackPane>
@@ -97,14 +94,9 @@
                         <MenuItem text="View Profile" />
                         <MenuItem text="Settings" />
                         <SeparatorMenuItem />
-                        <MenuItem text="Logout" />
+                        <MenuItem fx:id="logoutItem" text="Logout" />
                      </items>
                   </MenuButton>
-               </children>
-            </HBox>
-            <HBox prefHeight="147.0" prefWidth="1087.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <ListView fx:id="suggestions" prefHeight="96.0" prefWidth="1125.0" />
                </children>
             </HBox>
       
@@ -118,6 +110,34 @@
                            <content>
                               <VBox spacing="20" styleClass="content-container">
                                  <children>
+                                    <Pane>
+                                       <children>
+                                          <ListView fx:id="suggestions" layoutX="144.0" layoutY="47.0" prefHeight="134.0" prefWidth="851.0" />
+                                          <HBox prefHeight="48.0" prefWidth="1054.0">
+                                             <children>
+                                                <Label prefHeight="47.0" prefWidth="159.0" styleClass="search-title" text="           SEARCH" textAlignment="CENTER" textFill="#2677d3">
+                                                   <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField fx:id="searchField" prefHeight="48.0" prefWidth="865.0" promptText="Search books, students, or resources..." />
+                                                <HBox alignment="CENTER" styleClass="search-container">
+                                                   <children>
+                                                      <Button fx:id="searchButton" styleClass="search-button">
+                                                         <graphic>
+                                                            <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                               <image>
+                                                                  <Image url="@images/search.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </Pane>
                                     <!-- Quick Actions -->
                                     <HBox spacing="10" styleClass="quick-actions">
                                        <children>
@@ -569,21 +589,6 @@
                   </Tab>
          </tabs>
             </TabPane>
-      
-            <!-- Footer -->
-            <HBox styleClass="footer">
-         <children>
-                  <Label text="© 2024 LibraryPro. All rights reserved." HBox.hgrow="ALWAYS" />
-                  <HBox spacing="15">
-                     <children>
-                        <Hyperlink text="Help Center" />
-                        <Hyperlink text="System Status" />
-                        <Hyperlink text="Feedback" />
-                        <Hyperlink text="Updates" />
-                     </children>
-                  </HBox>
-         </children>
-            </HBox>
          </children>
       </VBox>
    

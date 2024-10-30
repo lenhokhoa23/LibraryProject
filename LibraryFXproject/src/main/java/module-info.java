@@ -5,6 +5,7 @@ module org.example.libraryfxproject {
     requires com.jfoenix;
     requires javafx.graphics;
     requires javafx.controls;
+    requires java.desktop;
 
 
     opens org.example.libraryfxproject to javafx.fxml;

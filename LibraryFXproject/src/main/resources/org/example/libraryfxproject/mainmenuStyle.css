@@ -7,7 +7,9 @@
 .main-container {
     -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #e1e5ea);
 }
-
+.search-title {
+    color: #2677d3
+}
 .header {
     -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
     -fx-padding: 10 20;

@@ -42,7 +42,7 @@ public class LoginView implements Initializable {
             Scene scene = new Scene(loginViewParent);
             stage.setTitle("Thư viện LICVNU");
             stage.setScene(scene);
-
+            stage.setResizable(false);
             // Cài đặt thuộc tính cho username và password
             username.setPromptText("Username");
             password.setPromptText("Password");
@@ -99,6 +99,11 @@ public class LoginView implements Initializable {
         alert.setContentText("Wrong Username / Password!");
         alert.show();
     }
+
+    public static void openLoginView(Stage stage) {
+        LoginView loginView = new LoginView(stage);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

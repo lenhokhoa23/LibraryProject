@@ -15,6 +15,8 @@ import org.example.libraryfxproject.Service.LoadService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 
+import org.example.libraryfxproject.View.UserView;
+
 import java.util.HashMap;
 
 public class LibraryApp extends Application {
@@ -25,7 +27,9 @@ public class LibraryApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        LoginView loginView = new LoginView(primaryStage);
-        LoginController loginController = new LoginController(loginView);
+//        LoginView loginView = new LoginView(primaryStage);
+//        LoginController loginController = new LoginController(loginView);
+//        MainMenuView mainMenuView = new MainMenuView(primaryStage);
+        UserView userMenuView = new UserView(primaryStage);
     }
 }
