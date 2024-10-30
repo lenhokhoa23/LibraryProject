@@ -8,10 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterService {
+    AccountDAO accountDAO = new AccountDAO();
 
     public RegisterService() {
         LoadService loadService = new LoadService();
-        AccountDAO accountDAO = new AccountDAO();
         loadService.loadData(accountDAO);
     }
 
