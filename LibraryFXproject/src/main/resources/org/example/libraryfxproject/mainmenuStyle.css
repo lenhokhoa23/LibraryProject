@@ -333,3 +333,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
     -fx-translate-y: -3;
 }
+
+.chart-pie { -fx-pie-colors: #4CAF50, #FF9800, #2196F3, #FFEB3B, #9C27B0, #FF5722, #03A9F4, #CDDC39, #E91E63, #673AB7; }
+.chart-title { -fx-font-size: 16px; -fx-font-weight: bold; }

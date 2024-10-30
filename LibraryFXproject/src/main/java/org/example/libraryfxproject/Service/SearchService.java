@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchService {
-    BookDAO bookDAO = new BookDAO();
+    private final BookDAO bookDAO = new BookDAO();
 
     public List<String> searchBookByPrefix(String prefix) {
         prefix = prefix.toUpperCase();
@@ -16,10 +16,10 @@ public class SearchService {
         TrieNode current = bookDAO.getTrie().getRoot();
         for (char ch : prefix.toCharArray()) {
             System.out.println("Checking character: " + ch);
-            System.out.println("Current node children: " + current.getChildren().keySet()); // In các key con của node hiện tại
+            System.out.println("Current node children: " + current.getChildren().keySet());
             TrieNode node = current.getChildren().get(ch);
             if (node == null) {
-                System.out.println("Character not found: " + ch); // In ra nếu không tìm thấy ký tự
+                System.out.println("Character not found: " + ch);
                 return results;
             }
             current = node;

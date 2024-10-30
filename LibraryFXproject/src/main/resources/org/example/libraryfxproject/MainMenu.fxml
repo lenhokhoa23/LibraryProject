@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@mainmenuStyle.css" />
    </stylesheets>
@@ -111,25 +135,25 @@
                                           <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label styleClass="stat-title" text="Total Books" />
-                                                <Label fx:id="totalBooksLabel" styleClass="stat-value" text="42,567" />
+                                                <Label fx:id="totalBooksLabel" styleClass="stat-value" text="0" />
                                              </children>
                                           </VBox>
                                           <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label styleClass="stat-title" text="Active Students" />
-                                                <Label fx:id="activeStudentsLabel" styleClass="stat-value" text="3,892" />
+                                                <Label fx:id="activeStudentsLabel" styleClass="stat-value" text="0" />
                                              </children>
                                           </VBox>
                                           <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label styleClass="stat-title" text="Books Borrowed" />
-                                                <Label fx:id="booksBorrowedLabel" styleClass="stat-value" text="1,245" />
+                                                <Label fx:id="booksBorrowedLabel" styleClass="stat-value" text="0" />
                                              </children>
                                           </VBox>
                                           <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label styleClass="stat-title" text="Overdue Books" />
-                                                <Label fx:id="overdueBooksLabel" styleClass="stat-value" text="87" />
+                                                <Label fx:id="overdueBooksLabel" styleClass="stat-value" text="0" />
                                              </children>
                                           </VBox>
                      </children>
@@ -138,16 +162,29 @@
                                     <!-- Charts -->
                                     <HBox spacing="20" styleClass="chart-container">
                      <children>
-                                          <VBox styleClass="chart-card" HBox.hgrow="ALWAYS">
-                                             <children>
-                                                <Label styleClass="chart-title" text="Circulation by Genre" />
-                                                <PieChart fx:id="genreCirculationChart" legendVisible="false" />
-                                             </children>
-                                          </VBox>
-                                          <VBox styleClass="chart-card" HBox.hgrow="ALWAYS">
+                        <VBox prefHeight="450.0" prefWidth="441.0" styleClass="chart-card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <!-- Dùng StackPane để căn giữa PieChart và giữ Label ở góc trên trái -->
+                              <Pane fx:id="chartPane" prefHeight="426.0" prefWidth="420.0" styleClass="chart-card" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <!-- Label cố định ở góc trên trái -->
+                                    <Label fx:id="chartTitleLabel" layoutX="10.0" layoutY="10.0" styleClass="chart-title" text="Circulation by Genre" />
+
+                                    <!-- PieChart được căn giữa -->
+                                    <PieChart fx:id="genreCirculationChart" layoutX="99.0" layoutY="89.0" legendVisible="false" prefHeight="248.0" prefWidth="249.0" />
+                                 </children>
+                              </Pane>
+
+                           </children>
+                        </VBox>
+
+
+
+
+                        <VBox styleClass="chart-card" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label styleClass="chart-title" text="Daily Checkouts" />
-                                                <LineChart fx:id="dailyCheckoutsChart">
+                                                <LineChart fx:id="dailyCheckoutsChart" prefHeight="400.0" prefWidth="616.0">
                                                    <xAxis>
                                                       <CategoryAxis side="BOTTOM" />
                                                    </xAxis>
