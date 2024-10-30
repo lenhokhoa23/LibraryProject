@@ -122,6 +122,14 @@ public class RegisterView implements Initializable {
         alert.show();
     }
 
+    public static void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi nhập liệu");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         RegisterController registerController = new RegisterController(this);
