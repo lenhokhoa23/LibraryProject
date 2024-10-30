@@ -29,6 +29,7 @@ public class UserDAO extends GeneralDao<String, User> {
     public User findUserByUsername(String username) {
         return dataMap.get(username);
     }
+
     public int fetchCartIdByUsername(String username) {
         if (dataMap.get(username) == null) {
             return -1;
@@ -37,5 +38,20 @@ public class UserDAO extends GeneralDao<String, User> {
         }
     }
 
+    public int getTotalUserCount() {
+        String sql = "SELECT COUNT(*) AS userCount FROM user";
+        int userCount = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                userCount = resultSet.getInt("userCount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userCount;
+    }
 
 }
