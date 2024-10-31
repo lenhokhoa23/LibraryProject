@@ -10,7 +10,7 @@ public class LoginService {
 
     public LoginService() {
         LoadService loadService = new LoadService();
-        loadService.loadData(accountDAO);
+        LoadService.loadData(accountDAO);
     }
 
     public int authenticate(String username, String password) {
@@ -25,4 +25,6 @@ public class LoginService {
             return 1;
         }
     }
+
+
 }

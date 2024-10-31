@@ -1,22 +1,32 @@
 package org.example.libraryfxproject.Dao;
 
 import javafx.scene.control.Alert;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.Trie;
 import org.example.libraryfxproject.Model.TrieNode;
 import org.example.libraryfxproject.Service.LoadService;
 import java.time.format.DateTimeParseException;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.sql.Date;
 
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 public class BookDAO extends GeneralDao<String, Book> {
     private Trie trie = new Trie();
     private TrieNode trieNode = new TrieNode();
+    public static int totalQuantity = 0;
 
     public Trie getTrie() {
         return trie;
@@ -26,9 +36,18 @@ public class BookDAO extends GeneralDao<String, Book> {
         this.trie = trie;
     }
 
+    public TrieNode getTrieNode() {
+        return trieNode;
+    }
+
+    public void setTrieNode(TrieNode trieNode) {
+        this.trieNode = trieNode;
+    }
+
     public BookDAO() {
         LoadService.loadData(this);
     }
+
     public void insert(String word) {
         TrieNode current = trie.getRoot();
         for (char ch : word.toCharArray()) {
@@ -36,8 +55,10 @@ public class BookDAO extends GeneralDao<String, Book> {
         }
         current.setEndOfWord(true);
     }
+
     @Override
     public void loadData() {
+        totalQuantity = 0;  // Reset tổng số lượng sách khi load lại
         String sql = "SELECT * FROM books";
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -57,9 +78,15 @@ public class BookDAO extends GeneralDao<String, Book> {
                         resultSet.getString("quantity")
                 );
 
-                // Thêm sách vào HashMap
                 dataMap.put(book.getTitle(), book);
                 insert(book.getTitle());
+
+                try {
+                    int quantity = Integer.parseInt(book.getQuantity());
+                    totalQuantity += quantity;
+                } catch (NumberFormatException e) {
+                    System.out.println("Không thể chuyển đổi quantity thành số cho sách: " + book.getTitle());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -253,4 +280,29 @@ public class BookDAO extends GeneralDao<String, Book> {
         }
         return statusBuilder.toString();
     }*/
+    public void loadGenreCirculationData(PieChart genreCirculationChart) {
+        String sql = "SELECT category, SUM(quantity) AS total_quantity " +
+                "FROM books " +
+                "WHERE category IN ('Business and Economics', 'Chemistry/Materials Science/Nanotechnology', 'Computer Science', " +
+                "'Engineering', 'Environmental Science', 'General and Popular Science', 'Life Sciences', " +
+                "'Mathematics', 'Medicine and Healthcare', 'Physics/Nonlinear Science', 'Social Sciences and Asian Studies') " +
+                "GROUP BY category";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+            while (resultSet.next()) {
+                String category = resultSet.getString("category");
+                int totalQuantity = resultSet.getInt("total_quantity");
+                pieChartData.add(new PieChart.Data(category, totalQuantity));
+            }
+            genreCirculationChart.setData(pieChartData);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

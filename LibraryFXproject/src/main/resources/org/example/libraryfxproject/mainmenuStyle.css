@@ -7,7 +7,9 @@
 .main-container {
     -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #e1e5ea);
 }
-
+.search-title {
+    color: #2677d3
+}
 .header {
     -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
     -fx-padding: 10 20;
@@ -376,3 +378,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
     -fx-translate-y: -3;
 }
+
+.chart-pie { -fx-pie-colors: #4CAF50, #FF9800, #2196F3, #FFEB3B, #9C27B0, #FF5722, #03A9F4, #CDDC39, #E91E63, #673AB7; }
+.chart-title { -fx-font-size: 16px; -fx-font-weight: bold; }

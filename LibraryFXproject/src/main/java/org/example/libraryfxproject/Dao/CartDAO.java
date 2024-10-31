@@ -188,4 +188,36 @@ public class CartDAO extends GeneralDao<Integer, Cart> {
         return result.toString();
     }
 
+    public int getBooksBorrowedCount() {
+        String sql = "SELECT COUNT(*) AS borrowedCount FROM Cart";
+        int borrowedCount = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                borrowedCount = resultSet.getInt("borrowedCount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowedCount;
+    }
+
+    public int getOverdueBooksCount() {
+        String sql = "SELECT COUNT(*) AS overdueCount FROM Cart WHERE endDate < ?";
+        int overdueCount = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                overdueCount = resultSet.getInt("overdueCount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return overdueCount;
+    }
 }
