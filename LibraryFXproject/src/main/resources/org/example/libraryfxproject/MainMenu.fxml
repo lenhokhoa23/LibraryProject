@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.collections.FXCollections?>
 
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -11,7 +14,6 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
-<?import java.net.URL?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -45,6 +47,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.util.Callback?>
+
 
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
@@ -251,42 +255,65 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10" styleClass="catalog-controls">
                                  <children>
-                                    <ComboBox fx:id="catalogFilter" promptText="Filter by" />
-                                    <TextField fx:id="catalogSearch" promptText="Search catalog" />
-                                    <Button styleClass="add-item-button" text="Add New Item" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <ToggleButton fx:id="catalogViewToggle" styleClass="view-toggle">
+                                    <ComboBox fx:id="filterComboBox" promptText="Filter by">
+                                       <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                             <String fx:value="ID" />
+                                             <String fx:value="Title" />
+                                             <String fx:value="Author" />
+                                             <String fx:value="Subject" />
+                                             <String fx:value="Category" />
+                                             <String fx:value="BookType" />
+                                          </FXCollections>
+                                       </items>
+                                    </ComboBox>
+                                    <TextField fx:id="searchCatalog" promptText="Search catalog" />
+                                    <ToggleButton fx:id="searchToggle" prefHeight="24.0" prefWidth="84.0" styleClass="view-toggle">
                                        <graphic>
-                                          <ImageView fitHeight="20" fitWidth="20">
+                                          <ImageView fitHeight="15" fitWidth="15">
                                              <image>
                                                 <Image url="@images/search.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       Search
                                     </ToggleButton>
+                                    <Button prefHeight="38.0" prefWidth="114.0" styleClass="add-item-button" fx:id="addItemButton" text="Add New Item" />
+                                    <Button prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" fx:id="deleteItemButton" text="Delete Item" />
+                                    <Button fx:id="refreshButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
+                                       <graphic>
+                                          <ImageView fitHeight="20" fitWidth="20">
+                                             <image>
+                                                <Image url="@images/refresh.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       Refresh
+                                    </Button>
+                                    <Region HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                               <StackPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <TableView fx:id="catalogTableView" visible="true">
+                                    <FlowPane fx:id="catalogGridView" hgap="15" vgap="15" visible="false" />
+                                    <TableView fx:id="catalogTableView" visible="true" VBox.vgrow="ALWAYS">
                                        <columns>
                                           <TableColumn fx:id="itemIdColumn" prefWidth="80" text="ID" />
                                           <TableColumn fx:id="titleColumn" prefWidth="200" text="Title" />
                                           <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
-                                          <TableColumn fx:id="genreColumn" prefWidth="100" text="Genre" />
-                                          <TableColumn fx:id="statusColumn" prefWidth="100" text="Status" />
-                                          <TableColumn fx:id="actionsColumn" prefWidth="150" text="Actions" />
+                                          <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
+                                          <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
+                                          <TableColumn fx:id="quantityColumn" prefWidth="174.0" text="Quantity" styleClass="centered-column" />
                                        </columns>
                                     </TableView>
-                                    <FlowPane fx:id="catalogGridView" hgap="15" vgap="15" visible="false" />
                                  </children>
                               </StackPane>
-                              <Pagination fx:id="catalogPagination" styleClass="catalog-pagination" />
+                              <Pagination fx:id="catalogPagination" maxPageIndicatorCount="8" pageCount="34" styleClass="catalog-pagination" />
                            </children>
                         </VBox>
             </content>
                   </Tab>
-         
+
                   <!-- Student Management Tab -->
                   <Tab closable="false" text="Students">
             <content>

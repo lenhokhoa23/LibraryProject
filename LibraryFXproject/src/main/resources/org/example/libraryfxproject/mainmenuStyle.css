@@ -256,6 +256,16 @@
     -fx-font-weight: bold;
 }
 
+.delete-item-button{
+    -fx-background-color: #FF0000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.delete-item-button:hover {
+    -fx-background-color: #CC0000;
+}
+
 .add-item-button:hover, .add-student-button:hover, .create-event-button:hover, .generate-report-button:hover {
     -fx-background-color: #27ae60;
 }
@@ -270,17 +280,50 @@
     -fx-background-color: #d35400;
 }
 
-.view-toggle {
+.refresh-toggle {
     -fx-background-color: #bdc3c7;
     -fx-background-radius: 15;
 }
 
-.view-toggle:selected {
+.refresh-toggle:selected {
     -fx-background-color: #3498db;
+}
+
+.refresh-toggle:hover {
+    -fx-background-color: #0056b3; /* Màu nền khi hover */
+    -fx-text-fill: white; /* Màu chữ khi hover */
+}
+.view-toggle {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+}
+.centered-column .table-cell {
+    -fx-alignment: CENTER;
+}
+
+.view-toggle:pressed {
+    -fx-background-color: #0056b3;
+    -fx-text-fill: white;
+}
+
+.view-toggle:selected {
+    -fx-background-color: #28a745; /* Màu nền khi được chọn */
+    -fx-text-fill: white; /* Màu chữ khi được chọn */
+}
+
+.view-toggle:hover {
+    -fx-background-color: #0056b3; /* Màu nền khi hover */
+    -fx-text-fill: white; /* Màu chữ khi hover */
 }
 
 .pagination {
     -fx-page-information-visible: false;
+     -fx-background-color: #f0f0f0;
+}
+
+.catalog-pagination {
+    margin-top: 10px;
 }
 
 .footer {

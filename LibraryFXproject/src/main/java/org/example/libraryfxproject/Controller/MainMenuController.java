@@ -3,7 +3,17 @@ package org.example.libraryfxproject.Controller;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Service.BookService;
+import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.View.AddBookView;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
@@ -12,28 +22,38 @@ import org.example.libraryfxproject.Service.UpdateService;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
-
 import org.example.libraryfxproject.View.MainMenuView;
-
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
 public class MainMenuController {
     private final MainMenuView mainMenuView;
     private final SearchService searchService;
-    private final UpdateService updateService;
+    private final BookService bookService;
+    HashMap<String, Book> booksMap;
+    private ObservableList<Book> observableBooks;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
-
+    private final int rowsPerPage = 100; // Số lượng records trên 1 page
+    private boolean isFilteredView = false;
+    private final ContextMenuController contextMenuController;
     public MainMenuController(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
         this.searchService = new SearchService();
         this.updateService = new UpdateService();
+        this.bookService = new BookService();
+        booksMap = bookService.loadData();
+        loadCatalogData();
+        initializePagination();
+        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
     }
-
+  
     public void registerEvent() {
         hideSuggestions();
 
@@ -80,6 +100,32 @@ public class MainMenuController {
                 scheduleSearch();
             }
         });
+        mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
+        mainMenuView.getRefreshButton().setOnAction(event -> {
+            isFilteredView = false;
+            loadCatalogData();
+            initializePagination();
+        });
+        mainMenuView.getSearchToggle().setOnAction(event -> {
+            CatalogEvent();
+        });
+    }
+
+    public void loadCatalogData() {
+        System.out.println("Loaded books: " + booksMap.size());
+        ObservableList<Book> observableBooks = FXCollections.observableArrayList(booksMap.values());
+        updateTableView(observableBooks);
+    }
+
+    private void initializePagination() {
+        List<Book> bookList = new ArrayList<>(booksMap.values());
+        observableBooks = FXCollections.observableArrayList(bookList);
+
+        int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
+        mainMenuView.getCatalogPagination().setPageCount(pageCount);
+        System.out.println("Total books: " + observableBooks.size());
+        System.out.println("Total pages: " + pageCount);
+        mainMenuView.getCatalogPagination().setPageFactory(pageIndex -> createPage(pageIndex));
 
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
@@ -148,4 +194,46 @@ public class MainMenuController {
     public void shutdown() {
         scheduler.shutdownNow();
     }
+
+    private Node createPage(int pageIndex) {
+        int start = pageIndex * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, observableBooks.size());
+        ObservableList<Book> currentPageBooks = FXCollections.observableArrayList();
+        if (start < observableBooks.size()) {
+            currentPageBooks.addAll(observableBooks.subList(start, end));
+        }
+        TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
+        catalogTableView.getItems().clear();
+        catalogTableView.setItems(currentPageBooks);
+        catalogTableView.scrollTo(0);
+        VBox pageContainer = new VBox();
+        pageContainer.getChildren().add(catalogTableView);
+        return pageContainer;
+    }
+
+    public void updateTableView(ObservableList<Book> books) {
+        mainMenuView.getCatalogTableView().getItems().clear();
+        mainMenuView.getCatalogTableView().setItems(books);
+    }
+
+    public void CatalogEvent() {
+        if (isFilteredView) {
+            loadCatalogData();
+            isFilteredView = false;
+        } else {
+            String searchType = mainMenuView.getFilterComboBox().getValue();
+            String searchText = mainMenuView.getSearchCatalog().getText().toUpperCase();
+            ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
+            if (searchType != null && !searchText.isEmpty()) {
+                filteredBooks = searchService.searchBookByAttribute(searchType.toLowerCase(), searchText);
+                updateTableView(filteredBooks);
+                isFilteredView = true;
+            }
+        }
+    }
+
+    public void openAddBookView(ActionEvent event) {
+        new AddBookView(mainMenuView.getStage());
+    }
+
 }

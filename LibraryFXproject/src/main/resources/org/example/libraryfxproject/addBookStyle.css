@@ -1,0 +1,52 @@
+.add-book-root {
+    -fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);
+}
+
+.label-title {
+    -fx-font-size: 28px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.label {
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+}
+
+.text-field, .date-picker {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20;
+    -fx-text-fill: black;
+}
+
+#addBookButton, #backButton {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-background-radius: 25px;
+    -fx-padding: 10 20;
+    -fx-border-color: white;
+    -fx-border-radius: 25px;
+    -fx-border-width: 2px;
+    -fx-transition: all 0.3s ease;
+}
+
+#addBookButton:hover, #backButton:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-cursor: hand;
+}
+
+#addBookButton:pressed, #backButton:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+}
+
+.hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-border-color: gray; /* Gray border */
+    -fx-border-width: 1px; /* Border width */
+    -fx-border-radius: 5px; /* Optional rounded corners */
+    -fx-padding: 5px; /* Padding inside each HBox */
+}
