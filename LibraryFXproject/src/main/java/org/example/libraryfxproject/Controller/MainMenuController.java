@@ -36,6 +36,7 @@ public class MainMenuController {
     private final MainMenuView mainMenuView;
     private final SearchService searchService;
     private final BookService bookService;
+    private final UpdateService updateService;
     HashMap<String, Book> booksMap;
     private ObservableList<Book> observableBooks;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
