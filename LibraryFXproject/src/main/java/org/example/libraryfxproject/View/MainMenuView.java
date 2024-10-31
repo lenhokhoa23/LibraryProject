@@ -104,10 +104,6 @@ public class MainMenuView {
     @FXML
     private Label chartTitleLabel;
 
-    public ListView<String> getSuggestions() {
-        return suggestions;
-    }
-    
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
@@ -208,6 +204,7 @@ public class MainMenuView {
 
     public void setSearchToggle(ToggleButton searchToggle) {
         this.searchToggle = searchToggle;
+    }
     public Label getTotalBooksLabel() {
         return totalBooksLabel;
     }
