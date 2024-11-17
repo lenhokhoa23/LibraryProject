@@ -57,7 +57,7 @@ public class MainMenuController {
         this.updateService = UpdateService.getInstance();
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
-        booksMap = bookService.loadData();
+        this.observableBooks = BookService.getInstance().getAllBooks();
         loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
@@ -125,14 +125,10 @@ public class MainMenuController {
         System.out.println("Loaded books: " + observableBooks.size());
         updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
-        updateCatablogTableView(observableBooks);
         updateUserTableView(studentList);
-
-
-    
     }
     private void initializePagination() {
-        int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
+        int pageCount = (int) Math.ceil((double) observableBooks.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
         System.out.println("Total books: " + observableBooks.size());
         System.out.println("Total pages: " + pageCount);
@@ -244,8 +240,8 @@ public class MainMenuController {
 
 
     private ObservableList<Book> getPageData(int pageIndex) {
-        int start = pageIndex * rowsPerPage;
-        int end = Math.min(start + rowsPerPage, observableBooks.size());
+        int start = pageIndex * ROWS_PER_PAGE;
+        int end = Math.min(start + ROWS_PER_PAGE, observableBooks.size());
         return FXCollections.observableArrayList(observableBooks.subList(start, end));
     }
 
@@ -274,7 +270,7 @@ public class MainMenuController {
             ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
             if (searchType != null && !searchText.isEmpty()) {
                 filteredBooks = searchService.searchBookByAttribute(searchType.toLowerCase(), searchText);
-                updateCatablogTableView(filteredBooks);
+                updateTableView(filteredBooks);
                 isFilteredView = true;
             }
         }
