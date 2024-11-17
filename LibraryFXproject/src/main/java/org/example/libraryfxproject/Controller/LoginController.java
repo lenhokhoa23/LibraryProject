@@ -25,7 +25,7 @@ public class LoginController {
 
     public LoginController(LoginView loginView) {
         this.loginView = loginView;
-        this.loginService = new LoginService();
+        this.loginService = LoginService.getInstance();
     }
 
     public void registerEvent() {

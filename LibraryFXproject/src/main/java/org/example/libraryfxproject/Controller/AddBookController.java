@@ -15,10 +15,11 @@ import java.time.format.DateTimeFormatter;
 
 public class AddBookController {
     private final AddBookView addBookView;
-    private final BookService bookService = new BookService();
+    private final BookService bookService;
     private final BookDAO bookDAO =new BookDAO();
     public AddBookController(AddBookView addBookView) {
         this.addBookView = addBookView;
+        bookService = BookService.getInstance();
     }
     public void registerEvent() {
         addBookView.getAddBookButton().setOnAction(event -> {

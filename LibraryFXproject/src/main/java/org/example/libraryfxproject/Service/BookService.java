@@ -12,11 +12,19 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 public class BookService {
-    private final BookDAO bookDAO = new BookDAO();;
-    public BookService() {
-        LoadService loadService = new LoadService();
+    private final BookDAO bookDAO = new BookDAO();
+    private static BookService bookService;
+    public static synchronized BookService getInstance() {
+        if (bookService == null) {
+            bookService = new BookService();
+        }
+        return bookService;
+    }
+    private BookService() {
+        LoadService loadService = LoadService.getInstance();
         loadService.loadData(bookDAO);
     }
+
     public HashMap<String, Book> loadData() {
         bookDAO.loadData(); // Gọi phương thức loadData để tải dữ liệu
         return bookDAO.getDataMap(); // Lấy dữ liệu từ HashMap
