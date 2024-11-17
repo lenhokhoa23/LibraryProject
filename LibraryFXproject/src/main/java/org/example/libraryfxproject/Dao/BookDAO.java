@@ -239,7 +239,7 @@ public class BookDAO extends GeneralDao<String, Book> {
         }
     }
 
-    public void deleteBookFromDatebase (String title) {
+    public void deleteBookFromDatabase (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
