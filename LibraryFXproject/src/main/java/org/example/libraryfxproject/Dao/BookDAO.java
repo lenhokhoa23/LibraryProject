@@ -1,5 +1,6 @@
 package org.example.libraryfxproject.Dao;
 
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -239,7 +240,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
-    public void deleteBookFromDatebase (String title) {
+    public void deleteBookFromDatabase (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -303,6 +304,38 @@ public class BookDAO extends GeneralDAO<String, Book> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ObservableList<XYChart.Series<String, Number>> loadGenreBorrowedData() {
+        String sql = "SELECT b.category, COUNT(c.ISBN) AS borrow_count " +
+                "FROM books b " +
+                "JOIN cart c ON b.ISBN = c.ISBN " +
+                "GROUP BY b.category " +
+                "ORDER BY b.category, borrow_count DESC";
+
+        ObservableList<XYChart.Series<String, Number>> seriesList = FXCollections.observableArrayList();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String category = resultSet.getString("category");
+                int borrowCount = resultSet.getInt("borrow_count");
+
+                // Thêm dữ liệu vào Series
+                series.getData().add(new XYChart.Data<>(category, borrowCount));
+            }
+
+            // Đặt tên cho Series
+            series.setName("Top Books Borrowed by Category");
+            seriesList.add(series);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return seriesList;
     }
 }
 

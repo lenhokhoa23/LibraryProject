@@ -2,6 +2,7 @@ package org.example.libraryfxproject.Controller;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -33,13 +35,13 @@ import java.util.HashMap;
 import java.util.List;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
+
 public class MainMenuController {
     private final MainMenuView mainMenuView;
     private final SearchService searchService ;
     private final BookService bookService;
     private final UpdateService updateService;
     private final UserService userService;
-    HashMap<String, Book> booksMap;
     private ObservableList<Book> observableBooks;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -120,23 +122,21 @@ public class MainMenuController {
     }
 
     public void loadTableData() {
-        System.out.println("Loaded books: " + booksMap.size());
-        ObservableList<Book> observableBooks = FXCollections.observableArrayList(booksMap.values());
+        System.out.println("Loaded books: " + observableBooks.size());
+        updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateCatablogTableView(observableBooks);
         updateUserTableView(studentList);
 
 
+    
     }
-
     private void initializePagination() {
-        List<Book> bookList = new ArrayList<>(booksMap.values());
-        observableBooks = FXCollections.observableArrayList(bookList);
-        int pageCount = (int) Math.ceil((double) observableBooks.size() / ROWS_PER_PAGE);
+        int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
         System.out.println("Total books: " + observableBooks.size());
         System.out.println("Total pages: " + pageCount);
-        mainMenuView.getCatalogPagination().setPageFactory(pageIndex -> createPage(pageIndex));
+        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
 
         int totalPages = (int) Math.ceil((double) studentList.size() / ROWS_PER_PAGE);
         mainMenuView.getStudentPagination().setPageCount(totalPages);
@@ -162,7 +162,7 @@ public class MainMenuController {
         mainMenuView.getBooksBorrowedLabel().setText(updateService.updatedLabel(3).getText());
         mainMenuView.getOverdueBooksLabel().setText(updateService.updatedLabel(4).getText());
 
-        updateService.updateChart(mainMenuView.getGenreCirculationChart());
+        updateService.updatePieChart(mainMenuView.getGenreCirculationChart());
         mainMenuView.getChartTitleLabel().setLayoutX(10);
         mainMenuView.getChartTitleLabel().setLayoutY(10);
 
@@ -172,7 +172,22 @@ public class MainMenuController {
         mainMenuView.getGenreCirculationChart().layoutYProperty().bind(
                 mainMenuView.getChartPane().heightProperty().subtract(mainMenuView.getGenreCirculationChart().heightProperty()).divide(2)
         );
+
+        updateService.updateBarChart(mainMenuView.getGenreBorrowedBarChart());
+        VBox.setVgrow(mainMenuView.getGenreBorrowedBarChart(), Priority.ALWAYS);
+
+        mainMenuView.getActivityTimeColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+        mainMenuView.getActivityUserIDColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+        mainMenuView.getActivityUsernameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+        mainMenuView.getActivityBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+        mainMenuView.getActivityISBNColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+        mainMenuView.getActivityDueColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+        updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 17);
+        mainMenuView.getViewAllButton().setOnAction(event -> {
+            updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
+        });
     }
+
     private void scheduleSearch() {
         if (searchTask != null && !searchTask.isDone()) {
             searchTask.cancel(false);
@@ -217,12 +232,7 @@ public class MainMenuController {
     }
 
     private Node createPage(int pageIndex) {
-        int start = pageIndex * ROWS_PER_PAGE;
-        int end = Math.min(start + ROWS_PER_PAGE, observableBooks.size());
-        ObservableList<Book> currentPageBooks = FXCollections.observableArrayList();
-        if (start < observableBooks.size()) {
-            currentPageBooks.addAll(observableBooks.subList(start, end));
-        }
+        ObservableList<Book> currentPageBooks = getPageData(pageIndex);
         TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
         catalogTableView.getItems().clear();
         catalogTableView.setItems(currentPageBooks);
@@ -232,7 +242,14 @@ public class MainMenuController {
         return pageContainer;
     }
 
-    public void updateCatablogTableView(ObservableList<Book> books) {
+
+    private ObservableList<Book> getPageData(int pageIndex) {
+        int start = pageIndex * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, observableBooks.size());
+        return FXCollections.observableArrayList(observableBooks.subList(start, end));
+    }
+
+    public void updateTableView(ObservableList<Book> books) {
         mainMenuView.getCatalogTableView().getItems().clear();
         mainMenuView.getCatalogTableView().setItems(books);
     }

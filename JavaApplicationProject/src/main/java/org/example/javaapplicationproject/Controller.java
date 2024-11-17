@@ -99,6 +99,19 @@ public class Controller {
         BookManagement.addBook(book);
     }
 
+    public void modifyBook() throws IOException {
+        System.out.println("Hãy nhập ISBN của sách:");
+        String ISBN = br.readLine();
+
+        System.out.println("Hãy nhập thuộc tính bạn muốn sửa:");
+        String attribute = br.readLine();
+
+        System.out.println("Hãy nhập thông tin cho thuộc tính đó:");
+        String newValue = br.readLine();
+
+        BookManagement.modifyBookAttribute(ISBN, attribute, newValue);
+    }
+
     public void removeBook() {
         try {
             System.out.println("Enter the name of the book you want to remove:");
@@ -177,6 +190,7 @@ public class Controller {
             System.out.println();
         }
     }
+
     public static void checkCartUser(String username, String role) {
         int cartId = 0;
         if (role.equals("user")) {
@@ -260,7 +274,6 @@ public class Controller {
         }
     }
 
-
     public static boolean borrowBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
         System.out.println("Nhập tên sách bạn muốn mượn: ");
         String bookTitle = br.readLine();
@@ -276,6 +289,7 @@ public class Controller {
             return true;
         } else if (isbn != null) {
             BookManagement.updateQuantity(username, bookTitle, "BORROW");
+            UserManagement.updateBorrowedBooks(username, 1);
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String startDate = dateFormat.format(calendar.getTime());
@@ -309,6 +323,7 @@ public class Controller {
         }
         return true;
     }
+
     public static boolean returnBook(BookManagement bookManagement, CartManagement cartManagement, String username) throws IOException {
         System.out.println("Nhập tên sách bạn muốn hủy mượn: ");
         String bookTitle = br.readLine();
@@ -323,9 +338,9 @@ public class Controller {
         }
         else {
             BookManagement.updateQuantity(username, bookTitle, "RETURN");
+            UserManagement.updateBorrowedBooks(username, -1);
             cartManagement.deleteCart(isbn2, cart_id);
             System.out.println("Hủy mượn sách thành công!");
-
         }
         return true;
     }

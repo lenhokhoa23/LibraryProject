@@ -6,12 +6,13 @@ public class Menu {
         System.out.println("Chào Admin! Các chức năng khả dụng:");
         System.out.println("[1] Thêm sách");
         System.out.println("[2] Xóa sách");
-        System.out.println("[3] Tìm sách");
-        System.out.println("[4] Xoá người dùng");
-        System.out.println("[5] Tìm người dùng");
-        System.out.println("[6] Xem giá sách người dùng");
-        System.out.println("[7] Xem trạng thái sách trong kho");
-        System.out.println("[8] Thoát");
+        System.out.println("[3] Sửa sách");
+        System.out.println("[4] Tìm sách");
+        System.out.println("[5] Xoá người dùng");
+        System.out.println("[6] Tìm người dùng");
+        System.out.println("[7] Xem giá sách người dùng");
+        System.out.println("[8] Xem trạng thái sách trong kho");
+        System.out.println("[9] Thoát");
     }
 
     // Hiển thị menu cho User

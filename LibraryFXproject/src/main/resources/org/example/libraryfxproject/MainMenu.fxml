@@ -3,16 +3,6 @@
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
-
-<?import javafx.scene.text.*?>
-
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -22,7 +12,6 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuButton?>
@@ -46,8 +35,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.util.Callback?>
-
+<?import javafx.scene.text.Font?>
 
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
@@ -184,37 +172,31 @@
 
                                     <!-- Charts -->
                                     <HBox spacing="20" styleClass="chart-container">
-                     <children>
-                        <VBox prefHeight="450.0" prefWidth="441.0" styleClass="chart-card" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Pane fx:id="chartPane" prefHeight="426.0" prefWidth="420.0" styleClass="chart-card" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="chartTitleLabel" layoutX="10.0" layoutY="10.0" styleClass="chart-title" text="Circulation by Genre" />
-
-                                    <PieChart fx:id="genreCirculationChart" layoutX="99.0" layoutY="89.0" legendVisible="false" prefHeight="248.0" prefWidth="249.0" />
-                                 </children>
-                              </Pane>
-
-                           </children>
-                        </VBox>
-
-
-
-
-                        <VBox styleClass="chart-card" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <VBox prefHeight="559.0" prefWidth="440.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label styleClass="chart-title" text="Daily Checkouts" />
-                                                <LineChart fx:id="dailyCheckoutsChart" prefHeight="400.0" prefWidth="616.0">
-                                                   <xAxis>
-                                                      <CategoryAxis side="BOTTOM" />
-                                                   </xAxis>
-                                                   <yAxis>
-                                                      <NumberAxis side="LEFT" />
-                                                   </yAxis>
-                                                </LineChart>
+                                                <Label fx:id="chartTitleLabel" layoutX="10.0" layoutY="10.0" styleClass="chart-title" text="Circulation by Genre" />
+                                                <Pane fx:id="chartPane" prefHeight="426.0" prefWidth="420.0">
+                                                   <children>
+                                                      <PieChart fx:id="genreCirculationChart" layoutX="47.0" layoutY="61.0" legendVisible="false" prefHeight="305.0" prefWidth="306.0" />
+                                                   </children>
+                                                </Pane>
                                              </children>
                                           </VBox>
-                     </children>
+                                          <VBox prefHeight="559.0" prefWidth="710.0" styleClass="stat-card">
+                                             <children>
+                                                <Label styleClass="chart-title" text="Top Books Borrowed by Genre" />
+                                                <BarChart fx:id="genreBorrowedBarChart" legendVisible="false" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" title="Books Borrowed by Category">
+                                                   <xAxis>
+                                                      <CategoryAxis tickLabelsVisible="false" />
+                                                   </xAxis>
+                                                   <yAxis>
+                                                      <NumberAxis label="Borrow Count" styleClass="chart-title" upperBound="50" />
+                                                   </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </VBox>
+                                       </children>
                                     </HBox>
 
                                     <!-- Recent Activities -->
@@ -224,15 +206,17 @@
                                              <children>
                                                 <Label styleClass="section-title" text="Recent Activities" />
                                                 <Region HBox.hgrow="ALWAYS" />
-                                                <Button styleClass="view-all-button" text="View All" />
+                                                <Button fx:id="viewAllButton" styleClass="view-all-button" text="View All" />
                                              </children>
                                           </HBox>
-                                          <TableView fx:id="recentActivitiesTable">
+                                          <TableView fx:id="recentActivitiesTable" minHeight="500.0" prefHeight="500.0" prefWidth="700.0">
                                              <columns>
-                                                <TableColumn fx:id="activityTimeColumn" prefWidth="100" text="Time" />
-                                                <TableColumn fx:id="activityTypeColumn" prefWidth="150" text="Activity" />
-                                                <TableColumn fx:id="activityDetailsColumn" prefWidth="300" text="Details" />
-                                                <TableColumn fx:id="activityUserColumn" prefWidth="150" text="User" />
+                                                <TableColumn fx:id="activityTimeColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Time" />
+                                                <TableColumn fx:id="activityUserIDColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="ID" />
+                                                <TableColumn fx:id="activityUsernameColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Username" />
+                                                <TableColumn fx:id="activityBookTitleColumn" maxWidth="900.0" minWidth="900.0" prefWidth="900.0" text="Book Title" />
+                                                <TableColumn fx:id="activityISBNColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="ISBN" />
+                                                <TableColumn fx:id="activityDueColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Due" />
                                              </columns>
                                           </TableView>
                      </children>
@@ -274,8 +258,8 @@
                                        </graphic>
                                        Search
                                     </ToggleButton>
-                                    <Button prefHeight="38.0" prefWidth="114.0" styleClass="add-item-button" fx:id="addItemButton" text="Add New Item" />
-                                    <Button prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" fx:id="deleteItemButton" text="Delete Item" />
+                                    <Button fx:id="addItemButton" prefHeight="38.0" prefWidth="114.0" styleClass="add-item-button" text="Add New Item" />
+                                    <Button fx:id="deleteItemButton" prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" text="Delete Item" />
                                     <Button fx:id="refreshButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                        <graphic>
                                           <ImageView fitHeight="20" fitWidth="20">
@@ -299,7 +283,7 @@
                                           <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
                                           <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
                                           <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
-                                          <TableColumn fx:id="quantityColumn" prefWidth="174.0" text="Quantity" styleClass="centered-column" />
+                                          <TableColumn fx:id="quantityColumn" prefWidth="174.0" styleClass="centered-column" text="Quantity" />
                                        </columns>
                                     </TableView>
                                  </children>

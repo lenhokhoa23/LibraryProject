@@ -43,17 +43,17 @@ public class RegisterController {
                     AccountDAO.saveUserToDatabase(name, email, phoneNumber, username, password);
                     openLoginView((Stage) ((Node) event.getSource()).getScene().getWindow());
                 } else if (registerService.validateInput(username, phoneNumber, email) == 1) {
-                    RegisterView.showAlert("Username không được có dấu cách, phải chứa 8-20 ký tự, bao gồm cả chữ cái và số!");
+                    RegisterView.showAlert("Username must not contain spaces, must be 8-20 characters long, including letters and numbers!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 2) {
-                    RegisterView.showAlert("Số điện thoại phải là dãy số, bắt đầu với số 0 và có ít nhất 10 ký tự!");
+                    RegisterView.showAlert("Phone number must be a numeric sequence, start with 0, and be at least 10 characters long!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 3) {
-                    RegisterView.showAlert("Email phải có định dạng hợp lệ và đuôi là @gmail.com!");
+                    RegisterView.showAlert("Email invalid or disposable email detected!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 4) {
-                    RegisterView.showAlert("Username này đã được sử dụng, vui lòng sử dụng một username khác!");
+                    RegisterView.showAlert("This username has already been taken, please use another username!");
                 }
             } else {
                 this.registerView.showErrorMessFill();
-                System.out.println("Vui lòng nhập đầy đủ thông tin!");
+                System.out.println("Please provide all required information!");
             }
         });
     }
