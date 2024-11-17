@@ -11,7 +11,6 @@ public class SystemController {
         BookManagement bookManagement = new BookManagement();
         CartManagement cartManagement = new CartManagement();
         Controller controller = new Controller();
-        AccountManagement accountManagement = new AccountManagement();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Welcome to My Application");
         BookManagement.loadBooksIntoMemory();
@@ -46,29 +45,33 @@ public class SystemController {
                                         break;
                                     }
                                     case 3: {
+                                        controller.modifyBook();
+                                        break;
+                                    }
+                                    case 4: {
                                         boolean finding = true;
                                         while (finding) {
                                             finding = controller.findBook();
                                         }
                                         break;
                                     }
-                                    case 4: {
+                                    case 5: {
                                         controller.removeUser();
                                         break;
                                     }
-                                    case 5 : {
+                                    case 6: {
                                         controller.findUser();
                                         break;
                                     }
-                                    case 6: {
+                                    case 7: {
                                         controller.checkCartUser(username, "admin");
                                         break;
                                     }
-                                    case 7: {
+                                    case 8: {
                                         controller.CheckBookStatus();
                                         break;
                                     }
-                                    case 8: {
+                                    case 9: {
                                         isUsing = false;
                                         isAdminUsing = false;
                                         System.out.println("Goodbye...");

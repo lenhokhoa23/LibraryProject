@@ -1,5 +1,7 @@
 package org.example.libraryfxproject.Dao;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.example.libraryfxproject.Model.Account;
 import org.example.libraryfxproject.Model.Cart;
 
@@ -219,5 +221,42 @@ public class CartDAO extends GeneralDao<Integer, Cart> {
             e.printStackTrace();
         }
         return overdueCount;
+    }
+
+    public ObservableList<ObservableList<String>> getActivities(int limit) {
+        ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (conn != null) {
+                String query = "SELECT c.startDate AS time, c.Cart_ID AS userID, u.username, " +
+                        "c.title AS bookTitle, c.ISBN, c.endDate AS due " +
+                        "FROM cart c " +
+                        "JOIN user u ON c.Cart_ID = u.Cart_ID ORDER BY c.startDate DESC " +
+                        (limit > 0 ? "LIMIT ?" : "");
+
+                PreparedStatement statement = conn.prepareStatement(query);
+                if (limit > 0) {
+                    statement.setInt(1, limit);
+                }
+                ResultSet result = statement.executeQuery();
+
+                while (result.next()) {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    row.add(result.getString("time"));
+                    row.add(String.valueOf(result.getInt("userID")));
+                    row.add(result.getString("username"));
+                    row.add(result.getString("bookTitle"));
+                    row.add(result.getString("ISBN"));
+                    row.add(result.getString("due"));
+
+                    activities.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn dữ liệu.");
+            e.printStackTrace();
+        }
+
+        return activities;
     }
 }

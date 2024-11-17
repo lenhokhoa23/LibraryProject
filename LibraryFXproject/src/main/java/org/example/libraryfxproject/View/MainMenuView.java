@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -82,7 +84,6 @@ public class MainMenuView {
     private MenuButton profileButton;
     private boolean isSelecting = false;
 
-
     @FXML
     private Label totalBooksLabel;
 
@@ -102,7 +103,34 @@ public class MainMenuView {
     private Pane chartPane;
 
     @FXML
+    private BarChart<String, Number> genreBorrowedBarChart;
+
+    @FXML
     private Label chartTitleLabel;
+
+    @FXML
+    private TableView<ObservableList<String>> recentActivitiesTable;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityTimeColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityUserIDColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityUsernameColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityBookTitleColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityISBNColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> activityDueColumn;
+
+    @FXML
+    private Button viewAllButton;
 
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
@@ -253,6 +281,78 @@ public class MainMenuView {
         this.chartPane = chartPane;
     }
 
+    public BarChart<String, Number> getGenreBorrowedBarChart() {
+        return genreBorrowedBarChart;
+    }
+
+    public void setGenreBorrowedBarChart(BarChart<String, Number> genreBorrowedBarChart) {
+        this.genreBorrowedBarChart = genreBorrowedBarChart;
+    }
+
+    public TableView<ObservableList<String>> getRecentActivitiesTable() {
+        return recentActivitiesTable;
+    }
+
+    public void setRecentActivitiesTable(TableView<ObservableList<String>> recentActivitiesTable) {
+        this.recentActivitiesTable = recentActivitiesTable;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityTimeColumn() {
+        return activityTimeColumn;
+    }
+
+    public void setActivityTimeColumn(TableColumn<ObservableList<String>, String> activityTimeColumn) {
+        this.activityTimeColumn = activityTimeColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityUserIDColumn() {
+        return activityUserIDColumn;
+    }
+
+    public void setActivityUserIDColumn(TableColumn<ObservableList<String>, String> activityUserIDColumn) {
+        this.activityUserIDColumn = activityUserIDColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityUsernameColumn() {
+        return activityUsernameColumn;
+    }
+
+    public void setActivityUsernameColumn(TableColumn<ObservableList<String>, String> activityUsernameColumn) {
+        this.activityUsernameColumn = activityUsernameColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityBookTitleColumn() {
+        return activityBookTitleColumn;
+    }
+
+    public void setActivityBookTitleColumn(TableColumn<ObservableList<String>, String> activityBookTitleColumn) {
+        this.activityBookTitleColumn = activityBookTitleColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityISBNColumn() {
+        return activityISBNColumn;
+    }
+
+    public void setActivityISBNColumn(TableColumn<ObservableList<String>, String> activityISBNColumn) {
+        this.activityISBNColumn = activityISBNColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getActivityDueColumn() {
+        return activityDueColumn;
+    }
+
+    public void setActivityDueColumn(TableColumn<ObservableList<String>, String> activityDueColumn) {
+        this.activityDueColumn = activityDueColumn;
+    }
+
+    public Button getViewAllButton() {
+        return viewAllButton;
+    }
+
+    public void setViewAllButton(Button viewAllButton) {
+        this.viewAllButton = viewAllButton;
+    }
+
     public Label getChartTitleLabel() {
         return chartTitleLabel;
     }
@@ -296,6 +396,12 @@ public class MainMenuView {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
+    private void handleActionClick(Book book) {
+        // Handle button click event
+        System.out.println("Button clicked for book: " + book.getTitle());
+    }
+
+
     public void showErrorMessFill() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Message");
@@ -303,7 +409,5 @@ public class MainMenuView {
         alert.setContentText("Please fill the blank search fields!");
         alert.show();
     }
-    
-
 
 }

@@ -1,12 +1,14 @@
 package org.example.libraryfxproject.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Model.Book;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
+
 public class MainMenuController {
     private final MainMenuView mainMenuView;
     private final SearchService searchService;
@@ -43,6 +46,7 @@ public class MainMenuController {
     private final int rowsPerPage = 100; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
+
     public MainMenuController(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
         this.searchService = new SearchService();
@@ -137,7 +141,7 @@ public class MainMenuController {
         mainMenuView.getBooksBorrowedLabel().setText(updateService.updatedLabel(3).getText());
         mainMenuView.getOverdueBooksLabel().setText(updateService.updatedLabel(4).getText());
 
-        updateService.updateChart(mainMenuView.getGenreCirculationChart());
+        updateService.updatePieChart(mainMenuView.getGenreCirculationChart());
         mainMenuView.getChartTitleLabel().setLayoutX(10);
         mainMenuView.getChartTitleLabel().setLayoutY(10);
 
@@ -147,7 +151,22 @@ public class MainMenuController {
         mainMenuView.getGenreCirculationChart().layoutYProperty().bind(
                 mainMenuView.getChartPane().heightProperty().subtract(mainMenuView.getGenreCirculationChart().heightProperty()).divide(2)
         );
+
+        updateService.updateBarChart(mainMenuView.getGenreBorrowedBarChart());
+        VBox.setVgrow(mainMenuView.getGenreBorrowedBarChart(), Priority.ALWAYS);
+
+        mainMenuView.getActivityTimeColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+        mainMenuView.getActivityUserIDColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+        mainMenuView.getActivityUsernameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+        mainMenuView.getActivityBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+        mainMenuView.getActivityISBNColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+        mainMenuView.getActivityDueColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+        updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 17);
+        mainMenuView.getViewAllButton().setOnAction(event -> {
+            updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
+        });
     }
+
     private void scheduleSearch() {
         if (searchTask != null && !searchTask.isDone()) {
             searchTask.cancel(false);
