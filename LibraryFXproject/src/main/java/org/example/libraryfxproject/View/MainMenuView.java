@@ -125,6 +125,7 @@ public class MainMenuView {
     private TableColumn<User, String> membershipTypeColumn;
     @FXML
     private Pagination studentPagination;
+    @FXML
     private TableView<ObservableList<String>> recentActivitiesTable;
 
     @FXML

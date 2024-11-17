@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class AddBookController {
     private final AddBookView addBookView;
-    private final BookService bookService = new BookService();
+    private final BookService bookService = BookService.getInstance();
     private final BookDAO bookDAO = new BookDAO();
 
     public AddBookController(AddBookView addBookView) {

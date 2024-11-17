@@ -28,11 +28,10 @@ public class BookService {
     private BookService() {
         LoadService loadService = LoadService.getInstance();
         loadService.loadData(bookDAO);
-        this.booksMap = bookDAO.getDataMap();
     }
 
     public ObservableList<Book> getAllBooks() {
-        return FXCollections.observableArrayList(booksMap.values());
+        return FXCollections.observableArrayList(bookDAO.getDataMap().values());
     }
 
     public int validateAddBookInput(String title, String author, String pubdateStr, String releaseDateStr,
