@@ -295,11 +295,6 @@ public class MainMenuView {
         bookTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookType"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
-    private void handleActionClick(Book book) {
-        // Handle button click event
-        System.out.println("Button clicked for book: " + book.getTitle());
-    }
-
 
     public void showErrorMessFill() {
         Alert alert = new Alert(Alert.AlertType.ERROR);

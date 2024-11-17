@@ -47,7 +47,7 @@ public class ContextMenuController {
                 // Thực hiện hành động xóa ở đây
                 Book selectedBook = catalogTableView.getSelectionModel().getSelectedItem();
                 if (selectedBook != null) {
-                    bookDAO.deleteBookFromDatebase(selectedBook.getTitle());
+                    bookDAO.deleteBookFromDatabase(selectedBook.getTitle());
                     catalogTableView.getItems().remove(selectedBook);
                 }
             }
