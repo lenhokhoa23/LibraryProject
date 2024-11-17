@@ -40,7 +40,6 @@ public class MainMenuController {
     private final SearchService searchService;
     private final BookService bookService;
     private final UpdateService updateService;
-    HashMap<String, Book> booksMap;
     private ObservableList<Book> observableBooks;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
@@ -53,7 +52,7 @@ public class MainMenuController {
         this.searchService = new SearchService();
         this.updateService = new UpdateService();
         this.bookService = new BookService();
-        booksMap = bookService.loadData();
+        observableBooks = bookService.getAllBooks();
         loadCatalogData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
@@ -117,20 +116,16 @@ public class MainMenuController {
     }
 
     public void loadCatalogData() {
-        System.out.println("Loaded books: " + booksMap.size());
-        ObservableList<Book> observableBooks = FXCollections.observableArrayList(booksMap.values());
-        updateTableView(observableBooks);
+        System.out.println("Loaded books: " + observableBooks.size());
+        updateTableView(getPageData(0)); // Load the first page initially
     }
 
     private void initializePagination() {
-        List<Book> bookList = new ArrayList<>(booksMap.values());
-        observableBooks = FXCollections.observableArrayList(bookList);
-
         int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
         System.out.println("Total books: " + observableBooks.size());
         System.out.println("Total pages: " + pageCount);
-        mainMenuView.getCatalogPagination().setPageFactory(pageIndex -> createPage(pageIndex));
+        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
 
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
@@ -216,12 +211,7 @@ public class MainMenuController {
     }
 
     private Node createPage(int pageIndex) {
-        int start = pageIndex * rowsPerPage;
-        int end = Math.min(start + rowsPerPage, observableBooks.size());
-        ObservableList<Book> currentPageBooks = FXCollections.observableArrayList();
-        if (start < observableBooks.size()) {
-            currentPageBooks.addAll(observableBooks.subList(start, end));
-        }
+        ObservableList<Book> currentPageBooks = getPageData(pageIndex);
         TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
         catalogTableView.getItems().clear();
         catalogTableView.setItems(currentPageBooks);
@@ -229,6 +219,12 @@ public class MainMenuController {
         VBox pageContainer = new VBox();
         pageContainer.getChildren().add(catalogTableView);
         return pageContainer;
+    }
+
+    private ObservableList<Book> getPageData(int pageIndex) {
+        int start = pageIndex * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, observableBooks.size());
+        return FXCollections.observableArrayList(observableBooks.subList(start, end));
     }
 
     public void updateTableView(ObservableList<Book> books) {

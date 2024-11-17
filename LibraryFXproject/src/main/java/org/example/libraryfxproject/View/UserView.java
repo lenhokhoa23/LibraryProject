@@ -128,7 +128,6 @@ public class UserView {
             stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
             stage.setScene(scene);
             stage.show();
-
             UserMenuController userMenuController = new UserMenuController(this);
             userMenuController.registerEvent();
         } catch (IOException e) {
