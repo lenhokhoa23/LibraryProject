@@ -12,6 +12,16 @@ import java.util.Map;
 
 public class SearchService {
     private final BookDAO bookDAO = new BookDAO();
+    private static SearchService searchService;
+    private SearchService() {}
+    // synchronized giup ho tro da luong khong tao ra nhieu thuc the
+    public static synchronized SearchService getInstance() {
+        if (searchService == null) {
+            searchService = new SearchService();
+        }
+        return searchService;
+    }
+
 
     public List<String> searchBookByPrefix(String prefix) {
         prefix = prefix.toUpperCase();

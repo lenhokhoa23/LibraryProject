@@ -22,6 +22,7 @@ import javafx.util.Callback;
 import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.User;
 
 import java.io.IOException;
 
@@ -109,6 +110,21 @@ public class MainMenuView {
     private Label chartTitleLabel;
 
     @FXML
+    private TableView<User> studentTableView;
+    @FXML
+    private TableColumn<User, String> usernameColumn;
+    @FXML
+    private TableColumn<User, String> nameColumn;
+    @FXML
+    private TableColumn<User, String> emailColumn;
+    @FXML
+    private TableColumn<User, String> phoneColumn;
+    @FXML
+    private TableColumn<User, String> borrowedBookColumn;
+    @FXML
+    private TableColumn<User, String> membershipTypeColumn;
+    @FXML
+    private Pagination studentPagination;
     private TableView<ObservableList<String>> recentActivitiesTable;
 
     @FXML
@@ -359,6 +375,70 @@ public class MainMenuView {
 
     public void setChartTitleLabel(Label chartTitleLabel) {
         this.chartTitleLabel = chartTitleLabel;
+    }
+
+    public TableView<User> getStudentTableView() {
+        return studentTableView;
+    }
+
+    public void setStudentTableView(TableView<User> studentTableView) {
+        this.studentTableView = studentTableView;
+    }
+
+    public TableColumn<User, String> getUsernameColumn() {
+        return usernameColumn;
+    }
+
+    public void setUsernameColumn(TableColumn<User, String> usernameColumn) {
+        this.usernameColumn = usernameColumn;
+    }
+
+    public TableColumn<User, String> getNameColumn() {
+        return nameColumn;
+    }
+
+    public void setNameColumn(TableColumn<User, String> nameColumn) {
+        this.nameColumn = nameColumn;
+    }
+
+    public TableColumn<User, String> getEmailColumn() {
+        return emailColumn;
+    }
+
+    public void setEmailColumn(TableColumn<User, String> emailColumn) {
+        this.emailColumn = emailColumn;
+    }
+
+    public TableColumn<User, String> getPhoneColumn() {
+        return phoneColumn;
+    }
+
+    public void setPhoneColumn(TableColumn<User, String> phoneColumn) {
+        this.phoneColumn = phoneColumn;
+    }
+
+    public TableColumn<User, String> getBorrowedBookColumn() {
+        return borrowedBookColumn;
+    }
+
+    public void setBorrowedBookColumn(TableColumn<User, String> borrowedBookColumn) {
+        this.borrowedBookColumn = borrowedBookColumn;
+    }
+
+    public TableColumn<User, String> getMembershipTypeColumn() {
+        return membershipTypeColumn;
+    }
+
+    public void setMembershipTypeColumn(TableColumn<User, String> membershipTypeColumn) {
+        this.membershipTypeColumn = membershipTypeColumn;
+    }
+
+    public Pagination getStudentPagination() {
+        return studentPagination;
+    }
+
+    public void setStudentPagination(Pagination studentPagination) {
+        this.studentPagination = studentPagination;
     }
 
     public void initializeMainMenuView() {

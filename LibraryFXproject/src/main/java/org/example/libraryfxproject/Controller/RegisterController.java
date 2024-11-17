@@ -19,7 +19,7 @@ import java.sql.SQLException;
 
 public class RegisterController {
     private final RegisterView registerView;
-    private final RegisterService registerService = new RegisterService();
+    private final RegisterService registerService = RegisterService.getInstance();
 
     public RegisterController(RegisterView registerView) {
         this.registerView = registerView;

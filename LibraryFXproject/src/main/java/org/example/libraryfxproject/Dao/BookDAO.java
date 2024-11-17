@@ -24,7 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class BookDAO extends GeneralDao<String, Book> {
+public class BookDAO extends GeneralDAO<String, Book> {
     private Trie trie = new Trie();
     private TrieNode trieNode = new TrieNode();
     public static int totalQuantity = 0;

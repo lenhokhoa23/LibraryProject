@@ -7,9 +7,15 @@ import org.example.libraryfxproject.Model.User;
 
 public class LoginService {
     private final AccountDAO accountDAO = new AccountDAO();
-
-    public LoginService() {
-        LoadService loadService = new LoadService();
+    private static LoginService loginService;
+    public static synchronized LoginService getInstance() {
+        if (loginService == null) {
+            loginService = new LoginService();
+        }
+        return loginService;
+    }
+    private LoginService() {
+        LoadService loadService = LoadService.getInstance();
         LoadService.loadData(accountDAO);
     }
 

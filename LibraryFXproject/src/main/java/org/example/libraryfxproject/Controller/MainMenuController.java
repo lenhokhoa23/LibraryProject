@@ -1,26 +1,27 @@
 package org.example.libraryfxproject.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Service.BookService;
-import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.Model.User;
+import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.View.AddBookView;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
-import org.example.libraryfxproject.Service.LoadService;
-import org.example.libraryfxproject.Service.UpdateService;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
@@ -37,23 +38,27 @@ import javafx.util.Duration;
 
 public class MainMenuController {
     private final MainMenuView mainMenuView;
-    private final SearchService searchService;
+    private final SearchService searchService ;
     private final BookService bookService;
     private final UpdateService updateService;
+    private final UserService userService;
     private ObservableList<Book> observableBooks;
+    private ObservableList<User> studentList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
-    private final int rowsPerPage = 100; // Số lượng records trên 1 page
+    private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
 
+
     public MainMenuController(MainMenuView mainMenuView) {
         this.mainMenuView = mainMenuView;
-        this.searchService = new SearchService();
-        this.updateService = new UpdateService();
-        this.bookService = new BookService();
-        observableBooks = bookService.getAllBooks();
-        loadCatalogData();
+        this.searchService = SearchService.getInstance();
+        this.updateService = UpdateService.getInstance();
+        this.bookService = BookService.getInstance();
+        this.userService = UserService.getInstance();
+        booksMap = bookService.loadData();
+        loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
     }
@@ -107,19 +112,25 @@ public class MainMenuController {
         mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
-            loadCatalogData();
+            loadTableData();
             initializePagination();
         });
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
+        setupTableColumns();
     }
 
-    public void loadCatalogData() {
+    public void loadTableData() {
         System.out.println("Loaded books: " + observableBooks.size());
         updateTableView(getPageData(0)); // Load the first page initially
-    }
+        studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
+        updateCatablogTableView(observableBooks);
+        updateUserTableView(studentList);
 
+
+    
+    }
     private void initializePagination() {
         int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
@@ -127,6 +138,16 @@ public class MainMenuController {
         System.out.println("Total pages: " + pageCount);
         mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
 
+        int totalPages = (int) Math.ceil((double) studentList.size() / ROWS_PER_PAGE);
+        mainMenuView.getStudentPagination().setPageCount(totalPages);
+
+        mainMenuView.getStudentPagination().setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public TableView<User> call(Integer pageIndex) {
+                updateTable(pageIndex);
+                return mainMenuView.getStudentTableView();
+            }
+        });
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
         // Add a click listener to the root pane to hide suggestions when clicking outside
@@ -221,6 +242,7 @@ public class MainMenuController {
         return pageContainer;
     }
 
+
     private ObservableList<Book> getPageData(int pageIndex) {
         int start = pageIndex * rowsPerPage;
         int end = Math.min(start + rowsPerPage, observableBooks.size());
@@ -232,9 +254,19 @@ public class MainMenuController {
         mainMenuView.getCatalogTableView().setItems(books);
     }
 
+    public void updateUserTableView(ObservableList<User> users) {
+        mainMenuView.getStudentTableView().getItems().clear();
+        mainMenuView.getStudentTableView().setItems(users);
+    }
+
+    private void updateTable(int pageIndex) {
+        int start = pageIndex * ROWS_PER_PAGE;
+        int end = Math.min(start + ROWS_PER_PAGE, studentList.size());
+        mainMenuView.getStudentTableView().setItems(FXCollections.observableArrayList(studentList.subList(start, end)));
+    }
     public void CatalogEvent() {
         if (isFilteredView) {
-            loadCatalogData();
+            loadTableData();
             isFilteredView = false;
         } else {
             String searchType = mainMenuView.getFilterComboBox().getValue();
@@ -242,7 +274,7 @@ public class MainMenuController {
             ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
             if (searchType != null && !searchText.isEmpty()) {
                 filteredBooks = searchService.searchBookByAttribute(searchType.toLowerCase(), searchText);
-                updateTableView(filteredBooks);
+                updateCatablogTableView(filteredBooks);
                 isFilteredView = true;
             }
         }
@@ -252,4 +284,19 @@ public class MainMenuController {
         new AddBookView(mainMenuView.getStage());
     }
 
+    private void setupTableColumns() {
+        mainMenuView.getUsernameColumn().setCellValueFactory(new PropertyValueFactory<>("username"));
+        mainMenuView.getNameColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
+        mainMenuView.getEmailColumn().setCellValueFactory(new PropertyValueFactory<>("email"));
+        mainMenuView.getPhoneColumn().setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        mainMenuView.getBorrowedBookColumn().setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
+        mainMenuView.getMembershipTypeColumn().setCellValueFactory(new PropertyValueFactory<>("membershipType"));
+        mainMenuView.getStudentTableView().getColumns().clear();
+        mainMenuView.getStudentTableView().getColumns().addAll(mainMenuView.getUsernameColumn(),
+                mainMenuView.getNameColumn(),
+                mainMenuView.getEmailColumn(),
+                mainMenuView.getPhoneColumn(),
+                mainMenuView.getBorrowedBookColumn(),
+                mainMenuView.getMembershipTypeColumn());
+    }
 }

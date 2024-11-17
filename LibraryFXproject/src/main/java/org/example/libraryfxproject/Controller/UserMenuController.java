@@ -33,7 +33,7 @@ public class UserMenuController {
 
     public UserMenuController(UserView userView) {
         this.userView = userView;
-        searchService = new SearchService();
+        searchService = SearchService.getInstance();
     }
 
     public void registerEvent() {

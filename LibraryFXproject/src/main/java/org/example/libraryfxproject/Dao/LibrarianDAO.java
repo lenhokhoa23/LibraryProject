@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class LibrarianDAO extends GeneralDao<String, Librarian> {
+public class LibrarianDAO extends GeneralDAO<String, Librarian> {
     @Override
     public void loadData() {
         String sql = "SELECT * FROM Librarian";

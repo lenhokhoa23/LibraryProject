@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAO extends GeneralDao<String, User> {
+public class UserDAO extends GeneralDAO<String, User> {
 
     /** Load userdata into memory. */
     @Override

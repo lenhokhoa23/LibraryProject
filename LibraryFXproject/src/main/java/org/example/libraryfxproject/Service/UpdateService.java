@@ -21,6 +21,15 @@ public class UpdateService {
     private final CartDAO cartDAO = new CartDAO();
     private final UserDAO userDAO = new UserDAO();
 
+    private static UpdateService updateService;
+    private UpdateService() {}
+    public static synchronized UpdateService getInstance() {
+        if (updateService == null) {
+            updateService = new UpdateService();
+        }
+        return updateService;
+    }
+
     public Label updatedLabel(int type) {
         Label label = new Label();
         if (type == 1) {

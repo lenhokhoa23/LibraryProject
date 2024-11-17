@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class AccountDAO extends GeneralDao<String, Account> {
+public class AccountDAO extends GeneralDAO<String, Account> {
 
     @Override
     public void loadData() {

@@ -17,12 +17,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BookService {
-    private final BookDAO bookDAO;
-    private HashMap<String, Book> booksMap;
-
-    public BookService() {
-        this.bookDAO = new BookDAO();
-        LoadService loadService = new LoadService();
+    private final BookDAO bookDAO = new BookDAO();
+    private static BookService bookService;
+    public static synchronized BookService getInstance() {
+        if (bookService == null) {
+            bookService = new BookService();
+        }
+        return bookService;
+    }
+    private BookService() {
+        LoadService loadService = LoadService.getInstance();
         loadService.loadData(bookDAO);
         this.booksMap = bookDAO.getDataMap();
     }
