@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class CartDAO extends GeneralDao<Integer, Cart> {
+public class CartDAO extends GeneralDAO<Integer, Cart> {
 
     @Override
     public void loadData() {

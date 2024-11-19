@@ -16,6 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Pane;
 
+
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -23,6 +26,9 @@ import javafx.util.Callback;
 import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.User;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -112,6 +118,30 @@ public class MainMenuView {
     private Label chartTitleLabel;
 
     @FXML
+    private TableView<User> studentTableView;
+
+    @FXML
+    private TableColumn<User, String> usernameColumn;
+
+    @FXML
+    private TableColumn<User, String> nameColumn;
+
+    @FXML
+    private TableColumn<User, String> emailColumn;
+
+    @FXML
+    private TableColumn<User, String> phoneColumn;
+
+    @FXML
+    private TableColumn<User, String> borrowedBookColumn;
+
+    @FXML
+    private TableColumn<User, String> membershipTypeColumn;
+
+    @FXML
+    private Pagination studentPagination;
+
+    @FXML
     private TableView<ObservableList<String>> recentActivitiesTable;
 
     @FXML
@@ -134,6 +164,22 @@ public class MainMenuView {
 
     @FXML
     private Button viewAllButton;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private Button addStudent;
+    @FXML
+    private Button cancelAddStudentButton;
+    @FXML
+    private Button addStudentButton;
+
+    private AlertDisplayer alertDisplayer;
 
     @FXML
     private Button modifyButton;
@@ -164,7 +210,37 @@ public class MainMenuView {
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
+        alertDisplayer = new JavaFXAlertDisplayer();
     }
+
+    public Button getAddStudentButton() {
+        return addStudentButton;
+    }
+
+    public TextField getNameField() {
+        return nameField;
+    }
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public TextField getEmailField() {
+        return emailField;
+    }
+
+    public TextField getPhoneField() {
+        return phoneField;
+    }
+
+    public Button getAddStudent() {
+        return addStudent;
+    }
+
+    public Button getCancelAddStudentButton() {
+        return cancelAddStudentButton;
+    }
+
 
     public boolean isSelecting() {
         return isSelecting;
@@ -413,9 +489,73 @@ public class MainMenuView {
         this.chartTitleLabel = chartTitleLabel;
     }
 
+    public TableView<User> getStudentTableView() {
+        return studentTableView;
+    }
+
+    public void setStudentTableView(TableView<User> studentTableView) {
+        this.studentTableView = studentTableView;
+    }
+
+    public TableColumn<User, String> getUsernameColumn() {
+        return usernameColumn;
+    }
+
+    public void setUsernameColumn(TableColumn<User, String> usernameColumn) {
+        this.usernameColumn = usernameColumn;
+    }
+
+    public TableColumn<User, String> getNameColumn() {
+        return nameColumn;
+    }
+
+    public void setNameColumn(TableColumn<User, String> nameColumn) {
+        this.nameColumn = nameColumn;
+    }
+
+    public TableColumn<User, String> getEmailColumn() {
+        return emailColumn;
+    }
+
+    public void setEmailColumn(TableColumn<User, String> emailColumn) {
+        this.emailColumn = emailColumn;
+    }
+
+    public TableColumn<User, String> getPhoneColumn() {
+        return phoneColumn;
+    }
+
+    public void setPhoneColumn(TableColumn<User, String> phoneColumn) {
+        this.phoneColumn = phoneColumn;
+    }
+
+    public TableColumn<User, String> getBorrowedBookColumn() {
+        return borrowedBookColumn;
+    }
+
+    public void setBorrowedBookColumn(TableColumn<User, String> borrowedBookColumn) {
+        this.borrowedBookColumn = borrowedBookColumn;
+    }
+
+    public TableColumn<User, String> getMembershipTypeColumn() {
+        return membershipTypeColumn;
+    }
+
+    public void setMembershipTypeColumn(TableColumn<User, String> membershipTypeColumn) {
+        this.membershipTypeColumn = membershipTypeColumn;
+    }
+
+    public Pagination getStudentPagination() {
+        return studentPagination;
+    }
+
+    public void setStudentPagination(Pagination studentPagination) {
+        this.studentPagination = studentPagination;
+    }
+
     public void initializeMainMenuView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
-        fxmlLoader.setController(this); // Set controller as the current object
+        fxmlLoader.setController(this);
         try {
             Parent mainViewParent = fxmlLoader.load();
             stage.setWidth(Screen.getPrimary().getBounds().getWidth());
@@ -432,10 +572,26 @@ public class MainMenuView {
             stage.setScene(scene);
             stage.show();
             stage.setResizable(false);
-            MainMenuController mainMenuController = new MainMenuController(this);
+            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
             mainMenuController.registerEvent();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    public void initializeAddStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent addStudentParent = fxmlLoader.load();
+            Scene addStudentScene = new Scene(addStudentParent);
+            Stage addStudentStage = new Stage();
+            addStudentStage.setScene(addStudentScene);
+            addStudentStage.initModality(Modality.APPLICATION_MODAL);
+            addStudentStage.initOwner(stage);
+            addStudentStage.show();
+            mainMenuController.registerForAddStudent(addStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -461,50 +617,7 @@ public class MainMenuView {
         System.out.println("Button clicked for book: " + book.getTitle());
     }
 
-    public void showErrorMessFill() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Please fill the blank search fields!");
-        alert.show();
-    }
 
-//    public void initializeModifyBookView() {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
-//            loader.setController(this);
-//            Parent root = loader.load();
-//            Stage popupStage = new Stage();
-//            popupStage.setTitle("Modify Book");
-//            popupStage.setScene(new Scene(root));
-//
-//            popupStage.initModality(Modality.WINDOW_MODAL);
-//            popupStage.initOwner(this.stage);
-//
-//            updateButton.setOnAction(event -> {
-//                try {
-//                    String ISBN = isbnField.getText();
-//                    String attribute = attributeField.getText();
-//                    String newValue = newValueField.getText();
-//                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-//                        System.out.println("Please fill in all fields!");
-//                    } else {
-//                        // bookService.modifyBook(ISBN, attribute, newValue);
-//                        System.out.println("Book updated successfully!");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    System.out.println("An error occurred. Please check the input values.");
-//                }
-//            });
-//            backButton.setOnAction(event -> popupStage.close());
-//            popupStage.showAndWait();
-//            MainMenuController mainMenuController = new MainMenuController(this);
-//            mainMenuController.registerEvent();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public Parent initializeModifyBookView() {
         try {

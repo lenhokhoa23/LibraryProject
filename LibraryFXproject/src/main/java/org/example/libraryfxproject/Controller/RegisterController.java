@@ -9,6 +9,7 @@ import org.example.libraryfxproject.Dao.AccountDAO;
 import org.example.libraryfxproject.Dao.DatabaseConnection;
 import org.example.libraryfxproject.Dao.UserDAO;
 import org.example.libraryfxproject.Service.RegisterService;
+import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.RegisterView;
 
@@ -17,11 +18,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RegisterController {
+public class RegisterController extends BaseController {
     private final RegisterView registerView;
-    private final RegisterService registerService = new RegisterService();
+    private final RegisterService registerService = RegisterService.getInstance();
 
-    public RegisterController(RegisterView registerView) {
+    public RegisterController(RegisterView registerView, AlertDisplayer alertDisplayer) {
+        super(alertDisplayer);
         this.registerView = registerView;
     }
 
@@ -39,21 +41,20 @@ public class RegisterController {
 
             if (!name.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
                 if (registerService.validateInput(username, phoneNumber, email) == 0) {
-                    this.registerView.showSuccessMessage();
+                    showSuccessMessage("Đăng kí tài khoản thành công!");
                     AccountDAO.saveUserToDatabase(name, email, phoneNumber, username, password);
                     openLoginView((Stage) ((Node) event.getSource()).getScene().getWindow());
                 } else if (registerService.validateInput(username, phoneNumber, email) == 1) {
-                    RegisterView.showAlert("Username must not contain spaces, must be 8-20 characters long, including letters and numbers!");
+                    showErrorMessage("Username must not contain spaces, must be 8-20 characters long, including letters and numbers!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 2) {
-                    RegisterView.showAlert("Phone number must be a numeric sequence, start with 0, and be at least 10 characters long!");
+                    showErrorMessage("Phone number must be a numeric sequence, start with 0, and be at least 10 characters long!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 3) {
-                    RegisterView.showAlert("Email invalid or disposable email detected!");
+                    showErrorMessage("Email invalid or disposable email detected!");
                 } else if (registerService.validateInput(username, phoneNumber, email) == 4) {
-                    RegisterView.showAlert("This username has already been taken, please use another username!");
+                    showErrorMessage("This username has already been taken, please use another username!");
                 }
             } else {
-                this.registerView.showErrorMessFill();
-                System.out.println("Please provide all required information!");
+                showErrorMessage("Please fill all blank fields!");
             }
         });
     }

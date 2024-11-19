@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.LoginController;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,10 +31,13 @@ public class LoginView implements Initializable {
     @FXML
     private Button registerButton;
 
+    private AlertDisplayer alertDisplayer;
+
     // Constructor
     public LoginView(Stage stage) {
         this.stage = stage;
         initializeLoginView();
+        alertDisplayer = new JavaFXAlertDisplayer();
     }
 
     // Khởi tạo giao diện
@@ -52,7 +57,7 @@ public class LoginView implements Initializable {
 
             stage.show();
             // Tạo LoginController và đăng ký các sự kiện điều khiển
-            LoginController loginController = new LoginController(this);
+            LoginController loginController = new LoginController(this, alertDisplayer);
             loginController.registerEvent();
 
         } catch (IOException e) {
@@ -75,32 +80,6 @@ public class LoginView implements Initializable {
 
     public TextField getPassword() {
         return password;
-    }
-
-    // Hiển thị thông báo thành công.
-    public void showSuccessMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Successfully login!");
-        alert.show();
-    }
-
-    // Hiển thị thông báo cần điền thêm.
-    public void showErrorMessFill() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Please fill all blank fields!");
-        alert.show();
-    }
-
-    public void showErrorMessWrong() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Wrong Username / Password!");
-        alert.show();
     }
 
     public static void openLoginView(Stage stage) {

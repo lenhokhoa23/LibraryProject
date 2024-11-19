@@ -1,6 +1,7 @@
 package org.example.libraryfxproject.Controller;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,19 +11,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Service.BookService;
-import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.Model.User;
+import org.example.libraryfxproject.Service.*;
+import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.AddBookView;
 
 import javafx.scene.input.KeyCode;
 
 import org.example.libraryfxproject.Service.UpdateService;
+import javafx.stage.Stage;
+import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 
@@ -32,25 +39,30 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
-public class MainMenuController {
+public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
-    private final SearchService searchService;
+    private final SearchService searchService ;
     private final BookService bookService;
     private final UpdateService updateService;
+    private final UserService userService;
     private ObservableList<Book> observableBooks;
+    private ObservableList<User> studentList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
-    private final int rowsPerPage = 100; // Số lượng records trên 1 page
+    private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
 
-    public MainMenuController(MainMenuView mainMenuView) {
+
+    public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
+        super(alertDisplayer);
         this.mainMenuView = mainMenuView;
-        this.searchService = new SearchService();
-        this.updateService = new UpdateService();
-        this.bookService = new BookService();
-        observableBooks = bookService.getAllBooks();
-        loadCatalogData();
+        this.searchService = SearchService.getInstance();
+        this.updateService = UpdateService.getInstance();
+        this.bookService = BookService.getInstance();
+        this.userService = UserService.getInstance();
+        this.observableBooks = BookService.getInstance().getAllBooks();
+        loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
     }
@@ -106,27 +118,50 @@ public class MainMenuController {
 
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
-            loadCatalogData();
+            loadTableData();
             initializePagination();
         });
 
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
+        setupTableColumns();
+        mainMenuView.getAddStudentButton().setOnAction(event -> {
+            mainMenuView.initializeAddStudentView(this);
+        });
     }
 
-    public void loadCatalogData() {
+    public void registerForAddStudent(Stage stage) {
+        mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
+            stage.close();
+        });
+    }
+
+    public void loadTableData() {
         System.out.println("Loaded books: " + observableBooks.size());
         updateTableView(getPageData(0)); // Load the first page initially
+        studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
+        updateUserTableView(studentList);
     }
-
     private void initializePagination() {
-        int pageCount = (int) Math.ceil((double) observableBooks.size() / rowsPerPage);
+        int pageCount = (int) Math.ceil((double) observableBooks.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
         System.out.println("Total books: " + observableBooks.size());
         System.out.println("Total pages: " + pageCount);
         mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
 
+        int totalPages = (int) Math.ceil((double) studentList.size() / ROWS_PER_PAGE);
+        mainMenuView.getStudentPagination().setPageCount(totalPages);
+
+        mainMenuView.getStudentPagination().setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public TableView<User> call(Integer pageIndex) {
+                updateTable(pageIndex);
+                return mainMenuView.getStudentTableView();
+            }
+        });
+        VBox.setVgrow(mainMenuView.getStudentPagination(), Priority.ALWAYS);
+        mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
         // Add a click listener to the root pane to hide suggestions when clicking outside
@@ -166,6 +201,14 @@ public class MainMenuController {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
 
+        mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
+        mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Set page factory
+        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
+
+        // Make sure pagination control uses available space
+        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
     }
 
     private void scheduleSearch() {
@@ -211,19 +254,38 @@ public class MainMenuController {
     }
 
     private Node createPage(int pageIndex) {
+        // Get data for current page
         ObservableList<Book> currentPageBooks = getPageData(pageIndex);
+
+        // Get the table view
         TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
+
+        // Clear and set new items
         catalogTableView.getItems().clear();
         catalogTableView.setItems(currentPageBooks);
+
+        // Reset scroll position
         catalogTableView.scrollTo(0);
+
+        // Create container with proper layout constraints
         VBox pageContainer = new VBox();
+        pageContainer.setFillWidth(true);
+        VBox.setVgrow(catalogTableView, Priority.ALWAYS);
+
+        // Set minimum height for table view
+        catalogTableView.setMinHeight(400); // Adjust this value based on your needs
+        catalogTableView.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Add table to container
         pageContainer.getChildren().add(catalogTableView);
+
         return pageContainer;
     }
 
+
     private ObservableList<Book> getPageData(int pageIndex) {
-        int start = pageIndex * rowsPerPage;
-        int end = Math.min(start + rowsPerPage, observableBooks.size());
+        int start = pageIndex * ROWS_PER_PAGE;
+        int end = Math.min(start + ROWS_PER_PAGE, observableBooks.size());
         return FXCollections.observableArrayList(observableBooks.subList(start, end));
     }
 
@@ -232,9 +294,19 @@ public class MainMenuController {
         mainMenuView.getCatalogTableView().setItems(books);
     }
 
+    public void updateUserTableView(ObservableList<User> users) {
+        mainMenuView.getStudentTableView().getItems().clear();
+        mainMenuView.getStudentTableView().setItems(users);
+    }
+
+    private void updateTable(int pageIndex) {
+        int start = pageIndex * ROWS_PER_PAGE;
+        int end = Math.min(start + ROWS_PER_PAGE, studentList.size());
+        mainMenuView.getStudentTableView().setItems(FXCollections.observableArrayList(studentList.subList(start, end)));
+    }
     public void CatalogEvent() {
         if (isFilteredView) {
-            loadCatalogData();
+            loadTableData();
             isFilteredView = false;
         } else {
             String searchType = mainMenuView.getFilterComboBox().getValue();
@@ -283,6 +355,19 @@ public class MainMenuController {
             popupStage.showAndWait();
         }
     }
-
-
+    private void setupTableColumns() {
+        mainMenuView.getUsernameColumn().setCellValueFactory(new PropertyValueFactory<>("username"));
+        mainMenuView.getNameColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
+        mainMenuView.getEmailColumn().setCellValueFactory(new PropertyValueFactory<>("email"));
+        mainMenuView.getPhoneColumn().setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        mainMenuView.getBorrowedBookColumn().setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
+        mainMenuView.getMembershipTypeColumn().setCellValueFactory(new PropertyValueFactory<>("membershipType"));
+        mainMenuView.getStudentTableView().getColumns().clear();
+        mainMenuView.getStudentTableView().getColumns().addAll(mainMenuView.getUsernameColumn(),
+                mainMenuView.getNameColumn(),
+                mainMenuView.getEmailColumn(),
+                mainMenuView.getPhoneColumn(),
+                mainMenuView.getBorrowedBookColumn(),
+                mainMenuView.getMembershipTypeColumn());
+    }
 }

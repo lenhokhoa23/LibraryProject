@@ -37,7 +37,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@mainmenuStyle.css" />
    </stylesheets>
@@ -139,7 +139,7 @@
                                           <Button styleClass="action-button" text="Generate Reports" />
                                        </children>
                                     </HBox>
-                  
+
                                     <!-- Library Stats -->
                                     <HBox spacing="15" styleClass="library-stats">
                      <children>
@@ -169,7 +169,7 @@
                                           </VBox>
                      </children>
                                     </HBox>
-                  
+
                                     <!-- Charts -->
                                     <HBox spacing="20" styleClass="chart-container">
                                        <children>
@@ -199,7 +199,6 @@
                                        </children>
                                     </HBox>
 
-
                                     <!-- Recent Activities -->
                                     <VBox styleClass="section">
                      <children>
@@ -228,7 +227,7 @@
                         </ScrollPane>
                      </content>
                   </Tab>
-         
+
                   <!-- Catalog Management Tab -->
                   <Tab closable="false" text="Catalog">
             <content>
@@ -310,19 +309,19 @@
                                                    <children>
                                                       <TextField fx:id="studentSearch" promptText="Search students" />
                                                       <ComboBox fx:id="studentFilter" promptText="Filter by" />
-                                                      <Button styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id = "addStudentButton" styleClass="add-student-button" text="Add New Student" />
                                                       <Region HBox.hgrow="ALWAYS" />
                                                       <Button styleClass="export-button" text="Export Data" />
                                                    </children>
                                                 </HBox>
                                                 <TableView fx:id="studentTableView" VBox.vgrow="ALWAYS">
                                                    <columns>
-                                                      <TableColumn fx:id="studentIdColumn" prefWidth="80" text="ID" />
-                                                      <TableColumn fx:id="studentNameColumn" prefWidth="150" text="Name" />
-                                                      <TableColumn fx:id="studentEmailColumn" prefWidth="200" text="Email" />
-                                                      <TableColumn fx:id="studentPhoneColumn" prefWidth="120" text="Phone" />
-                                                      <TableColumn fx:id="studentStatusColumn" prefWidth="100" text="Status" />
-                                                      <TableColumn fx:id="studentActionsColumn" prefWidth="150" text="Actions" />
+                                                      <TableColumn fx:id="usernameColumn" prefWidth="80" text="Username" />
+                                                      <TableColumn fx:id="nameColumn" prefWidth="150" text="Name" />
+                                                      <TableColumn fx:id="emailColumn" prefWidth="200" text="Email" />
+                                                      <TableColumn fx:id="phoneColumn" prefWidth="120" text="Phone" />
+                                                      <TableColumn fx:id="borrowedBookColumn" prefWidth="100" text="Borrowed Books" />
+                                                      <TableColumn fx:id="membershipTypeColumn" prefWidth="150" text="Membership" />
                                                    </columns>
                                                 </TableView>
                                                 <Pagination fx:id="studentPagination" styleClass="student-pagination" />
@@ -343,15 +342,14 @@
                                                       <TextField promptText="Search by Student ID or Book" />
                                                    </children>
                                                 </HBox>
-                                                <TableView VBox.vgrow="ALWAYS">
+                                                <TableView fx:id ="borrowHistoryTable" VBox.vgrow="ALWAYS">
                                                    <columns>
-                                                      <TableColumn prefWidth="100" text="Student ID" />
-                                                      <TableColumn prefWidth="150" text="Student Name" />
-                                                      <TableColumn prefWidth="200" text="Book Title" />
-                                                      <TableColumn prefWidth="100" text="Borrow Date" />
-                                                      <TableColumn prefWidth="100" text="Due Date" />
-                                                      <TableColumn prefWidth="100" text="Return Date" />
-                                                      <TableColumn prefWidth="100" text="Status" />
+                                                      <TableColumn fx:id ="userColumn" prefWidth="100" text="Username" />
+                                                      <TableColumn fx:id ="studentNameColumn" prefWidth="150" text="Student Name" />
+                                                      <TableColumn fx:id ="bookTitleColumn" prefWidth="200" text="Book Title" />
+                                                      <TableColumn fx:id ="borrowDateColumn" prefWidth="100" text="Borrow Date" />
+                                                      <TableColumn fx:id ="dueDateColumn" prefWidth="100" text="Due Date" />
+                                                      <TableColumn fx:id ="returnDateColumn" prefWidth="100" text="Return Date" />
                                                    </columns>
                                                 </TableView>
                                                 <Pagination fx:id="borrowingHistoryPagination" styleClass="borrowing-pagination" />
@@ -365,7 +363,7 @@
                         </VBox>
             </content>
                   </Tab>
-         
+
                   <!-- Circulation Tab -->
                   <Tab closable="false" text="Circulation">
             <content>
@@ -396,7 +394,7 @@
                         </VBox>
             </content>
                   </Tab>
-         
+
                   <!-- Events Tab -->
                   <Tab closable="false" text="Events">
             <content>
@@ -419,6 +417,7 @@
                                     <TableColumn fx:id="eventCapacityColumn" prefWidth="80" text="Capacity" />
                                     <TableColumn fx:id="eventRegistrationsColumn" prefWidth="100" text="Registrations" />
                                     <TableColumn fx:id="eventActionsColumn" prefWidth="150" text="Actions" />
+
                                  </columns>
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" spacing="10">
@@ -431,7 +430,7 @@
                         </VBox>
             </content>
                   </Tab>
-         
+
                   <!-- Reports Tab -->
                   <Tab closable="false" text="Reports">
             <content>
@@ -508,7 +507,7 @@
                         </VBox>
             </content>
                   </Tab>
-         
+
                   <!-- Settings Tab -->
                   <Tab closable="false" text="Settings">
             <content>

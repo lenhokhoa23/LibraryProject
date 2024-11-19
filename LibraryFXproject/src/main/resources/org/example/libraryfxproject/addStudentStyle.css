@@ -1,0 +1,126 @@
+* {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.root {
+     -fx-background-image: url('images/add_Student.jpg');
+     -fx-background-size: cover;
+     -fx-background-position: center center;
+}
+
+/* Main container styling */
+.content-area {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-padding: 30px;
+    -fx-spacing: 15;
+    -fx-alignment: center;
+    -fx-max-width: 400px;
+    -fx-min-height: 450px;
+}
+
+/* Title styling */
+.title {
+    -fx-font-size: 24px;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 20 0;
+}
+
+/* Input fields styling */
+.input-field {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
+    -fx-font-size: 14px;
+}
+
+.input-field:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 2px;
+}
+
+/* Label styling */
+.label {
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+}
+
+/* ComboBox styling */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 2px;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 8 12;
+    -fx-text-fill: #2C3E50;
+}
+
+.combo-box .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 5px;
+}
+
+/* Button styling */
+.button {
+    -fx-background-radius: 5px;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+}
+
+.add-button {
+    -fx-background-color: #2ECC71;
+    -fx-text-fill: white;
+}
+
+.add-button:hover {
+    -fx-background-color: #27AE60;
+}
+
+.cancel-button {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #C0392B;
+}
+
+/* Container for buttons */
+.button-container {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-padding: 20 0 0 0;
+}
+
+/* Form container */
+.form-container {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+    -fx-padding: 20;
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+}

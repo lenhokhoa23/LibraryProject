@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.RegisterController;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +33,10 @@ public class RegisterView implements Initializable {
     private Button registerButton;
     @FXML
     private Button backButton;
+
+    private AlertDisplayer alertDisplayer;
     private final Stage stage;
+
     public TextField getName() {
         return name;
     }
@@ -90,6 +95,7 @@ public class RegisterView implements Initializable {
 
     public RegisterView(Stage stage) {
         this.stage = stage;
+        alertDisplayer = new JavaFXAlertDisplayer();
         initializeRegisterView();
     }
 
@@ -106,33 +112,9 @@ public class RegisterView implements Initializable {
         }
     }
 
-    public void showSuccessMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Successfully register!");
-        alert.show();
-    }
-
-    public void showErrorMessFill() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Please fill all blank fields!");
-        alert.show();
-    }
-
-    public static void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi nhập liệu");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        RegisterController registerController = new RegisterController(this);
+        RegisterController registerController = new RegisterController(this, alertDisplayer);
         registerController.registerEvent();
     }
 }
