@@ -7,16 +7,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
+import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.AddBookView;
 
 import javafx.scene.input.KeyCode;
@@ -36,7 +39,7 @@ import java.util.List;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
-public class MainMenuController {
+public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
     private final SearchService searchService ;
     private final BookService bookService;
@@ -51,7 +54,8 @@ public class MainMenuController {
     private final ContextMenuController contextMenuController;
 
 
-    public MainMenuController(MainMenuView mainMenuView) {
+    public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
+        super(alertDisplayer);
         this.mainMenuView = mainMenuView;
         this.searchService = SearchService.getInstance();
         this.updateService = UpdateService.getInstance();
@@ -119,6 +123,15 @@ public class MainMenuController {
             CatalogEvent();
         });
         setupTableColumns();
+        mainMenuView.getAddStudentButton().setOnAction(event -> {
+            mainMenuView.initializeAddStudentView(this);
+        });
+    }
+
+    public void registerForAddStudent(Stage stage) {
+        mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
+            stage.close();
+        });
     }
 
     public void loadTableData() {
@@ -144,6 +157,8 @@ public class MainMenuController {
                 return mainMenuView.getStudentTableView();
             }
         });
+        VBox.setVgrow(mainMenuView.getStudentPagination(), Priority.ALWAYS);
+        mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
         // Add a click listener to the root pane to hide suggestions when clicking outside
@@ -182,6 +197,14 @@ public class MainMenuController {
         mainMenuView.getViewAllButton().setOnAction(event -> {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
+        mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
+        mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Set page factory
+        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
+
+        // Make sure pagination control uses available space
+        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
     }
 
     private void scheduleSearch() {
@@ -228,13 +251,31 @@ public class MainMenuController {
     }
 
     private Node createPage(int pageIndex) {
+        // Get data for current page
         ObservableList<Book> currentPageBooks = getPageData(pageIndex);
+
+        // Get the table view
         TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
+
+        // Clear and set new items
         catalogTableView.getItems().clear();
         catalogTableView.setItems(currentPageBooks);
+
+        // Reset scroll position
         catalogTableView.scrollTo(0);
+
+        // Create container with proper layout constraints
         VBox pageContainer = new VBox();
+        pageContainer.setFillWidth(true);
+        VBox.setVgrow(catalogTableView, Priority.ALWAYS);
+
+        // Set minimum height for table view
+        catalogTableView.setMinHeight(400); // Adjust this value based on your needs
+        catalogTableView.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Add table to container
         pageContainer.getChildren().add(catalogTableView);
+
         return pageContainer;
     }
 

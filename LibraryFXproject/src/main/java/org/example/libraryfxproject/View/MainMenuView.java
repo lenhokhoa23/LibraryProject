@@ -16,6 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Pane;
 
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -23,6 +26,8 @@ import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 
@@ -111,20 +116,28 @@ public class MainMenuView {
 
     @FXML
     private TableView<User> studentTableView;
+
     @FXML
     private TableColumn<User, String> usernameColumn;
+
     @FXML
     private TableColumn<User, String> nameColumn;
+
     @FXML
     private TableColumn<User, String> emailColumn;
+
     @FXML
     private TableColumn<User, String> phoneColumn;
+
     @FXML
     private TableColumn<User, String> borrowedBookColumn;
+
     @FXML
     private TableColumn<User, String> membershipTypeColumn;
+
     @FXML
     private Pagination studentPagination;
+
     @FXML
     private TableView<ObservableList<String>> recentActivitiesTable;
 
@@ -148,6 +161,22 @@ public class MainMenuView {
 
     @FXML
     private Button viewAllButton;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private Button addStudent;
+    @FXML
+    private Button cancelAddStudentButton;
+    @FXML
+    private Button addStudentButton;
+
+    private AlertDisplayer alertDisplayer;
 
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
@@ -161,7 +190,37 @@ public class MainMenuView {
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
+        alertDisplayer = new JavaFXAlertDisplayer();
     }
+
+    public Button getAddStudentButton() {
+        return addStudentButton;
+    }
+
+    public TextField getNameField() {
+        return nameField;
+    }
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public TextField getEmailField() {
+        return emailField;
+    }
+
+    public TextField getPhoneField() {
+        return phoneField;
+    }
+
+    public Button getAddStudent() {
+        return addStudent;
+    }
+
+    public Button getCancelAddStudentButton() {
+        return cancelAddStudentButton;
+    }
+
 
     public boolean isSelecting() {
         return isSelecting;
@@ -444,7 +503,7 @@ public class MainMenuView {
 
     public void initializeMainMenuView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
-        fxmlLoader.setController(this); // Set controller as the current object
+        fxmlLoader.setController(this);
         try {
             Parent mainViewParent = fxmlLoader.load();
             stage.setWidth(Screen.getPrimary().getBounds().getWidth());
@@ -461,10 +520,26 @@ public class MainMenuView {
             stage.setScene(scene);
             stage.show();
             stage.setResizable(false);
-            MainMenuController mainMenuController = new MainMenuController(this);
+            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
             mainMenuController.registerEvent();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    public void initializeAddStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent addStudentParent = fxmlLoader.load();
+            Scene addStudentScene = new Scene(addStudentParent);
+            Stage addStudentStage = new Stage();
+            addStudentStage.setScene(addStudentScene);
+            addStudentStage.initModality(Modality.APPLICATION_MODAL);
+            addStudentStage.initOwner(stage);
+            addStudentStage.show();
+            mainMenuController.registerForAddStudent(addStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -483,12 +558,5 @@ public class MainMenuView {
     }
 
 
-    public void showErrorMessFill() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Please fill the blank search fields!");
-        alert.show();
-    }
 
 }

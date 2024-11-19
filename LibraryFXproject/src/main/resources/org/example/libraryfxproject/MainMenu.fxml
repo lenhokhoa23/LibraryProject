@@ -309,7 +309,7 @@
                                                    <children>
                                                       <TextField fx:id="studentSearch" promptText="Search students" />
                                                       <ComboBox fx:id="studentFilter" promptText="Filter by" />
-                                                      <Button styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id = "addStudentButton" styleClass="add-student-button" text="Add New Student" />
                                                       <Region HBox.hgrow="ALWAYS" />
                                                       <Button styleClass="export-button" text="Export Data" />
                                                    </children>
@@ -342,15 +342,14 @@
                                                       <TextField promptText="Search by Student ID or Book" />
                                                    </children>
                                                 </HBox>
-                                                <TableView VBox.vgrow="ALWAYS">
+                                                <TableView fx:id ="borrowHistoryTable" VBox.vgrow="ALWAYS">
                                                    <columns>
-                                                      <TableColumn prefWidth="100" text="Student ID" />
-                                                      <TableColumn prefWidth="150" text="Student Name" />
-                                                      <TableColumn prefWidth="200" text="Book Title" />
-                                                      <TableColumn prefWidth="100" text="Borrow Date" />
-                                                      <TableColumn prefWidth="100" text="Due Date" />
-                                                      <TableColumn prefWidth="100" text="Return Date" />
-                                                      <TableColumn prefWidth="100" text="Status" />
+                                                      <TableColumn fx:id ="userColumn" prefWidth="100" text="Username" />
+                                                      <TableColumn fx:id ="studentNameColumn" prefWidth="150" text="Student Name" />
+                                                      <TableColumn fx:id ="bookTitleColumn" prefWidth="200" text="Book Title" />
+                                                      <TableColumn fx:id ="borrowDateColumn" prefWidth="100" text="Borrow Date" />
+                                                      <TableColumn fx:id ="dueDateColumn" prefWidth="100" text="Due Date" />
+                                                      <TableColumn fx:id ="returnDateColumn" prefWidth="100" text="Return Date" />
                                                    </columns>
                                                 </TableView>
                                                 <Pagination fx:id="borrowingHistoryPagination" styleClass="borrowing-pagination" />
