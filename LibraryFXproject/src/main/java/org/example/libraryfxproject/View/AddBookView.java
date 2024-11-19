@@ -53,6 +53,7 @@ public class AddBookView implements Initializable {
         this.stage.setTitle("Add Book");
         initializeAddBookView();
     }
+
     public void initializeAddBookView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addBookView.fxml"));
