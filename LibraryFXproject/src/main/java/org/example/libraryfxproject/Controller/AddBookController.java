@@ -16,10 +16,12 @@
     public class AddBookController {
         private final AddBookView addBookView;
         private final BookService bookService = new BookService();
-        private final BookDAO bookDAO =new BookDAO();
+        private final BookDAO bookDAO = new BookDAO();
+
         public AddBookController(AddBookView addBookView) {
             this.addBookView = addBookView;
         }
+
         public void registerEvent() {
             addBookView.getAddBookButton().setOnAction(event -> {
                 try {

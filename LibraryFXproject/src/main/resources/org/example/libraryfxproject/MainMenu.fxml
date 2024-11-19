@@ -260,7 +260,7 @@
                                        Search
                                     </ToggleButton>
                                     <Button fx:id="addItemButton" prefHeight="38.0" prefWidth="114.0" styleClass="add-item-button" text="Add New Item" />
-                                    <Button fx:id="deleteItemButton" prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" text="Delete Item" />
+                                    <Button fx:id="modifyButton" prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" text="Modify" />
                                     <Button fx:id="refreshButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                        <graphic>
                                           <ImageView fitHeight="20" fitWidth="20">

@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Pane;
 
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -24,6 +25,8 @@ import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class MainMenuView {
     @FXML
@@ -58,6 +61,7 @@ public class MainMenuView {
 
     @FXML
     private Button searchButton;
+
     @FXML
     private TextField searchCatalog;
 
@@ -71,15 +75,14 @@ public class MainMenuView {
     private Button addItemButton;
 
     @FXML
-    private Button deleteItemButton;
-
-    @FXML
     private ToggleButton searchToggle;
 
     @FXML
     private ListView<String> suggestions = new ListView<>();
+
     @FXML
     private MenuItem logoutItem;
+
     @FXML
     private MenuButton profileButton;
     private boolean isSelecting = false;
@@ -132,6 +135,24 @@ public class MainMenuView {
     @FXML
     private Button viewAllButton;
 
+    @FXML
+    private Button modifyButton;
+
+    @FXML
+    private TextField isbnField;
+
+    @FXML
+    private TextField attributeField;
+
+    @FXML
+    private TextField newValueField;
+
+    @FXML
+    private Button updateButton;
+
+    @FXML
+    private Button backButton;
+
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
@@ -139,7 +160,6 @@ public class MainMenuView {
     public Pagination getCatalogPagination() {
         return catalogPagination; // Add this method
     }
-
 
     public MainMenuView(Stage stage) {
         this.stage = stage;
@@ -216,14 +236,6 @@ public class MainMenuView {
 
     public void setAddItemButton(Button addItemButton) {
         this.addItemButton = addItemButton;
-    }
-
-    public Button getDeleteItemButton() {
-        return deleteItemButton;
-    }
-
-    public void setDeleteItemButton(Button deleteItemButton) {
-        this.deleteItemButton = deleteItemButton;
     }
 
     public ToggleButton getSearchToggle() {
@@ -353,6 +365,46 @@ public class MainMenuView {
         this.viewAllButton = viewAllButton;
     }
 
+    public TextField getIsbnField() {
+        return isbnField;
+    }
+
+    public void setIsbnField(TextField isbnField) {
+        this.isbnField = isbnField;
+    }
+
+    public TextField getAttributeField() {
+        return attributeField;
+    }
+
+    public void setAttributeField(TextField attributeField) {
+        this.attributeField = attributeField;
+    }
+
+    public TextField getNewValueField() {
+        return newValueField;
+    }
+
+    public void setNewValueField(TextField newValueField) {
+        this.newValueField = newValueField;
+    }
+
+    public Button getUpdateButton() {
+        return updateButton;
+    }
+
+    public void setUpdateButton(Button updateButton) {
+        this.updateButton = updateButton;
+    }
+
+    public Button getBackButton() {
+        return backButton;
+    }
+
+    public void setBackButton(Button backButton) {
+        this.backButton = backButton;
+    }
+
     public Label getChartTitleLabel() {
         return chartTitleLabel;
     }
@@ -396,11 +448,18 @@ public class MainMenuView {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
+    public Button getModifyButton() {
+        return modifyButton;
+    }
+
+    public void setModifyButton(Button modifyButton) {
+        this.modifyButton = modifyButton;
+    }
+
     private void handleActionClick(Book book) {
         // Handle button click event
         System.out.println("Button clicked for book: " + book.getTitle());
     }
-
 
     public void showErrorMessFill() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -410,4 +469,59 @@ public class MainMenuView {
         alert.show();
     }
 
+//    public void initializeModifyBookView() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
+//            loader.setController(this);
+//            Parent root = loader.load();
+//            Stage popupStage = new Stage();
+//            popupStage.setTitle("Modify Book");
+//            popupStage.setScene(new Scene(root));
+//
+//            popupStage.initModality(Modality.WINDOW_MODAL);
+//            popupStage.initOwner(this.stage);
+//
+//            updateButton.setOnAction(event -> {
+//                try {
+//                    String ISBN = isbnField.getText();
+//                    String attribute = attributeField.getText();
+//                    String newValue = newValueField.getText();
+//                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+//                        System.out.println("Please fill in all fields!");
+//                    } else {
+//                        // bookService.modifyBook(ISBN, attribute, newValue);
+//                        System.out.println("Book updated successfully!");
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    System.out.println("An error occurred. Please check the input values.");
+//                }
+//            });
+//            backButton.setOnAction(event -> popupStage.close());
+//            popupStage.showAndWait();
+//            MainMenuController mainMenuController = new MainMenuController(this);
+//            mainMenuController.registerEvent();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public Parent initializeModifyBookView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
+            loader.setController(this);
+            return loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public void showSuccessMessage() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Book modified successfully!");
+        alert.show();
+    }
 }
