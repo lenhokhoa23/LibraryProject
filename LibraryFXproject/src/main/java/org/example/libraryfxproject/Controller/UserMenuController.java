@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
 
@@ -24,14 +25,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class UserMenuController {
+public class UserMenuController extends BaseController {
     private final UserView userView;
     private final SearchService searchService;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
 
-    public UserMenuController(UserView userView) {
+    public UserMenuController(UserView userView, AlertDisplayer alertDisplayer) {
+        super(alertDisplayer);
         this.userView = userView;
         searchService = SearchService.getInstance();
     }

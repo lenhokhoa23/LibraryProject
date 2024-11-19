@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 
@@ -42,6 +44,7 @@ public class UserView {
     @FXML
     private Button club5;
 
+    private AlertDisplayer alertDisplayer;
 
 
     private boolean isSelecting = false;
@@ -49,6 +52,7 @@ public class UserView {
 
     public UserView(Stage stage) {
         this.stage = stage;
+        alertDisplayer = new JavaFXAlertDisplayer();
         initializeUserView();
     }
 
@@ -128,7 +132,7 @@ public class UserView {
             stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
             stage.setScene(scene);
             stage.show();
-            UserMenuController userMenuController = new UserMenuController(this);
+            UserMenuController userMenuController = new UserMenuController(this, alertDisplayer);
             userMenuController.registerEvent();
         } catch (IOException e) {
             e.printStackTrace();
