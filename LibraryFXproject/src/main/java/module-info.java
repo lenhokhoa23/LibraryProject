@@ -5,6 +5,7 @@ module org.example.libraryfxproject {
     requires com.jfoenix;
     requires javafx.graphics;
     requires javafx.controls;
+    requires org.apache.poi.ooxml;
     requires java.desktop;
 
 

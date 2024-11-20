@@ -198,6 +198,9 @@ public class MainMenuView {
     @FXML
     private Button refreshStudentButton;
 
+    @FXML
+    private Button exportDataButton;
+
     private AlertDisplayer alertDisplayer;
 
     public TableView<Book> getCatalogTableView() {
@@ -212,6 +215,10 @@ public class MainMenuView {
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
+    }
+
+    public Button getExportDataButton() {
+        return exportDataButton;
     }
 
     public Button getRefreshStudentButton() {

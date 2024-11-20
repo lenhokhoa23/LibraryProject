@@ -321,7 +321,7 @@
                                                          Refresh
                                                       </Button>
                                                       <Region HBox.hgrow="ALWAYS" />
-                                                      <Button styleClass="export-button" text="Export Data" />
+                                                      <Button fx:id="exportDataButton" styleClass="export-button" text="Export Data" />
                                                    </children>
                                                 </HBox>
                                                 <TableView fx:id="studentTableView" VBox.vgrow="ALWAYS">
