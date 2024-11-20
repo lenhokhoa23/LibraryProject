@@ -14,6 +14,7 @@ import org.example.libraryfxproject.View.BookDetailsView;
 public class ContextMenuController {
     private final BookDAO bookDAO;
     private final TableView<Book> catalogTableView;
+
     public ContextMenuController(TableView<Book> catalogTableView) {
         this.catalogTableView = catalogTableView;
         this.bookDAO = new BookDAO();

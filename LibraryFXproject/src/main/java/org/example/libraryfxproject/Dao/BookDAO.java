@@ -240,6 +240,27 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+    public static void modifyBookAttribute(String ISBN, String attribute, String newValue) {
+        String sql = "UPDATE books SET " + attribute + " = ? WHERE ISBN = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, newValue);
+            statement.setString(2, ISBN);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Cập nhật thành công thuộc tính " + attribute + " cho sách có ISBN: " + ISBN);
+            } else {
+                System.out.println("Không tìm thấy sách với ISBN: " + ISBN);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi cập nhật thuộc tính của sách!");
+            e.printStackTrace();
+        }
+    }
+
     public void deleteBookFromDatabase (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();

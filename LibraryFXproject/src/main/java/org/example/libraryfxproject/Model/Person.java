@@ -5,6 +5,7 @@ public abstract class Person {
     private String name;
     private String email;
     private String phoneNumber;
+
     public Person(String username, String name, String email, String phoneNumber) {
         this.username = username;
         this.name = name;

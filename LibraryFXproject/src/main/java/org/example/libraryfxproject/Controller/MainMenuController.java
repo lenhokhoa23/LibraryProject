@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
@@ -22,6 +25,7 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.AddBookView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import org.example.libraryfxproject.Service.UpdateService;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
@@ -31,11 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import javafx.animation.TranslateTransition;
-import javafx.util.Duration;
 
 public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
@@ -112,11 +112,14 @@ public class MainMenuController extends BaseController {
             }
         });
         mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
+        mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
+
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             loadTableData();
             initializePagination();
         });
+
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
@@ -215,6 +218,7 @@ public class MainMenuController extends BaseController {
         mainMenuView.getViewAllButton().setOnAction(event -> {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
+
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
@@ -260,7 +264,6 @@ public class MainMenuController extends BaseController {
 
     private void performSearch() {
         // Implement your search logic here
-
         hideSuggestions();
     }
 
@@ -339,6 +342,37 @@ public class MainMenuController extends BaseController {
         new AddBookView(mainMenuView.getStage());
     }
 
+    public void openModifyBookView() {
+        Parent root = mainMenuView.initializeModifyBookView();
+        if (root != null) {
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Modify Book");
+            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(this.mainMenuView.getStage());
+
+            System.out.println(mainMenuView);
+            mainMenuView.getUpdateButton().setOnAction(event -> {
+                try {
+                    String ISBN = mainMenuView.getIsbnField().getText();
+                    String attribute = mainMenuView.getAttributeField().getText();
+                    String newValue = mainMenuView.getNewValueField().getText();
+                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                        System.out.println("Please fill in all fields!");
+                    } else {
+                        bookService.modifyBook(ISBN, attribute, newValue);
+                        System.out.println("Book updated successfully!");
+                        popupStage.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("An error occurred. Please check the input values.");
+                }
+            });
+            mainMenuView.getBackButton().setOnAction(event -> popupStage.close());
+            popupStage.showAndWait();
+        }
+    }
     private void setupTableColumns() {
         mainMenuView.getUsernameColumn().setCellValueFactory(new PropertyValueFactory<>("username"));
         mainMenuView.getNameColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
