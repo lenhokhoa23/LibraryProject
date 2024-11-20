@@ -15,6 +15,9 @@ import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Dao.CartDAO;
 import org.example.libraryfxproject.Dao.UserDAO;
 import org.example.libraryfxproject.Model.Account;
+import org.example.libraryfxproject.Model.Cart;
+
+import java.util.List;
 
 public class UpdateService {
     private final BookDAO bookDAO = new BookDAO();
@@ -108,9 +111,15 @@ public class UpdateService {
         }
     }
 
-
     public void populateTableView(TableView<ObservableList<String>> tableView, int limit) {
         tableView.setItems(cartDAO.getActivities(limit));
     }
 
+    public List<Cart> getAllBorrowHistory() {
+        return cartDAO.getAllBorrowHistory();
+    }
+
+    public List<Cart> searchBorrowHistory(String column, String value) {
+        return cartDAO.searchBorrowHistory(column, value);
+    }
 }
