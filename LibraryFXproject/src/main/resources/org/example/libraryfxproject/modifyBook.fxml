@@ -6,18 +6,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="215.0" prefWidth="380.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
+<AnchorPane prefHeight="215.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox layoutX="20.0" layoutY="20.0" prefHeight="150.0" prefWidth="360.0" spacing="15.0">
             <children>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <TextField fx:id="isbnField" prefHeight="26.0" prefWidth="330.0" promptText="ISBN của sách" />
+                    <TextField fx:id="isbnField" prefHeight="26.0" prefWidth="330.0" promptText="ISBN" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <TextField fx:id="attributeField" prefHeight="26.0" prefWidth="330.0" promptText="Thuộc tính cần sửa" />
+                    <TextField fx:id="attributeField" prefHeight="26.0" prefWidth="330.0" promptText="Attribute" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <TextField fx:id="newValueField" prefHeight="26.0" prefWidth="330.0" promptText="Nội dung sửa" />
+                    <TextField fx:id="newValueField" prefHeight="26.0" prefWidth="330.0" promptText="New value" />
                 </HBox>
             </children>
         </VBox>

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartDAO extends GeneralDAO<Integer, Cart> {
 
@@ -248,7 +250,6 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
                     row.add(result.getString("bookTitle"));
                     row.add(result.getString("ISBN"));
                     row.add(result.getString("due"));
-
                     activities.add(row);
                 }
             }
@@ -259,6 +260,76 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
 
         return activities;
     }
+
+    public List<Cart> getAllBorrowHistory() {
+        List<Cart> borrowHistory = new ArrayList<>();
+        String query = """
+                SELECT c.Cart_ID, c.startDate, c.endDate, c.title, c.ISBN, u.username
+                            FROM Cart c
+                            JOIN user u ON c.Cart_ID = u.Cart_ID""";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Cart cart = new Cart(
+                        resultSet.getInt("Cart_ID"),
+                        resultSet.getString("startDate"),
+                        resultSet.getString("endDate"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getString("title")
+                );
+                borrowHistory.add(cart);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowHistory;
+    }
+
+    public List<Cart> searchBorrowHistory(String column, String value) {
+        List<Cart> searchResults = new ArrayList<>();
+        String query;
+
+        // Phân biệt giữa cột kiểu số và chuỗi
+        if (column.equals("Cart_ID")) {
+            query = "SELECT Cart_ID, startDate, endDate, title, ISBN FROM Cart WHERE " + column + " = ?";
+        } else {
+            query = "SELECT Cart_ID, startDate, endDate, title, ISBN FROM Cart WHERE " + column + " LIKE ?";
+        }
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Gán giá trị cho tham số
+            if (column.equals("Cart_ID")) {
+                statement.setInt(1, Integer.parseInt(value)); // Với cột kiểu số
+            } else {
+                statement.setString(1, "%" + value + "%"); // Với cột kiểu chuỗi
+            }
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Cart cart = new Cart(
+                            resultSet.getInt("Cart_ID"),
+                            resultSet.getString("startDate"),
+                            resultSet.getString("endDate"),
+                            resultSet.getString("ISBN"),
+                            resultSet.getString("title")
+                    );
+                    searchResults.add(cart);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input for numeric column: " + value);
+        }
+
+        return searchResults;
+    }
+
 
     public void addCart(Cart cart) {
         String sql = "INSERT INTO cart (Cart_ID, startDate, endDate, title, ISBN) "

@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
@@ -45,12 +46,12 @@ public class MainMenuController extends BaseController {
     private final UserService userService;
     private ObservableList<Book> observableBooks;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
+    private ObservableList<Cart> borrowHistoryData;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
     private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
-
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -112,7 +113,10 @@ public class MainMenuController extends BaseController {
             }
         });
         mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
-        mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
+        // mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
+        mainMenuView.getModifyButton().setOnAction(event -> {
+            mainMenuView.initializeModifyBookView(this);
+        });
 
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
@@ -124,6 +128,7 @@ public class MainMenuController extends BaseController {
             CatalogEvent();
         });
         setupTableColumns();
+
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
         });
@@ -154,6 +159,44 @@ public class MainMenuController extends BaseController {
     }
 //    String username, String name, String email, String phoneNumber, int id,
 //    int borrowedBooks, String membershipType
+
+    public void registerForModifyBook(Stage stage) {
+        mainMenuView.getUpdateButton().setOnAction(event -> {
+            try {
+                String ISBN = mainMenuView.getIsbnField().getText();
+                String attribute = mainMenuView.getAttributeField().getText();
+                String newValue = mainMenuView.getNewValueField().getText();
+                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    System.out.println("Please fill in all fields!");
+                } else {
+                    bookService.modifyBook(ISBN, attribute, newValue);
+                    System.out.println("Book updated successfully!");
+                    stage.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("An error occurred. Please check the input values.");
+            }
+        });
+        mainMenuView.getBackButton().setOnAction(event -> stage.close());mainMenuView.getUpdateButton().setOnAction(event -> {
+            try {
+                String ISBN = mainMenuView.getIsbnField().getText();
+                String attribute = mainMenuView.getAttributeField().getText();
+                String newValue = mainMenuView.getNewValueField().getText();
+                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    System.out.println("Please fill in all fields!");
+                } else {
+                    bookService.modifyBook(ISBN, attribute, newValue);
+                    System.out.println("Book updated successfully!");
+                    stage.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("An error occurred. Please check the input values.");
+            }
+        });
+        mainMenuView.getBackButton().setOnAction(event -> stage.close());
+    }
 
     public void loadTableData() {
         updateTableView(getPageData(0)); // Load the first page initially
@@ -227,6 +270,13 @@ public class MainMenuController extends BaseController {
 
         // Make sure pagination control uses available space
         VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
+        mainMenuView.getCartIdColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+        mainMenuView.getBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+        mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+        mainMenuView.getBorrowDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+        mainMenuView.getDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+        mainMenuView.getUserNameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+        updateService.populateTableView(mainMenuView.getBorrowHistoryTable(), 50);
     }
 
     private void scheduleSearch() {
@@ -342,37 +392,6 @@ public class MainMenuController extends BaseController {
         new AddBookView(mainMenuView.getStage());
     }
 
-    public void openModifyBookView() {
-        Parent root = mainMenuView.initializeModifyBookView();
-        if (root != null) {
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Modify Book");
-            popupStage.setScene(new Scene(root));
-            popupStage.initModality(Modality.WINDOW_MODAL);
-            popupStage.initOwner(this.mainMenuView.getStage());
-
-            System.out.println(mainMenuView);
-            mainMenuView.getUpdateButton().setOnAction(event -> {
-                try {
-                    String ISBN = mainMenuView.getIsbnField().getText();
-                    String attribute = mainMenuView.getAttributeField().getText();
-                    String newValue = mainMenuView.getNewValueField().getText();
-                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                        System.out.println("Please fill in all fields!");
-                    } else {
-                        bookService.modifyBook(ISBN, attribute, newValue);
-                        System.out.println("Book updated successfully!");
-                        popupStage.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("An error occurred. Please check the input values.");
-                }
-            });
-            mainMenuView.getBackButton().setOnAction(event -> popupStage.close());
-            popupStage.showAndWait();
-        }
-    }
     private void setupTableColumns() {
         mainMenuView.getUsernameColumn().setCellValueFactory(new PropertyValueFactory<>("username"));
         mainMenuView.getNameColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
