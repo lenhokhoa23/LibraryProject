@@ -21,6 +21,7 @@ import java.sql.SQLException;
 public class RegisterController extends BaseController {
     private final RegisterView registerView;
     private final RegisterService registerService = RegisterService.getInstance();
+    private final UserDAO userDAO = new UserDAO();
 
     public RegisterController(RegisterView registerView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -42,7 +43,7 @@ public class RegisterController extends BaseController {
             if (!name.isEmpty() && !email.isEmpty() && !phoneNumber.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
                 if (registerService.validateInput(username, phoneNumber, email) == 0) {
                     showSuccessMessage("Đăng kí tài khoản thành công!");
-                    AccountDAO.saveUserToDatabase(name, email, phoneNumber, username, password);
+                    userDAO.saveUserToDatabase(name, email, phoneNumber, username, password, "Basic");
                     openLoginView((Stage) ((Node) event.getSource()).getScene().getWindow());
                 } else if (registerService.validateInput(username, phoneNumber, email) == 1) {
                     showErrorMessage("Username must not contain spaces, must be 8-20 characters long, including letters and numbers!");

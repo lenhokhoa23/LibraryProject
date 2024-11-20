@@ -3,8 +3,10 @@ package org.example.libraryfxproject.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.example.libraryfxproject.Dao.BookDAO;
+import org.example.libraryfxproject.Dao.UserDAO;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.TrieNode;
+import org.example.libraryfxproject.Model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 public class SearchService {
     private final BookDAO bookDAO = new BookDAO();
+    private final UserDAO userDAO = new UserDAO();
     private static SearchService searchService;
     private SearchService() {}
     // synchronized giup ho tro da luong khong tao ra nhieu thuc the
@@ -56,4 +59,10 @@ public class SearchService {
         List<Book> books = bookDAO.findBooksByAttribute(attribute, value);
         return FXCollections.observableArrayList(books);
     }
+
+    public ObservableList<User> searchUserByUsername(String username) {
+        List<User> users = userDAO.findUserByComponentOfUserName(username);
+        return FXCollections.observableArrayList(users);
+    }
+
 }
