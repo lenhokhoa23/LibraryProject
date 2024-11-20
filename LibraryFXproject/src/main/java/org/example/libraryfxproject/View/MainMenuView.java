@@ -26,6 +26,7 @@ import javafx.util.Callback;
 import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
@@ -164,18 +165,25 @@ public class MainMenuView {
 
     @FXML
     private Button viewAllButton;
+
     @FXML
     private TextField nameField;
+
     @FXML
     private TextField usernameField;
+
     @FXML
     private TextField emailField;
+
     @FXML
     private TextField phoneField;
+
     @FXML
     private Button addStudent;
+
     @FXML
     private Button cancelAddStudentButton;
+
     @FXML
     private Button addStudentButton;
 
@@ -198,6 +206,27 @@ public class MainMenuView {
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private TableView<ObservableList<String>> borrowHistoryTable;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> cartIdColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> bookTitleColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> isbnColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowDateColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> dueDateColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> userNameColumn;
 
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
@@ -240,7 +269,6 @@ public class MainMenuView {
     public Button getCancelAddStudentButton() {
         return cancelAddStudentButton;
     }
-
 
     public boolean isSelecting() {
         return isSelecting;
@@ -321,6 +349,7 @@ public class MainMenuView {
     public void setSearchToggle(ToggleButton searchToggle) {
         this.searchToggle = searchToggle;
     }
+
     public Label getTotalBooksLabel() {
         return totalBooksLabel;
     }
@@ -439,6 +468,14 @@ public class MainMenuView {
 
     public void setViewAllButton(Button viewAllButton) {
         this.viewAllButton = viewAllButton;
+    }
+
+    public Button getModifyButton() {
+        return modifyButton;
+    }
+
+    public void setModifyButton(Button modifyButton) {
+        this.modifyButton = modifyButton;
     }
 
     public TextField getIsbnField() {
@@ -578,6 +615,7 @@ public class MainMenuView {
             e.printStackTrace();
         }
     }
+
     public void initializeAddStudentView(MainMenuController mainMenuController) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
         fxmlLoader.setController(this);
@@ -604,37 +642,115 @@ public class MainMenuView {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
-    public Button getModifyButton() {
-        return modifyButton;
-    }
-
-    public void setModifyButton(Button modifyButton) {
-        this.modifyButton = modifyButton;
-    }
-
     private void handleActionClick(Book book) {
         // Handle button click event
         System.out.println("Button clicked for book: " + book.getTitle());
     }
 
-
-
-    public Parent initializeModifyBookView() {
+    public void initializeModifyBookView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
+        fxmlLoader.setController(this);
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
-            loader.setController(this);
-            return loader.load();
+            Parent modifyBookParent = fxmlLoader.load();
+            Scene modifyBookScene = new Scene(modifyBookParent);
+            Stage modifyBookStage = new Stage();
+            modifyBookStage.setTitle("Modify Book");
+            modifyBookStage.setScene(modifyBookScene);
+            modifyBookStage.initModality(Modality.APPLICATION_MODAL);
+            modifyBookStage.initOwner(stage);
+            modifyBookStage.show();
+            mainMenuController.registerForModifyBook(modifyBookStage);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
-    
-    public void showSuccessMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Book modified successfully!");
-        alert.show();
+
+    public TableColumn<ObservableList<String>, String> getCartIdColumn() {
+        return cartIdColumn;
+    }
+
+    public void setCartIdColumn(TableColumn<ObservableList<String>, String> cartIdColumn) {
+        this.cartIdColumn = cartIdColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBookTitleColumn() {
+        return bookTitleColumn;
+    }
+
+    public void setBookTitleColumn(TableColumn<ObservableList<String>, String> bookTitleColumn) {
+        this.bookTitleColumn = bookTitleColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getIsbnColumn() {
+        return isbnColumn;
+    }
+
+    public void setIsbnColumn(TableColumn<ObservableList<String>, String> isbnColumn) {
+        this.isbnColumn = isbnColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowDateColumn() {
+        return borrowDateColumn;
+    }
+
+    public void setBorrowDateColumn(TableColumn<ObservableList<String>, String> borrowDateColumn) {
+        this.borrowDateColumn = borrowDateColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getDueDateColumn() {
+        return dueDateColumn;
+    }
+
+    public void setDueDateColumn(TableColumn<ObservableList<String>, String> dueDateColumn) {
+        this.dueDateColumn = dueDateColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getUserNameColumn() {
+        return userNameColumn;
+    }
+
+    public void setUserNameColumn(TableColumn<ObservableList<String>, String> userNameColumn) {
+        this.userNameColumn = userNameColumn;
+    }
+
+    @FXML
+    private ComboBox<String> filterByColumn;
+
+    @FXML
+    private TextField searchField1;
+
+    @FXML
+    private Button searchButton1;
+
+    public ComboBox<String> getFilterByColumn() {
+        return filterByColumn;
+    }
+
+    public void setFilterByColumn(ComboBox<String> filterByColumn) {
+        this.filterByColumn = filterByColumn;
+    }
+
+    public TextField getSearchField1() {
+        return searchField1;
+    }
+
+    public void setSearchField1(TextField searchField1) {
+        this.searchField1 = searchField1;
+    }
+
+    public Button getSearchButton1() {
+        return searchButton1;
+    }
+
+    public void setSearchButton1(Button searchButton1) {
+        this.searchButton1 = searchButton1;
+    }
+
+    public TableView<ObservableList<String>> getBorrowHistoryTable() {
+        return borrowHistoryTable;
+    }
+
+    public void setBorrowHistoryTable(TableView<ObservableList<String>> borrowHistoryTable) {
+        this.borrowHistoryTable = borrowHistoryTable;
     }
 }
