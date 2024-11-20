@@ -187,6 +187,21 @@ public class MainMenuView {
     @FXML
     private Button addStudentButton;
 
+    @FXML
+    private ComboBox<String> membershipTypeComboBox;
+
+    @FXML
+    private TextField passwordField;
+
+    @FXML
+    private TextField studentSearch;
+
+    @FXML
+    private Button studentSearchButton;
+
+    @FXML
+    private Button refreshStudentButton;
+
     private AlertDisplayer alertDisplayer;
 
     @FXML
@@ -239,7 +254,18 @@ public class MainMenuView {
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
-        alertDisplayer = new JavaFXAlertDisplayer();
+    }
+
+    public Button getRefreshStudentButton() {
+        return refreshStudentButton;
+    }
+
+    public TextField getStudentSearch() {
+        return studentSearch;
+    }
+
+    public Button getStudentSearchButton() {
+        return studentSearchButton;
     }
 
     public Button getAddStudentButton() {
@@ -268,6 +294,15 @@ public class MainMenuView {
 
     public Button getCancelAddStudentButton() {
         return cancelAddStudentButton;
+    }
+
+
+    public ComboBox<String> getMembershipTypeComboBox() {
+        return membershipTypeComboBox;
+    }
+
+    public TextField getPasswordField() {
+        return passwordField;
     }
 
     public boolean isSelecting() {
@@ -591,6 +626,7 @@ public class MainMenuView {
     }
 
     public void initializeMainMenuView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
         fxmlLoader.setController(this);
         try {

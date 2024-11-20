@@ -37,11 +37,11 @@ public class LoginView implements Initializable {
     public LoginView(Stage stage) {
         this.stage = stage;
         initializeLoginView();
-        alertDisplayer = new JavaFXAlertDisplayer();
     }
 
     // Khởi tạo giao diện
     private void initializeLoginView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/Login.fxml"));
             fxmlLoader.setController(this); // Đặt controller là đối tượng hiện tại (LoginView)

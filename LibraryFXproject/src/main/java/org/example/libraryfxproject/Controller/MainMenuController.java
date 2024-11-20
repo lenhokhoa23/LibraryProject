@@ -1,5 +1,4 @@
 package org.example.libraryfxproject.Controller;
-
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,15 +24,14 @@ import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.AddBookView;
-
 import javafx.scene.input.KeyCode;
-
+import javafx.scene.input.MouseEvent;
 import org.example.libraryfxproject.Service.UpdateService;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
-
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -134,13 +132,33 @@ public class MainMenuController extends BaseController {
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
         });
-    }
-
-    public void registerForAddStudent(Stage stage) {
-        mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
-            stage.close();
+        mainMenuView.getStudentSearchButton().setOnAction(event -> {
+            ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText());
+            updateUserTableView(filteredUser);
+        });
+        mainMenuView.getRefreshStudentButton().setOnAction(event -> {
+            loadTableData();
         });
     }
+
+    public void registerForAddStudent(Stage addStudentStage) {
+        mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
+            addStudentStage.close();
+        });
+        mainMenuView.getAddStudent().setOnAction(event -> {
+            if (showConfirmation("A new User will be added, are you sure?")) {
+                userService.getUserDAO().saveUserToDatabase(mainMenuView.getNameField().getText(),
+                        mainMenuView.getEmailField().getText(), mainMenuView.getPhoneField().getText(),
+                        mainMenuView.getUsernameField().getText(),
+                        mainMenuView.getPasswordField().getText(),
+                        mainMenuView.getMembershipTypeComboBox().getValue());
+                showSuccessMessage("Add user successfully!!");
+                addStudentStage.close();
+            }
+        });
+    }
+//    String username, String name, String email, String phoneNumber, int id,
+//    int borrowedBooks, String membershipType
 
     public void registerForModifyBook(Stage stage) {
         mainMenuView.getUpdateButton().setOnAction(event -> {
@@ -181,7 +199,6 @@ public class MainMenuController extends BaseController {
     }
 
     public void loadTableData() {
-        System.out.println("Loaded books: " + observableBooks.size());
         updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateUserTableView(studentList);
@@ -390,4 +407,5 @@ public class MainMenuController extends BaseController {
                 mainMenuView.getBorrowedBookColumn(),
                 mainMenuView.getMembershipTypeColumn());
     }
+
 }

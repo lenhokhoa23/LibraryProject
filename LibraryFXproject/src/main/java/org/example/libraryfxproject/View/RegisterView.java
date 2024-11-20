@@ -114,6 +114,7 @@ public class RegisterView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        alertDisplayer = new JavaFXAlertDisplayer();
         RegisterController registerController = new RegisterController(this, alertDisplayer);
         registerController.registerEvent();
     }

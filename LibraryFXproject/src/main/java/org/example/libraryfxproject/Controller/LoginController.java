@@ -63,4 +63,5 @@ public class LoginController extends BaseController {
     private void openUserView(Stage stage) {
         UserView userView = new UserView(stage);
     }
+
 }
