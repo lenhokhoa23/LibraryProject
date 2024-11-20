@@ -248,7 +248,7 @@
                                        </items>
                                     </ComboBox>
                                     <TextField fx:id="searchCatalog" promptText="Search catalog" />
-                                    <ToggleButton fx:id="searchToggle" prefHeight="24.0" prefWidth="84.0" styleClass="view-toggle">
+                                    <ToggleButton fx:id="searchToggle" prefHeight="20.0" prefWidth="84.0" styleClass="view-toggle">
                                        <graphic>
                                           <ImageView fitHeight="15" fitWidth="15">
                                              <image>
@@ -308,8 +308,18 @@
                                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="student-controls">
                                                    <children>
                                                       <TextField fx:id="studentSearch" promptText="Search students" />
-                                                      <ComboBox fx:id="studentFilter" promptText="Filter by" />
+                                                      <Button fx:id = "studentSearchButton" styleClass="add-student-button" text="Search" />
                                                       <Button fx:id = "addStudentButton" styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id="refreshStudentButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
+                                                         <graphic>
+                                                            <ImageView fitHeight="20" fitWidth="20">
+                                                               <image>
+                                                                  <Image url="@images/refresh.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         Refresh
+                                                      </Button>
                                                       <Region HBox.hgrow="ALWAYS" />
                                                       <Button styleClass="export-button" text="Export Data" />
                                                    </children>
@@ -364,6 +374,64 @@
             </content>
                   </Tab>
 
+            <!-- Book Borrowing Management Tab -->
+            <Tab closable="false" text="Quản lý mượn trả">
+               <content>
+                  <VBox spacing="20" styleClass="content-container">
+                     <children>
+                        <TabPane>
+                           <tabs>
+                              <!-- Borrow Books Tab -->
+                              <Tab text="Mượn sách">
+                                 <content>
+                                    <VBox spacing="15" styleClass="borrow-section">
+                                       <children>
+                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Mã sinh viên:" />
+                                                <TextField fx:id="borrowStudentIdField" promptText="Nhập mã sinh viên" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Mã sách:" />
+                                                <TextField fx:id="borrowBookIdField" promptText="Nhập mã sách" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Ngày trả:" />
+                                                <DatePicker fx:id="borrowDueDatePicker" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <Button fx:id="borrowButton" text="Mượn sách" styleClass="borrow-button" />
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+
+                              <!-- Return Books Tab -->
+                              <Tab text="Trả sách">
+                                 <content>
+                                    <VBox spacing="15" styleClass="return-section">
+                                       <children>
+                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Mã mượn:" />
+                                                <TextField fx:id="returnBorrowIdField" promptText="Nhập mã mượn" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <Button fx:id="returnButton" text="Trả sách" styleClass="return-button" />
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
                   <!-- Circulation Tab -->
                   <Tab closable="false" text="Circulation">
             <content>

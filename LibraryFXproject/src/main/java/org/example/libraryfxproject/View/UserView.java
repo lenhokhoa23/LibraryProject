@@ -52,7 +52,6 @@ public class UserView {
 
     public UserView(Stage stage) {
         this.stage = stage;
-        alertDisplayer = new JavaFXAlertDisplayer();
         initializeUserView();
     }
 
@@ -121,6 +120,7 @@ public class UserView {
     }
 
     public void initializeUserView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
         fxmlLoader.setController(this);
         try {
