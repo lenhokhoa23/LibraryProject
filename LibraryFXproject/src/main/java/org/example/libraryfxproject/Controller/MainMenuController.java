@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
@@ -20,6 +21,8 @@ import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.Exception.ExportException;
+import org.example.libraryfxproject.Util.ExporterFactory;
 import org.example.libraryfxproject.View.AddBookView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +30,8 @@ import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,6 +49,7 @@ public class MainMenuController extends BaseController {
     private final BookService bookService;
     private final UpdateService updateService;
     private final UserService userService;
+    private final ExportService exportService;
     private ObservableList<Book> observableBooks;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
     private ObservableList<Cart> borrowHistoryData;
@@ -60,6 +66,7 @@ public class MainMenuController extends BaseController {
         this.updateService = UpdateService.getInstance();
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
+        this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         this.observableBooks = BookService.getInstance().getAllBooks();
         loadTableData();
         initializePagination();
@@ -138,6 +145,20 @@ public class MainMenuController extends BaseController {
         });
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
             loadTableData();
+        });
+        mainMenuView.getExportDataButton().setOnAction(event -> {
+            try {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle("Choose export location");
+                File selectedDirectory = directoryChooser.showDialog(null);
+                if (selectedDirectory != null) {
+                    List<User> userList = userService.getUserDAO().findUserByComponentOfUserName("");
+                    exportService.exportStudentData(userList, selectedDirectory.getAbsolutePath());
+                    alertDisplayer.showInformationAlert("Export Success", "Data has been exported successfully!");
+                }
+            } catch (ExportException exportException) {
+                alertDisplayer.showErrorAlert("Export Error", "Failed to export data " + exportException.getMessage());
+            }
         });
     }
 

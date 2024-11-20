@@ -388,8 +388,7 @@
 }
 
 .borrow-button,
-.return-button,
-.search-button {
+.return-button {
     -fx-background-color: #007bff;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -403,7 +402,3 @@
     -fx-background-color: #0056b3;
 }
 
-.search-controls {
-    -fx-spacing: 10px;
-    -fx-padding: 10px 0;
-}
