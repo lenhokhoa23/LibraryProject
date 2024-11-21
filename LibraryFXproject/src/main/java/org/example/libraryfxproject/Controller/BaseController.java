@@ -16,6 +16,7 @@ public abstract class BaseController {
     }
 
     protected void showErrorMessage(String message) {
+
         alertDisplayer.showErrorAlert("Error", message);
     }
 

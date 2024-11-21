@@ -25,13 +25,14 @@ public class BookService {
         }
         return bookService;
     }
+
+    public BookDAO getBookDAO() {
+        return bookDAO;
+    }
+
     private BookService() {
         LoadService loadService = LoadService.getInstance();
         loadService.loadData(bookDAO);
-    }
-
-    public ObservableList<Book> getAllBooks() {
-        return FXCollections.observableArrayList(bookDAO.getDataMap().values());
     }
 
     public int validateAddBookInput(String title, String author, String pubdateStr, String releaseDateStr,

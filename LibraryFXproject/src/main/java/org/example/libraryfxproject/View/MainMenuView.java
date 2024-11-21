@@ -36,6 +36,81 @@ import java.util.ResourceBundle;
 
 public class MainMenuView {
     @FXML
+    private TextField title;
+    @FXML
+    private TextField author;
+    @FXML
+    private DatePicker pubdate;
+    @FXML
+    private DatePicker releaseDate;
+    @FXML
+    private TextField ISBN;
+    @FXML
+    private TextField price;
+    @FXML
+    private TextField subject;
+    @FXML
+    private TextField category;
+    @FXML
+    private TextField URL; // For the book URL or link
+    @FXML
+    private TextField bookType;
+    @FXML
+    private TextField quantity;
+    @FXML
+    private Button addBookButton;
+    @FXML
+    private Button backButton;
+
+    public TableColumn<Book, Integer> getItemIdColumn() {
+        return itemIdColumn;
+    }
+
+    public void setItemIdColumn(TableColumn<Book, Integer> itemIdColumn) {
+        this.itemIdColumn = itemIdColumn;
+    }
+
+    public TableColumn<Book, String> getTitleColumn() {
+        return titleColumn;
+    }
+
+    public void setTitleColumn(TableColumn<Book, String> titleColumn) {
+        this.titleColumn = titleColumn;
+    }
+
+    public TableColumn<Book, String> getAuthorColumn() {
+        return authorColumn;
+    }
+
+    public void setAuthorColumn(TableColumn<Book, String> authorColumn) {
+        this.authorColumn = authorColumn;
+    }
+
+    public TableColumn<Book, String> getSubjectColumn() {
+        return subjectColumn;
+    }
+
+    public void setSubjectColumn(TableColumn<Book, String> subjectColumn) {
+        this.subjectColumn = subjectColumn;
+    }
+
+    public TableColumn<Book, String> getBookTypeColumn() {
+        return bookTypeColumn;
+    }
+
+    public void setBookTypeColumn(TableColumn<Book, String> bookTypeColumn) {
+        this.bookTypeColumn = bookTypeColumn;
+    }
+
+    public TableColumn<Book, String> getQuantityColumn() {
+        return quantityColumn;
+    }
+
+    public void setQuantityColumn(TableColumn<Book, String> quantityColumn) {
+        this.quantityColumn = quantityColumn;
+    }
+
+    @FXML
     private TableView<Book> catalogTableView;
 
     @FXML
@@ -197,20 +272,42 @@ public class MainMenuView {
     private Button updateButton;
 
     @FXML
-    private Button backButton;
+    private Button goToPageButton;
+
+    @FXML
+    private TextField pageNumberField;
 
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
 
     public Pagination getCatalogPagination() {
-        return catalogPagination; // Add this method
+        return this.catalogPagination; // Add this method
+    }
+
+    public void setCatalogPagination(Pagination catalogPagination) {
+        this.catalogPagination = catalogPagination;
     }
 
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
-        alertDisplayer = new JavaFXAlertDisplayer();
+    }
+
+    public TextField getPageNumberField() {
+        return pageNumberField;
+    }
+
+    public void setPageNumberField(TextField pageNumberField) {
+        this.pageNumberField = pageNumberField;
+    }
+
+    public Button getGoToPageButton() {
+        return goToPageButton;
+    }
+
+    public void setGoToPageButton(Button goToPageButton) {
+        this.goToPageButton = goToPageButton;
     }
 
     public Button getAddStudentButton() {
@@ -546,6 +643,7 @@ public class MainMenuView {
     }
 
     public Pagination getStudentPagination() {
+
         return studentPagination;
     }
 
@@ -553,7 +651,56 @@ public class MainMenuView {
         this.studentPagination = studentPagination;
     }
 
+    public TextField getTitle() {
+        return title;
+    }
+
+    public TextField getAuthor() {
+        return author;
+    }
+
+    public DatePicker getPubdate() {
+        return pubdate;
+    }
+
+    public DatePicker getReleaseDate() {
+        return releaseDate;
+    }
+
+    public TextField getISBN() {
+        return ISBN;
+    }
+
+    public TextField getPrice() {
+        return price;
+    }
+
+    public TextField getSubject() {
+        return subject;
+    }
+
+    public TextField getCategory() {
+        return category;
+    }
+
+    public TextField getURL() {
+        return URL;
+    }
+
+    public TextField getBookType() {
+        return bookType;
+    }
+
+    public TextField getQuantity() {
+        return quantity;
+    }
+
+    public Button getAddBookButton() {
+        return addBookButton;
+    }
+
     public void initializeMainMenuView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
         fxmlLoader.setController(this);
         try {
@@ -562,8 +709,6 @@ public class MainMenuView {
             stage.setHeight(Screen.getPrimary().getBounds().getHeight());
             stage.setX((Screen.getPrimary().getBounds().getWidth() - stage.getWidth()) / 2);
             stage.setY((Screen.getPrimary().getBounds().getHeight() - stage.getHeight()) / 2);
-            setupCatalogTableView();
-         
             Scene scene = new Scene(mainViewParent);
             stage.setX(-5);
             stage.setY(-5);
@@ -594,16 +739,6 @@ public class MainMenuView {
             throw new RuntimeException(e);
         }
     }
-
-    public void setupCatalogTableView() {
-        itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("no"));
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        bookTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookType"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-    }
-
     public Button getModifyButton() {
         return modifyButton;
     }
@@ -611,13 +746,6 @@ public class MainMenuView {
     public void setModifyButton(Button modifyButton) {
         this.modifyButton = modifyButton;
     }
-
-    private void handleActionClick(Book book) {
-        // Handle button click event
-        System.out.println("Button clicked for book: " + book.getTitle());
-    }
-
-
 
     public Parent initializeModifyBookView() {
         try {
@@ -629,12 +757,21 @@ public class MainMenuView {
             return null;
         }
     }
-    
-    public void showSuccessMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Message");
-        alert.setHeaderText(null);
-        alert.setContentText("Book modified successfully!");
-        alert.show();
+
+    public void initializeAddBookView(MainMenuController mainMenuController) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addBookView.fxml"));
+        loader.setController(this);
+        try {
+            Parent addBookParent = loader.load();
+            Scene addBookScene = new Scene(addBookParent);
+            Stage addBookStage = new Stage();
+            addBookStage.setScene(addBookScene);
+            addBookStage.initModality(Modality.APPLICATION_MODAL);
+            addBookStage.initOwner(stage);
+            addBookStage.show();
+            mainMenuController.registerForAddBook(addBookStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
