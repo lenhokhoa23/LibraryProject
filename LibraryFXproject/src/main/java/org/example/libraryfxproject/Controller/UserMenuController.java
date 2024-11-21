@@ -15,6 +15,7 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
 
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -42,7 +43,9 @@ public class UserMenuController extends BaseController {
         hideSuggestions();
 
         userView.getLogoutItem().setOnAction(event -> {
-            LoginView.openLoginView((Stage) userView.getProfileButton().getScene().getWindow());
+            Stage stage = (Stage) userView.getProfileButton().getScene().getWindow();
+            stage.close();
+            LoginView.openLoginView(new Stage());
         });
 
         userView.getSearchField().setOnKeyReleased(event -> {

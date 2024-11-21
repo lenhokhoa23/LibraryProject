@@ -41,4 +41,6 @@ public class User extends Person{
     public void setMembershipType(String membershipType) {
         this.membershipType = membershipType;
     }
+
+
 }

@@ -1,39 +1,35 @@
 package org.example.libraryfxproject.Controller;
-
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.example.libraryfxproject.Export.ExporterFactory;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
-
+import org.example.libraryfxproject.Util.Exception.ExportException;
+import org.example.libraryfxproject.View.AddBookView;
 import javafx.scene.input.KeyCode;
-
-import org.example.libraryfxproject.Service.UpdateService;
-import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -47,13 +43,14 @@ public class MainMenuController extends BaseController {
     private final UpdateService updateService;
     private final UserService userService;
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
+    private final ExportService exportService;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
+    private ObservableList<Cart> borrowHistoryData;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
     private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
-
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -62,6 +59,8 @@ public class MainMenuController extends BaseController {
         this.updateService = UpdateService.getInstance();
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
+
+        this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
@@ -71,7 +70,9 @@ public class MainMenuController extends BaseController {
         hideSuggestions();
 
         mainMenuView.getLogoutItem().setOnAction(event -> {
-            LoginView.openLoginView((Stage) mainMenuView.getProfileButton().getScene().getWindow());
+            Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
+            stage.close();
+            LoginView.openLoginView(new Stage());
         });
 
         mainMenuView.getSearchField().setOnKeyReleased(event -> {
@@ -113,7 +114,13 @@ public class MainMenuController extends BaseController {
                 scheduleSearch();
             }
         });
-        mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
+
+        mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
+
+        // mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
+        mainMenuView.getModifyButton().setOnAction(event -> {
+            mainMenuView.initializeModifyBookView(this);
+        });
 
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
@@ -127,7 +134,6 @@ public class MainMenuController extends BaseController {
             loadTableData();
             initializePagination();
         });
-
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
@@ -137,6 +143,7 @@ public class MainMenuController extends BaseController {
         });
 
         setupTableColumns();
+
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
         });
@@ -145,20 +152,120 @@ public class MainMenuController extends BaseController {
             mainMenuView.initializeAddBookView(this);
         });
 
+        mainMenuView.getStudentSearchButton().setOnAction(event -> {
+            ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText());
+            updateUserTableView(filteredUser);
+        });
+        mainMenuView.getRefreshStudentButton().setOnAction(event -> {
+            loadTableData();
+        });
+        mainMenuView.getExportDataButton().setOnAction(event -> {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Choose export location");
+            File selectedDirectory = directoryChooser.showDialog(null);
+            if (selectedDirectory != null) {
+                Task<Void> exportTask = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        List<User> userList = userService.getUserDAO().findUserByComponentOfUserName("");
+                        exportService.exportStudentData(userList, selectedDirectory.getAbsolutePath(),
+                                new ExportService.ExportCallback() {
+                                    @Override
+                                    public void onSuccess(String filePath) {
+                                        Platform.runLater(() -> {
+                                            alertDisplayer.showInformationAlert("Export Success", "Data has been exported successfully to:" + filePath);
+                                            mainMenuView.getProgressIndicator().setVisible(false);
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String errorMessage) {
+                                        Platform.runLater(() -> {
+                                            alertDisplayer.showErrorAlert("Export Error", "Failed to export data: " + errorMessage);
+                                            mainMenuView.getProgressIndicator().setVisible(false);
+                                        });
+
+                                    }
+                                });
+                        return null;
+                    }
+                };
+                exportTask.setOnFailed(e -> {
+                    alertDisplayer.showErrorAlert("Export Error", "An unexpected error occur during export data.");
+                    mainMenuView.getProgressIndicator().setVisible(false);
+                });
+
+                mainMenuView.getProgressIndicator().setVisible(true);
+                new Thread(exportTask).start();
+            }
+        });
     }
 
-    public void registerForAddStudent(Stage stage) {
+    public void registerForAddStudent(Stage addStudentStage) {
         mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
-            stage.close();
+            addStudentStage.close();
         });
+        mainMenuView.getAddStudent().setOnAction(event -> {
+            if (showConfirmation("A new User will be added, are you sure?")) {
+                userService.getUserDAO().saveUserToDatabase(mainMenuView.getNameField().getText(),
+                        mainMenuView.getEmailField().getText(), mainMenuView.getPhoneField().getText(),
+                        mainMenuView.getUsernameField().getText(),
+                        mainMenuView.getPasswordField().getText(),
+                        mainMenuView.getMembershipTypeComboBox().getValue());
+                showSuccessMessage("Add user successfully!!");
+                addStudentStage.close();
+            }
+        });
+    }
+//    String username, String name, String email, String phoneNumber, int id,
+//    int borrowedBooks, String membershipType
+
+    public void registerForModifyBook(Stage stage) {
+        mainMenuView.getUpdateButton().setOnAction(event -> {
+            try {
+                String ISBN = mainMenuView.getIsbnField().getText();
+                String attribute = mainMenuView.getAttributeField().getText();
+                String newValue = mainMenuView.getNewValueField().getText();
+                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    System.out.println("Please fill in all fields!");
+                } else {
+                    bookService.modifyBook(ISBN, attribute, newValue);
+                    System.out.println("Book updated successfully!");
+                    stage.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("An error occurred. Please check the input values.");
+            }
+        });
+        mainMenuView.getBackButton().setOnAction(event -> stage.close());mainMenuView.getUpdateButton().setOnAction(event -> {
+            try {
+                String ISBN = mainMenuView.getIsbnField().getText();
+                String attribute = mainMenuView.getAttributeField().getText();
+                String newValue = mainMenuView.getNewValueField().getText();
+                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    System.out.println("Please fill in all fields!");
+                } else {
+                    bookService.modifyBook(ISBN, attribute, newValue);
+                    System.out.println("Book updated successfully!");
+                    stage.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("An error occurred. Please check the input values.");
+            }
+        });
+        mainMenuView.getBackButton().setOnAction(event -> stage.close());
     }
 
     public void loadTableData() {
         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
         updateBookTableView(bookList);
+        updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateUserTableView(studentList);
     }
+
     private void initializePagination() {
         int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
@@ -223,6 +330,22 @@ public class MainMenuController extends BaseController {
         mainMenuView.getViewAllButton().setOnAction(event -> {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
+
+        mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
+        mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Set page factory
+        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
+
+        // Make sure pagination control uses available space
+        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
+        mainMenuView.getCartIdColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+        mainMenuView.getBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+        mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+        mainMenuView.getBorrowDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+        mainMenuView.getDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+        mainMenuView.getUserNameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+        updateService.populateTableView(mainMenuView.getBorrowHistoryTable(), 50);
     }
 
     private void scheduleSearch() {
@@ -260,6 +383,7 @@ public class MainMenuController extends BaseController {
 
     private void performSearch() {
         // Implement your search logic here
+
         hideSuggestions();
     }
 
@@ -268,6 +392,7 @@ public class MainMenuController extends BaseController {
     }
 
     public void updateBookTableView(ObservableList<Book> books) {
+
         mainMenuView.getCatalogTableView().getItems().clear();
         mainMenuView.getCatalogTableView().setItems(books);
     }
@@ -288,6 +413,7 @@ public class MainMenuController extends BaseController {
         int end = Math.min(start + ROWS_PER_PAGE, studentList.size());
         mainMenuView.getStudentTableView().setItems(FXCollections.observableArrayList(studentList.subList(start, end)));
     }
+
     public void CatalogEvent() {
         if (isFilteredView) {
             loadTableData();
@@ -334,6 +460,9 @@ public class MainMenuController extends BaseController {
             mainMenuView.getBackButton().setOnAction(event -> popupStage.close());
             popupStage.showAndWait();
         }
+
+    public void openAddBookView(ActionEvent event) {
+        new AddBookView(mainMenuView.getStage());
     }
 
     private void setupTableColumns() {
@@ -433,4 +562,5 @@ public class MainMenuController extends BaseController {
             addBookStage.close();
         });
     }
+
 }

@@ -410,3 +410,25 @@
     -fx-border-radius: 3;
     -fx-padding: 2;
 }
+.borrow-section,
+.return-section,
+.history-section {
+    -fx-spacing: 15px;
+}
+
+.borrow-button,
+.return-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.borrow-button:hover,
+.return-button:hover,
+.search-button:hover {
+    -fx-background-color: #0056b3;
+}
+
+
