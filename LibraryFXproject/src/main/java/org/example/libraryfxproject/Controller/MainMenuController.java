@@ -1,12 +1,11 @@
 package org.example.libraryfxproject.Controller;
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -16,32 +15,25 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.example.libraryfxproject.Export.ExporterFactory;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.Exception.ExportException;
-import org.example.libraryfxproject.Util.ExporterFactory;
 import org.example.libraryfxproject.View.AddBookView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import javafx.animation.TranslateTransition;
-import javafx.util.Duration;
 
 public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
@@ -77,7 +69,9 @@ public class MainMenuController extends BaseController {
         hideSuggestions();
 
         mainMenuView.getLogoutItem().setOnAction(event -> {
-            LoginView.openLoginView((Stage) mainMenuView.getProfileButton().getScene().getWindow());
+            Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
+            stage.close();
+            LoginView.openLoginView(new Stage());
         });
 
         mainMenuView.getSearchField().setOnKeyReleased(event -> {
@@ -147,17 +141,43 @@ public class MainMenuController extends BaseController {
             loadTableData();
         });
         mainMenuView.getExportDataButton().setOnAction(event -> {
-            try {
-                DirectoryChooser directoryChooser = new DirectoryChooser();
-                directoryChooser.setTitle("Choose export location");
-                File selectedDirectory = directoryChooser.showDialog(null);
-                if (selectedDirectory != null) {
-                    List<User> userList = userService.getUserDAO().findUserByComponentOfUserName("");
-                    exportService.exportStudentData(userList, selectedDirectory.getAbsolutePath());
-                    alertDisplayer.showInformationAlert("Export Success", "Data has been exported successfully!");
-                }
-            } catch (ExportException exportException) {
-                alertDisplayer.showErrorAlert("Export Error", "Failed to export data " + exportException.getMessage());
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Choose export location");
+            File selectedDirectory = directoryChooser.showDialog(null);
+            if (selectedDirectory != null) {
+                Task<Void> exportTask = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        List<User> userList = userService.getUserDAO().findUserByComponentOfUserName("");
+                        exportService.exportStudentData(userList, selectedDirectory.getAbsolutePath(),
+                                new ExportService.ExportCallback() {
+                                    @Override
+                                    public void onSuccess(String filePath) {
+                                        Platform.runLater(() -> {
+                                            alertDisplayer.showInformationAlert("Export Success", "Data has been exported successfully to:" + filePath);
+                                            mainMenuView.getProgressIndicator().setVisible(false);
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String errorMessage) {
+                                        Platform.runLater(() -> {
+                                            alertDisplayer.showErrorAlert("Export Error", "Failed to export data: " + errorMessage);
+                                            mainMenuView.getProgressIndicator().setVisible(false);
+                                        });
+
+                                    }
+                                });
+                        return null;
+                    }
+                };
+                exportTask.setOnFailed(e -> {
+                    alertDisplayer.showErrorAlert("Export Error", "An unexpected error occur during export data.");
+                    mainMenuView.getProgressIndicator().setVisible(false);
+                });
+
+                mainMenuView.getProgressIndicator().setVisible(true);
+                new Thread(exportTask).start();
             }
         });
     }

@@ -43,7 +43,9 @@ public class UserMenuController extends BaseController {
         hideSuggestions();
 
         userView.getLogoutItem().setOnAction(event -> {
-            LoginView.openLoginView((Stage) userView.getProfileButton().getScene().getWindow());
+            Stage stage = (Stage) userView.getProfileButton().getScene().getWindow();
+            stage.close();
+            LoginView.openLoginView(new Stage());
         });
 
         userView.getSearchField().setOnKeyReleased(event -> {

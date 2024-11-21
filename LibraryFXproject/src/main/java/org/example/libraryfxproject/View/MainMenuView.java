@@ -246,6 +246,9 @@ public class MainMenuView {
     @FXML
     private TableColumn<ObservableList<String>, String> userNameColumn;
 
+    @FXML
+    private ProgressIndicator progressIndicator;
+
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
@@ -257,6 +260,10 @@ public class MainMenuView {
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
+    }
+
+    public ProgressIndicator getProgressIndicator() {
+        return progressIndicator;
     }
 
     public Button getExportDataButton() {

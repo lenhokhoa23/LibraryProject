@@ -1,4 +1,4 @@
-package org.example.libraryfxproject.Util;
+package org.example.libraryfxproject.Export;
 
 public class ExporterFactory {
     public static DataExporter createExporter(ExportType type) {
