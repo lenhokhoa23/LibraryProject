@@ -21,7 +21,6 @@ public class BookManagement {
             // Tạo PreparedStatement
             pstmt = conn.prepareStatement(query);
             pstmt.setString(1, bookTitle); // Gán giá trị bookTitle vào câu truy vấn
-
             // Thực thi truy vấn
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -47,7 +46,6 @@ public class BookManagement {
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setString(3, book.getPubdate());
@@ -135,6 +133,7 @@ public class BookManagement {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Lỗi khi tải database");
         }
     }
 
@@ -258,28 +257,70 @@ public class BookManagement {
     public static String getBooksStatus(String bookTitle) {
         StringBuilder statusBuilder = new StringBuilder();
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Truy vấn để lấy số lượng sách cùng tên và trạng thái của từng quyển sách
-            String query = "SELECT Cart_ID, endDate FROM cart WHERE title = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, bookTitle);
-            ResultSet rs = stmt.executeQuery();
+            // Kiểm tra sự tồn tại của sách trong kho
+            String query1 = "SELECT COUNT(*) AS count FROM books WHERE title = ?";
+            PreparedStatement stmt1 = conn.prepareStatement(query1);
+            stmt1.setString(1, bookTitle);
+            ResultSet rs1 = stmt1.executeQuery();
 
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                int cartId = rs.getInt("Cart_ID");
-                String status = CartManagement.getBookStatus(cartId); // Gọi hàm lấy trạng thái
-                statusBuilder.append("Cart ID: ").append(cartId)
-                        .append(" - ").append(status).append("\n");
+            if (rs1.next() && rs1.getInt("count") == 0) {
+                return "Không tìm thấy sách \"" + bookTitle + "\" trong kho.";
             }
 
-            // Thêm thông tin số lượng sách vào kết quả
-            statusBuilder.insert(0, "Số lượng sách \"" + bookTitle + "\": " + count + "\n");
+            // Lấy tổng số sách còn lại trong kho từ bảng books
+            String query2 = "SELECT SUM(quantity) AS remain FROM books WHERE title = ?";
+            PreparedStatement stmt2 = conn.prepareStatement(query2);
+            stmt2.setString(1, bookTitle);
+            ResultSet rs2 = stmt2.executeQuery();
+
+            int remainBooks = 0;
+            if (rs2.next()) {
+                remainBooks = rs2.getInt("remain");
+            }
+
+            // Lấy thông tin sách đã được mượn từ bảng cart
+            String query3 = "SELECT isbn, title, Cart_ID, endDate FROM cart WHERE title = ?";
+            PreparedStatement stmt3 = conn.prepareStatement(query3);
+            stmt3.setString(1, bookTitle);
+            ResultSet rs3 = stmt3.executeQuery();
+
+            int borrowedBooks = 0;
+            while (rs3.next()) {
+                borrowedBooks++;
+                String isbn = rs3.getString("isbn");
+                String title = rs3.getString("title");
+                int cartId = rs3.getInt("Cart_ID");
+                String endDate = rs3.getString("endDate");
+
+                statusBuilder.append("Cart ID: ").append(cartId)
+                        .append(", ISBN: ").append(isbn)
+                        .append(", sách \"").append(title)
+                        .append("\"\nHạn: ").append(endDate)
+                        .append("\n*------------------------------------*\n");
+            }
+
+            // Tính tổng số lượng sách
+            int totalBooks = remainBooks + borrowedBooks;
+
+            // Xây dựng kết quả
+            statusBuilder.insert(0, "Tổng số sách \"" + bookTitle + "\": " + totalBooks + "\n");
+            statusBuilder.append("Tổng số sách đã mượn: ").append(borrowedBooks).append("\n")
+                    .append("Tổng số sách còn trống: ").append(remainBooks).append("\n");
+
+            // Nếu không có sách nào được mượn
+            if (borrowedBooks == 0) {
+                statusBuilder.append("Hiện không có sách nào được mượn.\n");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return "Đã xảy ra lỗi khi lấy thông tin sách.";
         }
+
         return statusBuilder.toString();
     }
+
+
 
     public int fetchQuantityFromBooks(String bookTitle) {
         int quantity = -1;

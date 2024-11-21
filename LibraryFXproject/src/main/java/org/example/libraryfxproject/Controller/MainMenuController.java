@@ -27,7 +27,8 @@ import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -41,8 +42,8 @@ public class MainMenuController extends BaseController {
     private final BookService bookService;
     private final UpdateService updateService;
     private final UserService userService;
+    private ObservableList<Book> bookList = FXCollections.observableArrayList();
     private final ExportService exportService;
-    private ObservableList<Book> observableBooks;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
     private ObservableList<Cart> borrowHistoryData;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -58,8 +59,8 @@ public class MainMenuController extends BaseController {
         this.updateService = UpdateService.getInstance();
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
+
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
-        this.observableBooks = BookService.getInstance().getAllBooks();
         loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
@@ -113,6 +114,7 @@ public class MainMenuController extends BaseController {
                 scheduleSearch();
             }
         });
+
         mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
 
         // mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
@@ -122,17 +124,34 @@ public class MainMenuController extends BaseController {
 
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
+            mainMenuView.getSearchToggle().setSelected(false);
+
+            mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected"); // Xóa trạng thái đã chọn
+            if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
+                mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
+            }
+            mainMenuView.getSearchCatalog().setText("");
             loadTableData();
             initializePagination();
         });
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
+
+        mainMenuView.getGoToPageButton().setOnAction(event -> {
+            goToPage();
+        });
+
         setupTableColumns();
 
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
         });
+
+        mainMenuView.getAddItemButton().setOnAction(event -> {
+            mainMenuView.initializeAddBookView(this);
+        });
+
         mainMenuView.getStudentSearchButton().setOnAction(event -> {
             ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText());
             updateUserTableView(filteredUser);
@@ -240,21 +259,30 @@ public class MainMenuController extends BaseController {
     }
 
     public void loadTableData() {
+        bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
+        updateBookTableView(bookList);
         updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateUserTableView(studentList);
     }
 
     private void initializePagination() {
-        int pageCount = (int) Math.ceil((double) observableBooks.size() / ROWS_PER_PAGE);
+        int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
-        System.out.println("Total books: " + observableBooks.size());
+        System.out.println("Total books: " + bookList.size());
         System.out.println("Total pages: " + pageCount);
-        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
+        mainMenuView.getCatalogPagination().setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public TableView<Book> call(Integer pageIndex) {
+                updateBookTable(pageIndex);
+                return mainMenuView.getCatalogTableView();
+            }
+        });
+        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
+        mainMenuView.getCatalogPagination().setMaxHeight(Double.MAX_VALUE);
 
         int totalPages = (int) Math.ceil((double) studentList.size() / ROWS_PER_PAGE);
         mainMenuView.getStudentPagination().setPageCount(totalPages);
-
         mainMenuView.getStudentPagination().setPageFactory(new Callback<Integer, Node>() {
             @Override
             public TableView<User> call(Integer pageIndex) {
@@ -302,6 +330,7 @@ public class MainMenuController extends BaseController {
         mainMenuView.getViewAllButton().setOnAction(event -> {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
+
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
@@ -362,42 +391,8 @@ public class MainMenuController extends BaseController {
         scheduler.shutdownNow();
     }
 
-    private Node createPage(int pageIndex) {
-        // Get data for current page
-        ObservableList<Book> currentPageBooks = getPageData(pageIndex);
+    public void updateBookTableView(ObservableList<Book> books) {
 
-        // Get the table view
-        TableView<Book> catalogTableView = mainMenuView.getCatalogTableView();
-
-        // Clear and set new items
-        catalogTableView.getItems().clear();
-        catalogTableView.setItems(currentPageBooks);
-
-        // Reset scroll position
-        catalogTableView.scrollTo(0);
-
-        // Create container with proper layout constraints
-        VBox pageContainer = new VBox();
-        pageContainer.setFillWidth(true);
-        VBox.setVgrow(catalogTableView, Priority.ALWAYS);
-
-        // Set minimum height for table view
-        catalogTableView.setMinHeight(400); // Adjust this value based on your needs
-        catalogTableView.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
-        // Add table to container
-        pageContainer.getChildren().add(catalogTableView);
-
-        return pageContainer;
-    }
-
-    private ObservableList<Book> getPageData(int pageIndex) {
-        int start = pageIndex * ROWS_PER_PAGE;
-        int end = Math.min(start + ROWS_PER_PAGE, observableBooks.size());
-        return FXCollections.observableArrayList(observableBooks.subList(start, end));
-    }
-
-    public void updateTableView(ObservableList<Book> books) {
         mainMenuView.getCatalogTableView().getItems().clear();
         mainMenuView.getCatalogTableView().setItems(books);
     }
@@ -405,6 +400,12 @@ public class MainMenuController extends BaseController {
     public void updateUserTableView(ObservableList<User> users) {
         mainMenuView.getStudentTableView().getItems().clear();
         mainMenuView.getStudentTableView().setItems(users);
+    }
+
+    private void updateBookTable(int pageIndex) {
+        int start = pageIndex * ROWS_PER_PAGE;
+        int end = Math.min(start + ROWS_PER_PAGE, bookList.size());
+        mainMenuView.getCatalogTableView().setItems(FXCollections.observableArrayList(bookList.subList(start, end)));
     }
 
     private void updateTable(int pageIndex) {
@@ -423,17 +424,63 @@ public class MainMenuController extends BaseController {
             ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
             if (searchType != null && !searchText.isEmpty()) {
                 filteredBooks = searchService.searchBookByAttribute(searchType.toLowerCase(), searchText);
-                updateTableView(filteredBooks);
+                updateBookTableView(filteredBooks);
                 isFilteredView = true;
             }
         }
     }
+
+    public void openModifyBookView() {
+        Parent root = mainMenuView.initializeModifyBookView();
+        if (root != null) {
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Modify Book");
+            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(this.mainMenuView.getStage());
+
+            System.out.println(mainMenuView);
+            mainMenuView.getUpdateButton().setOnAction(event -> {
+                try {
+                    String ISBN = mainMenuView.getIsbnField().getText();
+                    String attribute = mainMenuView.getAttributeField().getText();
+                    String newValue = mainMenuView.getNewValueField().getText();
+                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                        System.out.println("Please fill in all fields!");
+                    } else {
+                        bookService.modifyBook(ISBN, attribute, newValue);
+                        System.out.println("Book updated successfully!");
+                        popupStage.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("An error occurred. Please check the input values.");
+                }
+            });
+            mainMenuView.getBackButton().setOnAction(event -> popupStage.close());
+            popupStage.showAndWait();
+        }
 
     public void openAddBookView(ActionEvent event) {
         new AddBookView(mainMenuView.getStage());
     }
 
     private void setupTableColumns() {
+        mainMenuView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));
+        mainMenuView.getTitleColumn().setCellValueFactory(new PropertyValueFactory<>("title"));
+        mainMenuView.getAuthorColumn().setCellValueFactory(new PropertyValueFactory<>("author"));
+        mainMenuView.getSubjectColumn().setCellValueFactory(new PropertyValueFactory<>("subject"));
+        mainMenuView.getBookTypeColumn().setCellValueFactory(new PropertyValueFactory<>("bookType"));
+        mainMenuView.getQuantityColumn().setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        mainMenuView.getCatalogTableView().getColumns().clear();
+        mainMenuView.getCatalogTableView().getColumns().addAll(
+                mainMenuView.getItemIdColumn(),
+                mainMenuView.getTitleColumn(),
+                mainMenuView.getAuthorColumn(),
+                mainMenuView.getSubjectColumn(),
+                mainMenuView.getBookTypeColumn(),
+                mainMenuView.getQuantityColumn());
+
         mainMenuView.getUsernameColumn().setCellValueFactory(new PropertyValueFactory<>("username"));
         mainMenuView.getNameColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
         mainMenuView.getEmailColumn().setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -441,12 +488,79 @@ public class MainMenuController extends BaseController {
         mainMenuView.getBorrowedBookColumn().setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
         mainMenuView.getMembershipTypeColumn().setCellValueFactory(new PropertyValueFactory<>("membershipType"));
         mainMenuView.getStudentTableView().getColumns().clear();
-        mainMenuView.getStudentTableView().getColumns().addAll(mainMenuView.getUsernameColumn(),
+        mainMenuView.getStudentTableView().getColumns().addAll(
+                mainMenuView.getUsernameColumn(),
                 mainMenuView.getNameColumn(),
                 mainMenuView.getEmailColumn(),
                 mainMenuView.getPhoneColumn(),
                 mainMenuView.getBorrowedBookColumn(),
                 mainMenuView.getMembershipTypeColumn());
+    }
+
+    private void goToPage() {
+        try {
+            int pageNumber = Integer.parseInt(mainMenuView.getPageNumberField().getText()) - 1;
+            if (pageNumber >= 0 && pageNumber < mainMenuView.getCatalogPagination().getPageCount()) {
+                mainMenuView.getCatalogPagination().setCurrentPageIndex(pageNumber);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void registerForAddBook(Stage addBookStage) {
+        // Handle Add Book button click
+        mainMenuView.getAddBookButton().setOnAction(event -> {
+            try {
+                // Extract input values
+                String title = mainMenuView.getTitle().getText();
+                String author = mainMenuView.getAuthor().getText();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
+
+                // Xử lý ngày tháng
+                LocalDate pubdateLocal = mainMenuView.getPubdate().getValue();
+                String pubdate = pubdateLocal != null ? pubdateLocal.format(formatter) : null;
+
+                LocalDate releaseDateLocal = mainMenuView.getReleaseDate().getValue();
+                String releaseDate = releaseDateLocal != null ? releaseDateLocal.format(formatter) : null;
+
+                String ISBN = mainMenuView.getISBN().getText();
+                String price = mainMenuView.getPrice().getText();
+                String subject = mainMenuView.getSubject().getText();
+                String category = mainMenuView.getCategory().getText();
+                String URL = mainMenuView.getURL().getText();
+                String bookType = mainMenuView.getBookType().getText();
+                String quantity = mainMenuView.getQuantity().getText();
+
+                // Kiểm tra dữ liệu đầu vào bằng validateAddBookInput
+                int validate = bookService.validateAddBookInput(title, author, pubdate, releaseDate,
+                        ISBN, price, subject, category, URL, bookType, quantity);
+
+                switch (validate) {
+                    case 1 -> alertDisplayer.showErrorAlert("Invalid ISBN. It must be exactly 13 digits.", "Lỗi");
+                    case 2 -> alertDisplayer.showErrorAlert("Invalid title. Special characters are not allowed.", "Lỗi");
+                    case 3 -> alertDisplayer.showErrorAlert("Invalid price or quantity. Both must be positive numbers.", "Lỗi");
+                    case 4 -> alertDisplayer.showErrorAlert("Invalid subject. Numbers are not allowed.", "Lỗi");
+                    case 5 -> alertDisplayer.showErrorAlert("Invalid category. Numbers are not allowed.", "Lỗi");
+                    case 6 -> alertDisplayer.showErrorAlert("Invalid URL. It must follow the format http:// or https://.", "Lỗi");
+                    case 7 -> alertDisplayer.showErrorAlert("Invalid book type. Special characters are not allowed.", "Lỗi");
+                    case 8 -> alertDisplayer.showErrorAlert("Invalid quantity. It must be a positive integer.", "Lỗi");
+                    case 9 -> alertDisplayer.showErrorAlert("Invalid author. Special characters are not allowed.", "Lỗi");
+                    default -> {
+                        // Nếu tất cả đều hợp lệ, thêm sách vào database
+                        bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
+                        alertDisplayer.showConfirmationAlert("Thêm sách thành công", "Thông báo");
+                        addBookStage.close();
+                    }
+                }
+            } catch (Exception e) {
+                alertDisplayer.showErrorAlert("Lỗi khi thêm sách", "Lỗi");
+            }
+        });
+        // Handle Back button click
+        mainMenuView.getBackButton().setOnAction(event -> {
+            addBookStage.close();
+        });
     }
 
 }
