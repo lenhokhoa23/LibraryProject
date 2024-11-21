@@ -1,10 +1,11 @@
-package org.example.libraryfxproject.Util;
+package org.example.libraryfxproject.Export;
 
 import org.example.libraryfxproject.Util.Exception.ExportException;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,16 +18,12 @@ public class CSVExporter implements DataExporter {
             if (data.isEmpty()) {
                 throw new ExportException("No data to export");
             }
+            List<Field> fields = getAllFields(data.get(0).getClass());
 
-            // Lấy các trường của đối tượng bằng Reflection
-            Field[] fields = data.get(0).getClass().getDeclaredFields();
-
-            // Viết header
-            writer.write(String.join(",", Arrays.stream(fields)
+            writer.write(String.join(",", fields.stream()
                     .map(Field::getName)
                     .collect(Collectors.toList())) + "\n");
 
-            // Viết data
             for (Object item : data) {
                 List<String> values = new ArrayList<>();
                 for (Field field : fields) {
@@ -43,5 +40,18 @@ public class CSVExporter implements DataExporter {
     @Override
     public String getFileExtension() {
         return ".csv";
+    }
+
+    public List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        if (clazz != null) {
+            fields.addAll(getAllFields(clazz.getSuperclass()));
+            for (Field field : clazz.getDeclaredFields()) {
+                if (!Modifier.isStatic(field.getModifiers())) {
+                    fields.add(field);
+                }
+            }
+        }
+        return fields;
     }
 }

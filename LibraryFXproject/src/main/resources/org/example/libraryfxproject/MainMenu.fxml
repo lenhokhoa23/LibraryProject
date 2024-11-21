@@ -37,6 +37,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ProgressIndicator?>
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@mainmenuStyle.css" />
@@ -324,6 +325,7 @@
                                                       <Region HBox.hgrow="ALWAYS" />
                                                       <Button fx:id="exportDataButton" styleClass="export-button" text="Export Data" />
                                                    </children>
+                                                   <ProgressIndicator fx:id="progressIndicator" visible="false" />
                                                 </HBox>
                                                 <TableView fx:id="studentTableView" VBox.vgrow="ALWAYS">
                                                    <columns>
@@ -428,37 +430,6 @@
                   </VBox>
                </content>
             </Tab>
-                  <!-- Circulation Tab -->
-                  <Tab closable="false" text="Circulation">
-            <content>
-                        <VBox spacing="20" styleClass="content-container">
-                           <children>
-                              <HBox spacing="10" styleClass="circulation-controls">
-                                 <children>
-                                    <Button styleClass="circulation-button" text="Check Out" />
-                                    <Button styleClass="circulation-button" text="Check In" />
-                                    <Button styleClass="circulation-button" text="Renew" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <TextField promptText="Scan barcode or enter book/student ID" />
-                                 </children>
-                              </HBox>
-                              <TableView VBox.vgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn prefWidth="120" text="Transaction ID" />
-                                    <TableColumn prefWidth="200" text="Book Title" />
-                                    <TableColumn prefWidth="100" text="Student ID" />
-                                    <TableColumn prefWidth="150" text="Student Name" />
-                                    <TableColumn prefWidth="120" text="Checkout Date" />
-                                    <TableColumn prefWidth="120" text="Due Date" />
-                                    <TableColumn prefWidth="100" text="Status" />
-                                 </columns>
-                              </TableView>
-                              <Pagination fx:id="circulationPagination" styleClass="circulation-pagination" />
-                           </children>
-                        </VBox>
-            </content>
-                  </Tab>
-
                   <!-- Events Tab -->
                   <Tab closable="false" text="Events">
             <content>
