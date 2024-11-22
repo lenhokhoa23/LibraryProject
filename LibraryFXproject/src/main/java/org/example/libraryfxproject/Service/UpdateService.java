@@ -115,11 +115,7 @@ public class UpdateService {
         tableView.setItems(cartDAO.getActivities(limit));
     }
 
-    public List<Cart> getAllBorrowHistory() {
-        return cartDAO.getAllBorrowHistory();
-    }
-
-    public List<Cart> searchBorrowHistory(String column, String value) {
-        return cartDAO.searchBorrowHistory(column, value);
+    public void populateTableView(TableView<ObservableList<String>> tableView, int ID, String startDate, String endDate) {
+        tableView.setItems(cartDAO.getActivities(ID, startDate, endDate));
     }
 }

@@ -261,75 +261,61 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return activities;
     }
 
-    public List<Cart> getAllBorrowHistory() {
-        List<Cart> borrowHistory = new ArrayList<>();
-        String query = """
-                SELECT c.Cart_ID, c.startDate, c.endDate, c.title, c.ISBN, u.username
-                            FROM Cart c
-                            JOIN user u ON c.Cart_ID = u.Cart_ID""";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                Cart cart = new Cart(
-                        resultSet.getInt("Cart_ID"),
-                        resultSet.getString("startDate"),
-                        resultSet.getString("endDate"),
-                        resultSet.getString("ISBN"),
-                        resultSet.getString("title")
+    public ObservableList<ObservableList<String>> getActivities(int studentID, String startDate, String endDate) {
+        ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (conn != null) {
+                StringBuilder queryBuilder = new StringBuilder(
+                        "SELECT c.startDate AS time, c.Cart_ID AS userID, u.username, " +
+                                "c.title AS bookTitle, c.ISBN, c.endDate AS due " +
+                                "FROM cart c JOIN user u ON c.Cart_ID = u.Cart_ID WHERE 1=1 "
                 );
-                borrowHistory.add(cart);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return borrowHistory;
-    }
 
-    public List<Cart> searchBorrowHistory(String column, String value) {
-        List<Cart> searchResults = new ArrayList<>();
-        String query;
+                if (studentID > 0) {
+                    queryBuilder.append("AND u.Cart_ID = ? ");
+                }
 
-        // Phân biệt giữa cột kiểu số và chuỗi
-        if (column.equals("Cart_ID")) {
-            query = "SELECT Cart_ID, startDate, endDate, title, ISBN FROM Cart WHERE " + column + " = ?";
-        } else {
-            query = "SELECT Cart_ID, startDate, endDate, title, ISBN FROM Cart WHERE " + column + " LIKE ?";
-        }
+                if (startDate != null && !startDate.isEmpty()) {
+                    queryBuilder.append("AND c.startDate >= ? ");
+                }
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+                if (endDate != null && !endDate.isEmpty()) {
+                    queryBuilder.append("AND c.endDate <= ? ");
+                }
 
-            // Gán giá trị cho tham số
-            if (column.equals("Cart_ID")) {
-                statement.setInt(1, Integer.parseInt(value)); // Với cột kiểu số
-            } else {
-                statement.setString(1, "%" + value + "%"); // Với cột kiểu chuỗi
-            }
+                PreparedStatement statement = conn.prepareStatement(queryBuilder.toString());
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Cart cart = new Cart(
-                            resultSet.getInt("Cart_ID"),
-                            resultSet.getString("startDate"),
-                            resultSet.getString("endDate"),
-                            resultSet.getString("ISBN"),
-                            resultSet.getString("title")
-                    );
-                    searchResults.add(cart);
+                int paramIndex = 1;
+                if (studentID > 0) {
+                    statement.setInt(paramIndex++, studentID);
+                }
+
+                if (startDate != null && !startDate.isEmpty()) {
+                    statement.setString(paramIndex++, startDate);
+                }
+                if (endDate != null && !endDate.isEmpty()) {
+                    statement.setString(paramIndex, endDate);
+                }
+
+                ResultSet result = statement.executeQuery();
+                System.out.println(statement.toString());
+                while (result.next()) {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    row.add(result.getString("time"));
+                    row.add(String.valueOf(result.getInt("userID")));
+                    row.add(result.getString("username"));
+                    row.add(result.getString("bookTitle"));
+                    row.add(result.getString("ISBN"));
+                    row.add(result.getString("due"));
+                    activities.add(row);
                 }
             }
         } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn dữ liệu.");
             e.printStackTrace();
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid input for numeric column: " + value);
         }
-
-        return searchResults;
+        return activities;
     }
-
 
     public void addCart(Cart cart) {
         String sql = "INSERT INTO cart (Cart_ID, startDate, endDate, title, ISBN) "
@@ -349,6 +335,35 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         } catch (SQLException e) {
             System.out.println("Lỗi khi thêm sách vào giỏ hàng!");
             e.printStackTrace();
+        }
+    }
+
+    public void deleteCart(String isbn, int cartId) {
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = null;
+
+        try {
+            String query = "DELETE FROM cart WHERE ISBN = ? AND Cart_ID = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, isbn);
+            statement.setInt(2, cartId);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Xóa thành công sách có ISBN " + isbn + " khỏi giỏ hàng với Cart_ID: " + cartId);
+            } else {
+                System.out.println("Không tìm thấy sách với ISBN " + isbn + " và Cart_ID " + cartId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

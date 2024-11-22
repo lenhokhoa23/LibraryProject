@@ -301,7 +301,7 @@
                            <children>
                               <TabPane>
                                  <tabs>
-                                    <Tab text="Student Information">
+                                    <Tab closable="false" text="Student Information">
                                        <content>
                                           <VBox spacing="10">
                                              <children>
@@ -309,8 +309,8 @@
                                                    <children>
                                                       <TextField fx:id="studentSearch" promptText="Search students" />
 
-                                                      <Button fx:id = "studentSearchButton" styleClass="add-student-button" text="Search" />
-                                                      <Button fx:id = "addStudentButton" styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id="studentSearchButton" styleClass="add-student-button" text="Search" />
+                                                      <Button fx:id="addStudentButton" styleClass="add-student-button" text="Add New Student" />
                                                       <Button fx:id="refreshStudentButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                                          <graphic>
                                                             <ImageView fitHeight="20" fitWidth="20">
@@ -340,23 +340,36 @@
                                           </VBox>
                                        </content>
                                     </Tab>
-                                    <Tab text="Borrowing History">
+                                    <Tab closable="false" text="Borrowing History">
                                        <content>
                                           <VBox spacing="10">
                                              <children>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="1200.0" spacing="10" styleClass="borrowing-controls">
                                                    <children>
+                                                      <Button fx:id="search1" mnemonicParsing="false" text="Search" />
+                                                      <TextField fx:id="studentID1" promptText="Enter ID" />
+                                                      <DatePicker fx:id="startDate1" promptText="Enter Borrow Date" />
+                                                      <DatePicker fx:id="endDate1" promptText="Enter Due" />
                                                       <Region HBox.hgrow="ALWAYS" />
+                                                      <Button fx:id="refresh1" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
+                                                         <graphic>
+                                                            <ImageView fitHeight="20" fitWidth="20">
+                                                               <image>
+                                                                  <Image url="@images/refresh.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
                                                    </children>
                                                 </HBox>
-                                                <TableView fx:id="borrowHistoryTable" VBox.vgrow="ALWAYS">
+                                                <TableView fx:id="borrowHistoryTable" prefHeight="674.0" prefWidth="1200.0" VBox.vgrow="ALWAYS">
                                                    <columns>
-                                                      <TableColumn fx:id="cartIdColumn" prefWidth="100" text="ID" />
-                                                      <TableColumn fx:id="bookTitleColumn" prefWidth="200" text="Book Title" />
-                                                      <TableColumn fx:id="isbnColumn" prefWidth="100" text="ISBN" />
                                                       <TableColumn fx:id="borrowDateColumn" prefWidth="100" text="Borrow Date" />
-                                                      <TableColumn fx:id="dueDateColumn" prefWidth="100" text="Due" />
+                                                      <TableColumn fx:id="cartIdColumn" prefWidth="100" text="ID" />
                                                       <TableColumn fx:id="userNameColumn" prefWidth="100" text="Username" />
+                                                      <TableColumn fx:id="isbnColumn" prefWidth="100" text="ISBN" />
+                                                      <TableColumn fx:id="bookTitleColumn" prefWidth="200" text="Book Title" />
+                                                      <TableColumn fx:id="dueDateColumn" prefWidth="100" text="Due" />
                                                    </columns>
                                                 </TableView>
                                              </children>
@@ -371,53 +384,59 @@
                   </Tab>
 
             <!-- Book Borrowing Management Tab -->
-            <Tab closable="false" text="Quản lý mượn trả">
+            <Tab fx:id="service" closable="false" text="Service">
                <content>
                   <VBox spacing="20" styleClass="content-container">
                      <children>
                         <TabPane>
                            <tabs>
                               <!-- Borrow Books Tab -->
-                              <Tab text="Mượn sách">
+                              <Tab fx:id="borrowANewBookTab" closable="false" text="Borrow a new book">
                                  <content>
                                     <VBox spacing="15" styleClass="borrow-section">
                                        <children>
-                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                          <HBox alignment="CENTER_LEFT" spacing="10">
                                              <children>
-                                                <Label text="Mã sinh viên:" />
-                                                <TextField fx:id="borrowStudentIdField" promptText="Nhập mã sinh viên" HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="ID1" text="Student_ID:" />
+                                                <TextField fx:id="borrowStudentIdField1" promptText="Enter Student_ID" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                          <HBox alignment="CENTER_LEFT" spacing="10">
                                              <children>
-                                                <Label text="Mã sách:" />
-                                                <TextField fx:id="borrowBookIdField" promptText="Nhập mã sách" HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="ISBN1" text="ISBN:" />
+                                                <TextField fx:id="borrowISBNField1" promptText="Enter ISBN" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                          <HBox alignment="CENTER_LEFT" spacing="10">
                                              <children>
-                                                <Label text="Ngày trả:" />
-                                                <DatePicker fx:id="borrowDueDatePicker" HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="returnDate1" text="Return date:" />
+                                                <DatePicker fx:id="borrowDueDatePicker1" promptText="Enter return date" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <Button fx:id="borrowButton" text="Mượn sách" styleClass="borrow-button" />
+                                          <Button fx:id="borrowServiceButton" styleClass="borrow-button" text="BORROW" />
                                        </children>
                                     </VBox>
                                  </content>
                               </Tab>
 
                               <!-- Return Books Tab -->
-                              <Tab text="Trả sách">
+                              <Tab fx:id="returnABookTab" closable="false" text="Return a book">
                                  <content>
                                     <VBox spacing="15" styleClass="return-section">
                                        <children>
-                                          <HBox spacing="10" alignment="CENTER_LEFT">
+                                          <HBox alignment="CENTER_LEFT" spacing="10">
                                              <children>
-                                                <Label text="Mã mượn:" />
-                                                <TextField fx:id="returnBorrowIdField" promptText="Nhập mã mượn" HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="ID2" text="Student_ID:" />
+                                                <TextField fx:id="returnStudentIdField1" prefHeight="28.0" prefWidth="1090.0" promptText="Enter Student_ID" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <Button fx:id="returnButton" text="Trả sách" styleClass="return-button" />
+                                                <HBox prefHeight="33.0" prefWidth="1200.0">
+                                                   <children>
+                                                      <Label fx:id="ISBN2" prefHeight="18.0" prefWidth="45.0" text="ISBN:" />
+                                                      <TextField fx:id="returnISBNField1" prefHeight="28.0" prefWidth="1168.0" promptText="Enter ISBN" />
+                                                   </children>
+                                                </HBox>
+                                          <Button fx:id="returnServiceButton" styleClass="return-button" text="RETURN" />
                                        </children>
                                     </VBox>
                                  </content>

@@ -193,13 +193,15 @@ public class BookDAO extends GeneralDAO<String, Book> {
     }
 
     public int fetchQuantityFromBooks(String type, int searchType) {
-        Book book = findBookByDistinctAttribute(type, searchType);
-        return Integer.parseInt(book.getQuantity());
+        return Integer.parseInt(findBookByDistinctAttribute(type, searchType).getQuantity());
     }
-
 
     public String fetchISBNFromBooks(String type, int searchType) {
         return findBookByDistinctAttribute(type, searchType).getISBN();
+    }
+
+    public String fetchTitleFromBooks(String type, int searchType) {
+        return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
     public void insertBookToDatabase(String title, String author, String pubdateStr, String releaseDateStr,
@@ -302,6 +304,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
         return statusBuilder.toString();
     }*/
+
     public void loadGenreCirculationData(PieChart genreCirculationChart) {
         String sql = "SELECT category, SUM(quantity) AS total_quantity " +
                 "FROM books " +
@@ -357,6 +360,50 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
 
         return seriesList;
+    }
+
+    public void updateQuantity(String username, String bookName, String operation) {
+        Connection connection = null;
+        PreparedStatement statementBook = null;
+        PreparedStatement statementUser = null;
+
+        try {
+            connection = DatabaseConnection.getConnection();
+            String updateBookQuery;
+            String updateUserQuery;
+
+            if (operation.equals("BORROW")) {
+                updateBookQuery = "UPDATE books SET quantity = quantity - 1 WHERE title = ?";
+                updateUserQuery = "UPDATE user SET borrowedBooks = borrowedBooks + 1 WHERE username = ?";
+            } else {
+                updateBookQuery = "UPDATE books SET quantity = quantity + 1 WHERE title = ?";
+                updateUserQuery = "UPDATE user SET borrowedBooks = borrowedBooks - 1 WHERE username = ?";
+            }
+
+            statementBook = connection.prepareStatement(updateBookQuery);
+            statementBook.setString(1, bookName);
+            int rowsUpdatedBook = statementBook.executeUpdate();
+
+            statementUser = connection.prepareStatement(updateUserQuery);
+            statementUser.setString(1, username);
+            int rowsUpdatedUser = statementUser.executeUpdate();
+
+            if (rowsUpdatedBook > 0 && rowsUpdatedUser > 0) {
+                System.out.println("Đã cập nhật số lượng sách và số sách mượn thành công.");
+            } else {
+                System.out.println("Không tìm thấy sách với tiêu đề: " + bookName + " hoặc không tìm thấy người dùng: " + username);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statementBook != null) statementBook.close();
+                if (statementUser != null) statementUser.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 
