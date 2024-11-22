@@ -22,7 +22,6 @@ import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.Exception.ExportException;
-import org.example.libraryfxproject.View.AddBookView;
 import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.LoginView;
@@ -45,7 +44,6 @@ public class MainMenuController extends BaseController {
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
     private final ExportService exportService;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
-    private ObservableList<Cart> borrowHistoryData;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
     private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
@@ -59,7 +57,6 @@ public class MainMenuController extends BaseController {
         this.updateService = UpdateService.getInstance();
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
-
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         loadTableData();
         initializePagination();
@@ -115,7 +112,6 @@ public class MainMenuController extends BaseController {
             }
         });
 
-        mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
 
         // mainMenuView.getModifyButton().setOnAction(event -> openModifyBookView());
         mainMenuView.getModifyButton().setOnAction(event -> {
@@ -153,7 +149,7 @@ public class MainMenuController extends BaseController {
         });
 
         mainMenuView.getStudentSearchButton().setOnAction(event -> {
-            ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText());
+            ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText().trim());
             updateUserTableView(filteredUser);
         });
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
@@ -261,7 +257,6 @@ public class MainMenuController extends BaseController {
     public void loadTableData() {
         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
         updateBookTableView(bookList);
-        updateTableView(getPageData(0)); // Load the first page initially
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateUserTableView(studentList);
     }
@@ -269,8 +264,6 @@ public class MainMenuController extends BaseController {
     private void initializePagination() {
         int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
-        System.out.println("Total books: " + bookList.size());
-        System.out.println("Total pages: " + pageCount);
         mainMenuView.getCatalogPagination().setPageFactory(new Callback<Integer, Node>() {
             @Override
             public TableView<Book> call(Integer pageIndex) {
@@ -331,14 +324,7 @@ public class MainMenuController extends BaseController {
             updateService.populateTableView(mainMenuView.getRecentActivitiesTable(), 0);
         });
 
-        mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
-        mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
-        // Set page factory
-        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
-
-        // Make sure pagination control uses available space
-        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
         mainMenuView.getCartIdColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
         mainMenuView.getBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
         mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
@@ -430,42 +416,8 @@ public class MainMenuController extends BaseController {
         }
     }
 
-    public void openModifyBookView() {
-        Parent root = mainMenuView.initializeModifyBookView();
-        if (root != null) {
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Modify Book");
-            popupStage.setScene(new Scene(root));
-            popupStage.initModality(Modality.WINDOW_MODAL);
-            popupStage.initOwner(this.mainMenuView.getStage());
 
-            System.out.println(mainMenuView);
-            mainMenuView.getUpdateButton().setOnAction(event -> {
-                try {
-                    String ISBN = mainMenuView.getIsbnField().getText();
-                    String attribute = mainMenuView.getAttributeField().getText();
-                    String newValue = mainMenuView.getNewValueField().getText();
-                    if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                        System.out.println("Please fill in all fields!");
-                    } else {
-                        bookService.modifyBook(ISBN, attribute, newValue);
-                        System.out.println("Book updated successfully!");
-                        popupStage.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("An error occurred. Please check the input values.");
-                }
-            });
-            mainMenuView.getBackButton().setOnAction(event -> popupStage.close());
-            popupStage.showAndWait();
-        }
-
-    public void openAddBookView(ActionEvent event) {
-        new AddBookView(mainMenuView.getStage());
-    }
-
-    private void setupTableColumns() {
+    private void setupTableColumns () {
         mainMenuView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));
         mainMenuView.getTitleColumn().setCellValueFactory(new PropertyValueFactory<>("title"));
         mainMenuView.getAuthorColumn().setCellValueFactory(new PropertyValueFactory<>("author"));
@@ -497,7 +449,7 @@ public class MainMenuController extends BaseController {
                 mainMenuView.getMembershipTypeColumn());
     }
 
-    private void goToPage() {
+    private void goToPage () {
         try {
             int pageNumber = Integer.parseInt(mainMenuView.getPageNumberField().getText()) - 1;
             if (pageNumber >= 0 && pageNumber < mainMenuView.getCatalogPagination().getPageCount()) {
@@ -508,7 +460,7 @@ public class MainMenuController extends BaseController {
         }
     }
 
-    public void registerForAddBook(Stage addBookStage) {
+    public void registerForAddBook (Stage addBookStage){
         // Handle Add Book button click
         mainMenuView.getAddBookButton().setOnAction(event -> {
             try {
@@ -538,14 +490,20 @@ public class MainMenuController extends BaseController {
 
                 switch (validate) {
                     case 1 -> alertDisplayer.showErrorAlert("Invalid ISBN. It must be exactly 13 digits.", "Lỗi");
-                    case 2 -> alertDisplayer.showErrorAlert("Invalid title. Special characters are not allowed.", "Lỗi");
-                    case 3 -> alertDisplayer.showErrorAlert("Invalid price or quantity. Both must be positive numbers.", "Lỗi");
+                    case 2 ->
+                            alertDisplayer.showErrorAlert("Invalid title. Special characters are not allowed.", "Lỗi");
+                    case 3 ->
+                            alertDisplayer.showErrorAlert("Invalid price or quantity. Both must be positive numbers.", "Lỗi");
                     case 4 -> alertDisplayer.showErrorAlert("Invalid subject. Numbers are not allowed.", "Lỗi");
                     case 5 -> alertDisplayer.showErrorAlert("Invalid category. Numbers are not allowed.", "Lỗi");
-                    case 6 -> alertDisplayer.showErrorAlert("Invalid URL. It must follow the format http:// or https://.", "Lỗi");
-                    case 7 -> alertDisplayer.showErrorAlert("Invalid book type. Special characters are not allowed.", "Lỗi");
-                    case 8 -> alertDisplayer.showErrorAlert("Invalid quantity. It must be a positive integer.", "Lỗi");
-                    case 9 -> alertDisplayer.showErrorAlert("Invalid author. Special characters are not allowed.", "Lỗi");
+                    case 6 ->
+                            alertDisplayer.showErrorAlert("Invalid URL. It must follow the format http:// or https://.", "Lỗi");
+                    case 7 ->
+                            alertDisplayer.showErrorAlert("Invalid book type. Special characters are not allowed.", "Lỗi");
+                    case 8 ->
+                            alertDisplayer.showErrorAlert("Invalid quantity. It must be a positive integer.", "Lỗi");
+                    case 9 ->
+                            alertDisplayer.showErrorAlert("Invalid author. Special characters are not allowed.", "Lỗi");
                     default -> {
                         // Nếu tất cả đều hợp lệ, thêm sách vào database
                         bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);

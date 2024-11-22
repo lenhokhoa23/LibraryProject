@@ -327,6 +327,15 @@ public class MainMenuView {
     @FXML
     private ProgressIndicator progressIndicator;
 
+    @FXML
+    private ComboBox<String> filterByColumn;
+
+    @FXML
+    private TextField searchField1;
+
+    @FXML
+    private Button searchButton1;
+
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
@@ -616,14 +625,6 @@ public class MainMenuView {
         this.viewAllButton = viewAllButton;
     }
 
-    public Button getModifyButton() {
-        return modifyButton;
-    }
-
-    public void setModifyButton(Button modifyButton) {
-        this.modifyButton = modifyButton;
-    }
-
     public TextField getIsbnField() {
         return isbnField;
     }
@@ -785,6 +786,54 @@ public class MainMenuView {
         return addBookButton;
     }
 
+    public TableColumn<ObservableList<String>, String> getCartIdColumn() {
+        return cartIdColumn;
+    }
+
+    public void setCartIdColumn(TableColumn<ObservableList<String>, String> cartIdColumn) {
+        this.cartIdColumn = cartIdColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBookTitleColumn() {
+        return bookTitleColumn;
+    }
+
+    public void setBookTitleColumn(TableColumn<ObservableList<String>, String> bookTitleColumn) {
+        this.bookTitleColumn = bookTitleColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getIsbnColumn() {
+        return isbnColumn;
+    }
+
+    public void setIsbnColumn(TableColumn<ObservableList<String>, String> isbnColumn) {
+        this.isbnColumn = isbnColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowDateColumn() {
+        return borrowDateColumn;
+    }
+
+    public void setBorrowDateColumn(TableColumn<ObservableList<String>, String> borrowDateColumn) {
+        this.borrowDateColumn = borrowDateColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getDueDateColumn() {
+        return dueDateColumn;
+    }
+
+    public void setDueDateColumn(TableColumn<ObservableList<String>, String> dueDateColumn) {
+        this.dueDateColumn = dueDateColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getUserNameColumn() {
+        return userNameColumn;
+    }
+
+    public void setUserNameColumn(TableColumn<ObservableList<String>, String> userNameColumn) {
+        this.userNameColumn = userNameColumn;
+    }
+
     public void initializeMainMenuView() {
         alertDisplayer = new JavaFXAlertDisplayer();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
@@ -871,63 +920,9 @@ public class MainMenuView {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-    public TableColumn<ObservableList<String>, String> getCartIdColumn() {
-        return cartIdColumn;
     }
 
-    public void setCartIdColumn(TableColumn<ObservableList<String>, String> cartIdColumn) {
-        this.cartIdColumn = cartIdColumn;
-    }
 
-    public TableColumn<ObservableList<String>, String> getBookTitleColumn() {
-        return bookTitleColumn;
-    }
-
-    public void setBookTitleColumn(TableColumn<ObservableList<String>, String> bookTitleColumn) {
-        this.bookTitleColumn = bookTitleColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getIsbnColumn() {
-        return isbnColumn;
-    }
-
-    public void setIsbnColumn(TableColumn<ObservableList<String>, String> isbnColumn) {
-        this.isbnColumn = isbnColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getBorrowDateColumn() {
-        return borrowDateColumn;
-    }
-
-    public void setBorrowDateColumn(TableColumn<ObservableList<String>, String> borrowDateColumn) {
-        this.borrowDateColumn = borrowDateColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getDueDateColumn() {
-        return dueDateColumn;
-    }
-
-    public void setDueDateColumn(TableColumn<ObservableList<String>, String> dueDateColumn) {
-        this.dueDateColumn = dueDateColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getUserNameColumn() {
-        return userNameColumn;
-    }
-
-    public void setUserNameColumn(TableColumn<ObservableList<String>, String> userNameColumn) {
-        this.userNameColumn = userNameColumn;
-    }
-
-    @FXML
-    private ComboBox<String> filterByColumn;
-
-    @FXML
-    private TextField searchField1;
-
-    @FXML
-    private Button searchButton1;
 
     public ComboBox<String> getFilterByColumn() {
         return filterByColumn;
