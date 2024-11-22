@@ -63,54 +63,6 @@ public class MainMenuView {
     @FXML
     private Button backButton;
 
-    public TableColumn<Book, Integer> getItemIdColumn() {
-        return itemIdColumn;
-    }
-
-    public void setItemIdColumn(TableColumn<Book, Integer> itemIdColumn) {
-        this.itemIdColumn = itemIdColumn;
-    }
-
-    public TableColumn<Book, String> getTitleColumn() {
-        return titleColumn;
-    }
-
-    public void setTitleColumn(TableColumn<Book, String> titleColumn) {
-        this.titleColumn = titleColumn;
-    }
-
-    public TableColumn<Book, String> getAuthorColumn() {
-        return authorColumn;
-    }
-
-    public void setAuthorColumn(TableColumn<Book, String> authorColumn) {
-        this.authorColumn = authorColumn;
-    }
-
-    public TableColumn<Book, String> getSubjectColumn() {
-        return subjectColumn;
-    }
-
-    public void setSubjectColumn(TableColumn<Book, String> subjectColumn) {
-        this.subjectColumn = subjectColumn;
-    }
-
-    public TableColumn<Book, String> getBookTypeColumn() {
-        return bookTypeColumn;
-    }
-
-    public void setBookTypeColumn(TableColumn<Book, String> bookTypeColumn) {
-        this.bookTypeColumn = bookTypeColumn;
-    }
-
-    public TableColumn<Book, String> getQuantityColumn() {
-        return quantityColumn;
-    }
-
-    public void setQuantityColumn(TableColumn<Book, String> quantityColumn) {
-        this.quantityColumn = quantityColumn;
-    }
-
     @FXML
     private TableView<Book> catalogTableView;
 
@@ -375,6 +327,58 @@ public class MainMenuView {
     @FXML
     private Button searchButton1;
 
+    public MainMenuView(Stage stage) {
+        this.stage = stage;
+        initializeMainMenuView();
+    }
+    public TableColumn<Book, Integer> getItemIdColumn() {
+        return itemIdColumn;
+    }
+
+    public void setItemIdColumn(TableColumn<Book, Integer> itemIdColumn) {
+        this.itemIdColumn = itemIdColumn;
+    }
+
+    public TableColumn<Book, String> getTitleColumn() {
+        return titleColumn;
+    }
+
+    public void setTitleColumn(TableColumn<Book, String> titleColumn) {
+        this.titleColumn = titleColumn;
+    }
+
+    public TableColumn<Book, String> getAuthorColumn() {
+        return authorColumn;
+    }
+
+    public void setAuthorColumn(TableColumn<Book, String> authorColumn) {
+        this.authorColumn = authorColumn;
+    }
+
+    public TableColumn<Book, String> getSubjectColumn() {
+        return subjectColumn;
+    }
+
+    public void setSubjectColumn(TableColumn<Book, String> subjectColumn) {
+        this.subjectColumn = subjectColumn;
+    }
+
+    public TableColumn<Book, String> getBookTypeColumn() {
+        return bookTypeColumn;
+    }
+
+    public void setBookTypeColumn(TableColumn<Book, String> bookTypeColumn) {
+        this.bookTypeColumn = bookTypeColumn;
+    }
+
+    public TableColumn<Book, String> getQuantityColumn() {
+        return quantityColumn;
+    }
+
+    public void setQuantityColumn(TableColumn<Book, String> quantityColumn) {
+        this.quantityColumn = quantityColumn;
+    }
+    
     public TableView<Book> getCatalogTableView() {
         return catalogTableView;
     }
@@ -387,10 +391,6 @@ public class MainMenuView {
         this.catalogPagination = catalogPagination;
     }
 
-    public MainMenuView(Stage stage) {
-        this.stage = stage;
-        initializeMainMenuView();
-    }
 
     public TextField getPageNumberField() {
         return pageNumberField;
@@ -824,6 +824,7 @@ public class MainMenuView {
         return addBookButton;
     }
 
+
     public TableColumn<ObservableList<String>, String> getCartIdColumn() {
         return cartIdColumn;
     }
@@ -961,34 +962,6 @@ public class MainMenuView {
     }
 
 
-
-    public void setIsbnColumn(TableColumn<ObservableList<String>, String> isbnColumn) {
-        this.isbnColumn = isbnColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getBorrowDateColumn() {
-        return borrowDateColumn;
-    }
-
-    public void setBorrowDateColumn(TableColumn<ObservableList<String>, String> borrowDateColumn) {
-        this.borrowDateColumn = borrowDateColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getDueDateColumn() {
-        return dueDateColumn;
-    }
-
-    public void setDueDateColumn(TableColumn<ObservableList<String>, String> dueDateColumn) {
-        this.dueDateColumn = dueDateColumn;
-    }
-
-    public TableColumn<ObservableList<String>, String> getUserNameColumn() {
-        return userNameColumn;
-    }
-
-    public void setUserNameColumn(TableColumn<ObservableList<String>, String> userNameColumn) {
-        this.userNameColumn = userNameColumn;
-    }
 
     public TableView<ObservableList<String>> getBorrowHistoryTable() {
         return borrowHistoryTable;

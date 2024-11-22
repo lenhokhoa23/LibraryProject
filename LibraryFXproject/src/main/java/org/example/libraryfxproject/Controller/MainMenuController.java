@@ -118,7 +118,6 @@ public class MainMenuController extends BaseController {
         });
 
 
-        mainMenuView.getAddItemButton().setOnAction(this::openAddBookView);
         mainMenuView.getModifyButton().setOnAction(event -> {
             mainMenuView.initializeModifyBookView(this);
         });
@@ -305,8 +304,6 @@ public class MainMenuController extends BaseController {
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
-        // Set page factory
-        mainMenuView.getCatalogPagination().setPageFactory(this::createPage);
 
         // Make sure pagination control uses available space
         VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
