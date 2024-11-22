@@ -325,6 +325,45 @@ public class MainMenuView {
     private TableColumn<ObservableList<String>, String> userNameColumn;
 
     @FXML
+    private Tab service;
+
+    @FXML
+    private TextField borrowStudentIdField1;
+
+    @FXML
+    private TextField borrowISBNField1;
+
+    @FXML
+    private DatePicker borrowDueDatePicker1;
+
+    @FXML
+    private Button borrowServiceButton;
+
+    @FXML
+    private TextField returnStudentIdField1;
+
+    @FXML
+    private TextField returnISBNField1;
+
+    @FXML
+    private Button returnServiceButton;
+
+    @FXML
+    private Button search1;
+
+    @FXML
+    private TextField studentID1;
+
+    @FXML
+    private DatePicker startDate1;
+
+    @FXML
+    private DatePicker endDate1;
+
+    @FXML
+    private Button refresh1;
+  
+    @FXML
     private ProgressIndicator progressIndicator;
 
     public TableView<Book> getCatalogTableView() {
@@ -406,7 +445,6 @@ public class MainMenuView {
     public Button getCancelAddStudentButton() {
         return cancelAddStudentButton;
     }
-
 
     public ComboBox<String> getMembershipTypeComboBox() {
         return membershipTypeComboBox;
@@ -920,44 +958,115 @@ public class MainMenuView {
         this.userNameColumn = userNameColumn;
     }
 
-    @FXML
-    private ComboBox<String> filterByColumn;
-
-    @FXML
-    private TextField searchField1;
-
-    @FXML
-    private Button searchButton1;
-
-    public ComboBox<String> getFilterByColumn() {
-        return filterByColumn;
-    }
-
-    public void setFilterByColumn(ComboBox<String> filterByColumn) {
-        this.filterByColumn = filterByColumn;
-    }
-
-    public TextField getSearchField1() {
-        return searchField1;
-    }
-
-    public void setSearchField1(TextField searchField1) {
-        this.searchField1 = searchField1;
-    }
-
-    public Button getSearchButton1() {
-        return searchButton1;
-    }
-
-    public void setSearchButton1(Button searchButton1) {
-        this.searchButton1 = searchButton1;
-    }
-
     public TableView<ObservableList<String>> getBorrowHistoryTable() {
         return borrowHistoryTable;
     }
 
     public void setBorrowHistoryTable(TableView<ObservableList<String>> borrowHistoryTable) {
         this.borrowHistoryTable = borrowHistoryTable;
+    }
+
+    public TextField getBorrowStudentIdField1() {
+        return borrowStudentIdField1;
+    }
+
+    public void setBorrowStudentIdField1(TextField borrowStudentIdField1) {
+        this.borrowStudentIdField1 = borrowStudentIdField1;
+    }
+
+    public TextField getBorrowISBNField1() {
+        return borrowISBNField1;
+    }
+
+    public void setBorrowISBNField1(TextField borrowISBNField1) {
+        this.borrowISBNField1 = borrowISBNField1;
+    }
+
+    public DatePicker getBorrowDueDatePicker1() {
+        return borrowDueDatePicker1;
+    }
+
+    public void setBorrowDueDatePicker1(DatePicker borrowDueDatePicker1) {
+        this.borrowDueDatePicker1 = borrowDueDatePicker1;
+    }
+
+    public Button getBorrowServiceButton() {
+        return borrowServiceButton;
+    }
+
+    public void setBorrowServiceButton(Button borrowServiceButton) {
+        this.borrowServiceButton = borrowServiceButton;
+    }
+
+    public TextField getReturnStudentIdField1() {
+        return returnStudentIdField1;
+    }
+
+    public void setReturnStudentIdField1(TextField returnStudentIdField1) {
+        this.returnStudentIdField1 = returnStudentIdField1;
+    }
+
+    public TextField getReturnISBNField1() {
+        return returnISBNField1;
+    }
+
+    public void setReturnISBNField1(TextField returnISBNField1) {
+        this.returnISBNField1 = returnISBNField1;
+    }
+
+    public Button getReturnServiceButton() {
+        return returnServiceButton;
+    }
+
+    public void setReturnServiceButton(Button returnServiceButton) {
+        this.returnServiceButton = returnServiceButton;
+    }
+
+    public Tab getService() {
+        return service;
+    }
+
+    public void setService(Tab service) {
+        this.service = service;
+    }
+
+    public Button getSearch1() {
+        return search1;
+    }
+
+    public void setSearch1(Button search1) {
+        this.search1 = search1;
+    }
+
+    public TextField getStudentID1() {
+        return studentID1;
+    }
+
+    public void setStudentID1(TextField studentID1) {
+        this.studentID1 = studentID1;
+    }
+
+    public DatePicker getStartDate1() {
+        return startDate1;
+    }
+
+    public void setStartDate1(DatePicker startDate1) {
+        this.startDate1 = startDate1;
+    }
+
+    public DatePicker getEndDate1() {
+        return endDate1;
+    }
+
+    public void setEndDate1(DatePicker endDate1) {
+        this.endDate1 = endDate1;
+    }
+
+    public Button getRefresh1() {
+        return refresh1;
+    }
+
+    public void setRefresh1(Button refresh1) {
+        this.refresh1 = refresh1;
     }
 }

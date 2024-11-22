@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends GeneralDAO<String, User> {
-
     /** Load userdata into memory. */
     @Override
     public void loadData() {
@@ -101,4 +100,26 @@ public class UserDAO extends GeneralDAO<String, User> {
         }
         return userList;
     }
+
+    public String getUsernameByCartId(int cartId) {
+        String selectUsernameSQL = "SELECT username FROM user WHERE Cart_ID = ?";
+        String username = null;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(selectUsernameSQL)) {
+            preparedStatement.setInt(1, cartId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    username = resultSet.getString("username");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return username;
+    }
+
 }
