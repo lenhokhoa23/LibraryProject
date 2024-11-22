@@ -29,7 +29,7 @@ public class Librarian extends Person {
     @Override
     public void printInfo() {
         super.printInfo();
-        System.out.println("Employee ID " + LibrarianID + " works in the " + workShift);
+        System.out.println("Employee ID " + LibrarianID + ", works in the " + workShift);
     }
 
 }

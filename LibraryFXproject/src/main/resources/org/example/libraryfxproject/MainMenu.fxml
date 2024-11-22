@@ -28,7 +28,6 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -37,6 +36,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ProgressIndicator?>
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@mainmenuStyle.css" />
@@ -231,7 +231,7 @@
                   <!-- Catalog Management Tab -->
                   <Tab closable="false" text="Catalog">
             <content>
-                        <VBox spacing="20" styleClass="content-container">
+                        <VBox spacing="10" styleClass="content-container">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10" styleClass="catalog-controls">
                                  <children>
@@ -273,22 +273,21 @@
                                     <Region HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
-                              <StackPane VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <FlowPane fx:id="catalogGridView" hgap="15" vgap="15" visible="false" />
-                                    <TableView fx:id="catalogTableView" visible="true" VBox.vgrow="ALWAYS">
-                                       <columns>
-                                          <TableColumn fx:id="itemIdColumn" prefWidth="80" text="ID" />
-                                          <TableColumn fx:id="titleColumn" prefWidth="200" text="Title" />
-                                          <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
-                                          <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
-                                          <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
-                                          <TableColumn fx:id="quantityColumn" prefWidth="174.0" styleClass="centered-column" text="Quantity" />
-                                       </columns>
-                                    </TableView>
-                                 </children>
-                              </StackPane>
-                              <Pagination fx:id="catalogPagination" maxPageIndicatorCount="8" pageCount="34" styleClass="catalog-pagination" />
+                              <TableView fx:id="catalogTableView" VBox.vgrow="ALWAYS">
+                                 <columns>
+                                    <TableColumn fx:id="itemIdColumn" prefWidth="80" text="ID" />
+                                    <TableColumn fx:id="titleColumn" prefWidth="200" text="Title" />
+                                    <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
+                                    <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
+                                    <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
+                                    <TableColumn fx:id="quantityColumn" prefWidth="174.0" styleClass="centered-column" text="Quantity" />
+                                 </columns>
+                              </TableView>
+                              <Pagination fx:id="catalogPagination" styleClass="catalog-pagination" />
+                              <HBox alignment="CENTER" prefHeight="27.0" prefWidth="1200.0" spacing="5" style="-fx-background-color: transparent;" StackPane.alignment="CENTER_RIGHT">
+                                 <TextField fx:id="pageNumberField" prefHeight="26.0" prefWidth="35.0" promptText="Page" style="-fx-font-size: 10px;" />
+                                 <Button fx:id="goToPageButton" prefHeight="24.0" prefWidth="26.0" style="-fx-font-size: 10px;" styleClass="pagination-go-button" text="Go" />
+                              </HBox>
                            </children>
                         </VBox>
             </content>
@@ -309,8 +308,8 @@
                                                    <children>
                                                       <TextField fx:id="studentSearch" promptText="Search students" />
 
-                                                      <Button fx:id="studentSearchButton" styleClass="add-student-button" text="Search" />
-                                                      <Button fx:id="addStudentButton" styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id = "studentSearchButton" styleClass="add-student-button" text="Search" />
+                                                      <Button fx:id = "addStudentButton" styleClass="add-student-button" text="Add New Student" />
                                                       <Button fx:id="refreshStudentButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                                          <graphic>
                                                             <ImageView fitHeight="20" fitWidth="20">
@@ -322,8 +321,9 @@
                                                          Refresh
                                                       </Button>
                                                       <Region HBox.hgrow="ALWAYS" />
-                                                      <Button styleClass="export-button" text="Export Data" />
+                                                      <Button fx:id="exportDataButton" styleClass="export-button" text="Export Data" />
                                                    </children>
+                                                   <ProgressIndicator fx:id="progressIndicator" visible="false" />
                                                 </HBox>
                                                 <TableView fx:id="studentTableView" VBox.vgrow="ALWAYS">
                                                    <columns>
@@ -447,37 +447,6 @@
                   </VBox>
                </content>
             </Tab>
-                  <!-- Circulation Tab -->
-                  <Tab closable="false" text="Circulation">
-            <content>
-                        <VBox spacing="20" styleClass="content-container">
-                           <children>
-                              <HBox spacing="10" styleClass="circulation-controls">
-                                 <children>
-                                    <Button styleClass="circulation-button" text="Check Out" />
-                                    <Button styleClass="circulation-button" text="Check In" />
-                                    <Button styleClass="circulation-button" text="Renew" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <TextField promptText="Scan barcode or enter book/student ID" />
-                                 </children>
-                              </HBox>
-                              <TableView VBox.vgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn prefWidth="120" text="Transaction ID" />
-                                    <TableColumn prefWidth="200" text="Book Title" />
-                                    <TableColumn prefWidth="100" text="Student ID" />
-                                    <TableColumn prefWidth="150" text="Student Name" />
-                                    <TableColumn prefWidth="120" text="Checkout Date" />
-                                    <TableColumn prefWidth="120" text="Due Date" />
-                                    <TableColumn prefWidth="100" text="Status" />
-                                 </columns>
-                              </TableView>
-                              <Pagination fx:id="circulationPagination" styleClass="circulation-pagination" />
-                           </children>
-                        </VBox>
-            </content>
-                  </Tab>
-
                   <!-- Events Tab -->
                   <Tab closable="false" text="Events">
             <content>

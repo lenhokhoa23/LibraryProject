@@ -381,6 +381,35 @@
 
 .chart-pie { -fx-pie-colors: #4CAF50, #FF9800, #2196F3, #FFEB3B, #9C27B0, #FF5722, #03A9F4, #CDDC39, #E91E63, #673AB7; }
 .chart-title { -fx-font-size: 16px; -fx-font-weight: bold; }
+
+.pagination-container {
+    -fx-padding: 10;
+    -fx-background-color: #f4f4f4; /* Màu nền */
+    -fx-border-color: #ccc; /* Viền */
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.pagination-go-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 3 5;
+    -fx-background-radius: 5;
+}
+
+.pagination-go-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.pagination-go-button:pressed {
+    -fx-background-color: #1c6690;
+}
+
+#pageNumberField {
+    -fx-border-color: #ccc;
+    -fx-border-radius: 3;
+    -fx-padding: 2;
+}
 .borrow-section,
 .return-section,
 .history-section {
@@ -388,8 +417,7 @@
 }
 
 .borrow-button,
-.return-button,
-.search-button {
+.return-button {
     -fx-background-color: #007bff;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -403,7 +431,4 @@
     -fx-background-color: #0056b3;
 }
 
-.search-controls {
-    -fx-spacing: 10px;
-    -fx-padding: 10px 0;
-}
+

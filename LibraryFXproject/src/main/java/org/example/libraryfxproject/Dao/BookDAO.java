@@ -204,32 +204,61 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
-    public void insertBookToDatabase(String title, String author, String pubdateStr, String releaseDateStr,
-                                     String ISBN, String price, String subject, String category, String URL,
-                                     String bookType, String quantity) {
-        String sql = "INSERT INTO books (title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy"); // e.g., 12-May-00
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, title);
-            statement.setString(2, author);
-            LocalDate pubdate = parseDate(pubdateStr, formatter);
-            LocalDate releaseDate = parseDate(releaseDateStr, formatter);
-            statement.setDate(3, pubdate != null ? Date.valueOf(pubdate) : null);
-            statement.setDate(4, releaseDate != null ? Date.valueOf(releaseDate) : null);
-            statement.setString(5, ISBN);
-            statement.setString(6, price);
-            statement.setString(7, subject);
-            statement.setString(8, category);
-            statement.setString(9, URL);
-            statement.setString(10, bookType);
-            statement.setString(11, quantity);
-            statement.executeUpdate();
-            System.out.println("Thêm sách thành công!");
+    public void insertBookToDatabase(String title, String author, String pubdate, String releaseDate,
+                                     String ISBN, String price, String subject, String category,
+                                     String URL, String bookType, String quantity) {
+        String findNextAvailableIDQuery = "SELECT t1.no + 1 AS next_id FROM books t1 "
+                + "LEFT JOIN books t2 ON t1.no + 1 = t2.no WHERE t2.no IS NULL LIMIT 1";
+        String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement findIDStmt = conn.prepareStatement(findNextAvailableIDQuery);
+             ResultSet rs = findIDStmt.executeQuery()) {
+
+            int nextAvailableID = -1;
+            if (rs.next()) {
+                nextAvailableID = rs.getInt("next_id");
+            }
+
+            // Nếu không tìm thấy ID trống, thì sử dụng ID tự động tăng.
+            if (nextAvailableID == -1) {
+                nextAvailableID = getNextAutoIncrementID(conn); // Lấy ID tiếp theo tự động tăng
+            }
+
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, nextAvailableID);
+                pstmt.setString(2, title);
+                pstmt.setString(3, author);
+                pstmt.setString(4, pubdate);
+                pstmt.setString(5, releaseDate);
+                pstmt.setString(6, ISBN);
+                pstmt.setString(7, price);
+                pstmt.setString(8, subject);
+                pstmt.setString(9, category);
+                pstmt.setString(10, URL);
+                pstmt.setString(11, bookType);
+                pstmt.setString(12, quantity);
+
+                pstmt.executeUpdate();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Error while inserting book data.");
+        }
+    }
+
+    private int getNextAutoIncrementID(Connection conn) throws SQLException {
+        String autoIncrementQuery = "SELECT AUTO_INCREMENT FROM information_schema.tables "
+                + "WHERE table_name = 'books' AND table_schema = DATABASE()";
+        try (PreparedStatement stmt = conn.prepareStatement(autoIncrementQuery);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("AUTO_INCREMENT");
+            }
+            return -1;
         }
     }
 

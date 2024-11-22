@@ -17,11 +17,15 @@ public class SystemController {
         AccountManagement.loadUserIntoMemory();
         try {
             boolean isUsing = true;
-
             while (isUsing) {
                 Menu.showLoginMenu();
                 String userAction = br.readLine();
-                int num = Integer.parseInt(userAction);
+                int num;
+                try {
+                    num = Integer.parseInt(userAction);
+                } catch (NumberFormatException e) {
+                    num = -5;
+                }
                 switch (num) {
                     case 0: {
                         StringBuilder usernameBuilder = new StringBuilder();
@@ -34,7 +38,12 @@ public class SystemController {
                             while (isAdminUsing) {
                                 Menu.showAdminMenu();
                                 String adminAct = br.readLine();
-                                int ops = Integer.parseInt(adminAct);
+                                int ops;
+                                try {
+                                    ops = Integer.parseInt(adminAct);
+                                } catch (NumberFormatException e) {
+                                    ops = -5;
+                                }
                                 switch (ops) {
                                     case 1: {
                                         controller.addBook();
@@ -77,6 +86,10 @@ public class SystemController {
                                         System.out.println("Goodbye...");
                                         break;
                                     }
+                                    default: {
+                                        System.out.println("Invalid request. Please re-enter your request.");
+                                        break;
+                                    }
                                 }
                             }
                         } else if (flag == 0) {
@@ -84,7 +97,12 @@ public class SystemController {
                             while (isUserUsing) {
                                 Menu.showUserMenu();
                                 String userAct = br.readLine();
-                                int ops = Integer.parseInt(userAct);
+                                int ops;
+                                try {
+                                   ops = Integer.parseInt(userAct);
+                                } catch (NumberFormatException e) {
+                                    ops = - 5;
+                                }
                                 switch (ops) {
                                     case 1: {
                                         controller.findBook();
@@ -118,6 +136,10 @@ public class SystemController {
                                         System.out.println("Goodbye...");
                                         break;
                                     }
+                                    default: {
+                                        System.out.println("Invalid request. Please re-enter your request.");
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -132,10 +154,16 @@ public class SystemController {
                         System.out.println("Goodbye...");
                         break;
                     }
+                    default: {
+                        System.out.println("Invalid request. Please re-enter your request.");
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Lỗi trong quá trình nhập xuất: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Lỗi không xác định: " + e.getMessage());
         }
     }
 }

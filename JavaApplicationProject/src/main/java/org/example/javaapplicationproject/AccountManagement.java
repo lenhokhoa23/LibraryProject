@@ -85,42 +85,58 @@ public class AccountManagement {
             System.out.println("Không tìm thấy tài khoản này!");
         } else {
             if (account.getRole().equals("admin")) {
-                String sql =  "SELECT * FROM librarian where username = ?";
+                String sql = "SELECT * FROM librarian WHERE username = ?";
                 try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);) {
+                     PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, account.getUsername());
                     ResultSet resultSet = statement.executeQuery();
-                    resultSet.next();
-                    Librarian librarian = new Librarian(resultSet.getString(1),
-                            resultSet.getString(2), resultSet.getString(3),
-                            resultSet.getString(4), resultSet.getInt(5),
-                            resultSet.getString(6));
-                    librarian.printInfo();
+
+                    if (resultSet.next()) {
+                        Librarian librarian = new Librarian(
+                                resultSet.getString("username"),
+                                resultSet.getString("name"),
+                                resultSet.getString("email"),
+                                resultSet.getString("phoneNumber"),
+                                resultSet.getInt("librarian_id"),
+                                resultSet.getString("workShift")
+                        );
+                        librarian.printInfo();
+                    } else {
+                        System.out.println("Không tìm thấy thông tin trong bảng librarian!");
+                    }
                 } catch (SQLException e) {
                     System.out.println("Lỗi khi truy cập bảng librarian");
                     e.printStackTrace();
                 }
-            } else {
-                if (account.getRole().equals("user")) {
-                    String sql = "SELECT * FROM user where username = ?";
-                    try (Connection connection = DatabaseConnection.getConnection();
-                         PreparedStatement statement = connection.prepareStatement(sql);) {
-                        statement.setString(1, account.getUsername());
-                        ResultSet resultSet = statement.executeQuery();
-                        resultSet.next();
-                        User user = new User(resultSet.getString(2),
-                                resultSet.getString(3), resultSet.getString(4),
-                                resultSet.getString(5), resultSet.getInt(1),
-                                resultSet.getInt(6), resultSet.getString(7));
+            } else if (account.getRole().equals("user")) {
+                String sql = "SELECT * FROM user WHERE username = ?";
+                try (Connection connection = DatabaseConnection.getConnection();
+                     PreparedStatement statement = connection.prepareStatement(sql)) {
+                    statement.setString(1, account.getUsername());
+                    ResultSet resultSet = statement.executeQuery();
+
+                    if (resultSet.next()) {
+                        User user = new User(
+                                resultSet.getString("username"),
+                                resultSet.getString("name"),
+                                resultSet.getString("email"),
+                                resultSet.getString("phoneNumber"),
+                                resultSet.getInt("cart_Id"),
+                                resultSet.getInt("borrowedBooks"),
+                                resultSet.getString("membershipType")
+                        );
                         user.printInfo();
-                    } catch (SQLException e) {
-                        System.out.println("Lỗi khi truy cập bảng user");
-                        e.printStackTrace();
+                    } else {
+                        System.out.println("Không tìm thấy thông tin trong bảng user!");
                     }
+                } catch (SQLException e) {
+                    System.out.println("Lỗi khi truy cập bảng user");
+                    e.printStackTrace();
                 }
             }
         }
     }
+
 
     public static int fetchCartIdByUsername(String username) {
         int cartId = -1;
