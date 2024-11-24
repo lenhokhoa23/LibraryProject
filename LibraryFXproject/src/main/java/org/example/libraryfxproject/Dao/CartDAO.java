@@ -317,6 +317,39 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return activities;
     }
 
+    public ObservableList<ObservableList<String>> getActivitiesByCartId(int cartId) {
+        ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (conn != null) {
+                String query = "SELECT c.startDate AS time, c.Cart_ID AS userID, u.username, " +
+                        "c.title AS bookTitle, c.ISBN, c.endDate AS due " +
+                        "FROM cart c " +
+                        "JOIN user u ON c.Cart_ID = u.Cart_ID " +
+                        "WHERE c.Cart_ID = ? ORDER BY c.startDate DESC";
+
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setInt(1, cartId);
+                ResultSet result = statement.executeQuery();
+
+                while (result.next()) {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    row.add(result.getString("time"));
+                    row.add(String.valueOf(result.getInt("userID")));
+                    row.add(result.getString("username"));
+                    row.add(result.getString("bookTitle"));
+                    row.add(result.getString("ISBN"));
+                    row.add(result.getString("due"));
+                    activities.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn dữ liệu.");
+            e.printStackTrace();
+        }
+        return activities;
+    }
+
     public void addCart(Cart cart) {
         String sql = "INSERT INTO cart (Cart_ID, startDate, endDate, title, ISBN) "
                 + "VALUES (?, ?, ?, ?, ?)";
@@ -366,4 +399,31 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
             }
         }
     }
+
+    public boolean hasBookInCart(String isbn, int cartId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT 1 FROM cart WHERE ISBN = ? AND Cart_ID = ? LIMIT 1";
+        try {
+            connection = DatabaseConnection.getConnection();
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, isbn);
+            preparedStatement.setInt(2, cartId);
+            resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
 }
