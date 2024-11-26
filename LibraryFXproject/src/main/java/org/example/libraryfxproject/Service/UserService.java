@@ -3,6 +3,7 @@ package org.example.libraryfxproject.Service;
 import org.example.libraryfxproject.Dao.AccountDAO;
 import org.example.libraryfxproject.Dao.CartDAO;
 import org.example.libraryfxproject.Dao.UserDAO;
+import org.example.libraryfxproject.Model.User;
 
 import java.lang.reflect.AccessFlag;
 
@@ -29,5 +30,13 @@ public class UserService {
 
     public UserDAO getUserDAO() {
         return userDAO;
+    }
+
+    public int fetchCartIdByUsername(String username) {
+        return userDAO.fetchCartIdByUsername(username);
+    }
+
+    public User findUserByUsername(String username) {
+        return userDAO.findUserByUsername(username);
     }
 }
