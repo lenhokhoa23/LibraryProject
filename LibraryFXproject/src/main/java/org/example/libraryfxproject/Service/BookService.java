@@ -94,9 +94,16 @@ public class    BookService {
                 ISBN, price, subject, category, URL,
                 bookType, quantity);
     }
+    public void deleteBookFromDatabase(String title) {
+        bookDAO.deleteBookFromDatabase(title);
+    }
 
     public void modifyBook(String ISBN, String attribute, String newValue) {
         BookDAO.modifyBookAttribute(ISBN, attribute, newValue);
     }
 
+    public boolean hasBookWithISBN(String ISBN) {
+        Book book = bookDAO.findBookByDistinctAttribute(ISBN, 3);
+        return book != null;
+    }
 }

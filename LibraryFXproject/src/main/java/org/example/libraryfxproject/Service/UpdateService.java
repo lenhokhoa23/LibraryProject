@@ -118,4 +118,9 @@ public class UpdateService {
     public void populateTableView(TableView<ObservableList<String>> tableView, int ID, String startDate, String endDate) {
         tableView.setItems(cartDAO.getActivities(ID, startDate, endDate));
     }
+
+    public void populateTableViewByCartId(TableView<ObservableList<String>> tableView, int cartId) {
+        tableView.setItems(cartDAO.getActivitiesByCartId(cartId));
+    }
+
 }

@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.chart.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 
-<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@userviewStyle.css" />
     </stylesheets>
@@ -134,89 +157,89 @@
                                                         <Button styleClass="see-all-button" text="See All" />
                                                     </children>
                                                  </HBox>
-                         <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER" pannable="true" fitToWidth="true" styleClass="book-scroll-pane">
+                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="book-scroll-pane" vbarPolicy="NEVER">
                              <HBox spacing="20" styleClass="books-row">
-                                 <VBox styleClass="book-card" fx:id="bookCard1">
+                                 <VBox fx:id="bookCard1" styleClass="book-card">
                                      <StackPane styleClass="image-container">
-                                         <Rectangle width="200" height="250" styleClass="image-clip"/>
-                                         <ImageView fitWidth="200" fitHeight="250" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png"/>
+                                         <Rectangle height="250" styleClass="image-clip" width="200" />
+                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                             <Image url="@images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
-                                         <Label text="The Great Gatsby" styleClass="book-title"/>
-                                         <Label text="F. Scott Fitzgerald" styleClass="book-author"/>
+                                         <Label styleClass="book-title" text="The Great Gatsby" />
+                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
                                          <HBox spacing="10" styleClass="button-container">
-                                             <Button text="View" styleClass="view-button"/>
-                                             <Button text="Borrow" styleClass="borrow-button"/>
+                                             <Button styleClass="view-button" text="View" />
+                                             <Button styleClass="borrow-button" text="Borrow" />
                                          </HBox>
                                      </VBox>
                                  </VBox>
 
-                                 <VBox styleClass="book-card" fx:id="bookCard2">
+                                 <VBox fx:id="bookCard2" styleClass="book-card">
                                      <StackPane styleClass="image-container">
-                                         <Rectangle width="200" height="250" styleClass="image-clip"/>
-                                         <ImageView fitWidth="200" fitHeight="250" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png"/>
+                                         <Rectangle height="250" styleClass="image-clip" width="200" />
+                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                             <Image url="@images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
-                                         <Label text="The Great Gatsby" styleClass="book-title"/>
-                                         <Label text="F. Scott Fitzgerald" styleClass="book-author"/>
+                                         <Label styleClass="book-title" text="The Great Gatsby" />
+                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
                                          <HBox spacing="10" styleClass="button-container">
-                                             <Button text="View" styleClass="view-button"/>
-                                             <Button text="Borrow" styleClass="borrow-button"/>
+                                             <Button styleClass="view-button" text="View" />
+                                             <Button styleClass="borrow-button" text="Borrow" />
                                          </HBox>
                                      </VBox>
                                  </VBox>
 
-                                 <VBox styleClass="book-card" fx:id="bookCard3">
+                                 <VBox fx:id="bookCard3" styleClass="book-card">
                                      <StackPane styleClass="image-container">
-                                         <Rectangle width="200" height="250" styleClass="image-clip"/>
-                                         <ImageView fitWidth="200" fitHeight="250" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png"/>
+                                         <Rectangle height="250" styleClass="image-clip" width="200" />
+                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                             <Image url="@images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
-                                         <Label text="The Great Gatsby" styleClass="book-title"/>
-                                         <Label text="F. Scott Fitzgerald" styleClass="book-author"/>
+                                         <Label styleClass="book-title" text="The Great Gatsby" />
+                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
                                          <HBox spacing="10" styleClass="button-container">
-                                             <Button text="View" styleClass="view-button"/>
-                                             <Button text="Borrow" styleClass="borrow-button"/>
+                                             <Button styleClass="view-button" text="View" />
+                                             <Button styleClass="borrow-button" text="Borrow" />
                                          </HBox>
                                      </VBox>
                                  </VBox>
 
-                                 <VBox styleClass="book-card" fx:id="bookCard4">
+                                 <VBox fx:id="bookCard4" styleClass="book-card">
                                      <StackPane styleClass="image-container">
-                                         <Rectangle width="200" height="250" styleClass="image-clip"/>
-                                         <ImageView fitWidth="200" fitHeight="250" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png"/>
+                                         <Rectangle height="250" styleClass="image-clip" width="200" />
+                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                             <Image url="@images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
-                                         <Label text="The Great Gatsby" styleClass="book-title"/>
-                                         <Label text="F. Scott Fitzgerald" styleClass="book-author"/>
+                                         <Label styleClass="book-title" text="The Great Gatsby" />
+                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
                                          <HBox spacing="10" styleClass="button-container">
-                                             <Button text="View" styleClass="view-button"/>
-                                             <Button text="Borrow" styleClass="borrow-button"/>
+                                             <Button styleClass="view-button" text="View" />
+                                             <Button styleClass="borrow-button" text="Borrow" />
                                          </HBox>
                                      </VBox>
                                  </VBox>
 
-                                 <VBox styleClass="book-card" fx:id="bookCard5">
+                                 <VBox fx:id="bookCard5" styleClass="book-card">
                                      <StackPane styleClass="image-container">
-                                         <Rectangle width="200" height="250" styleClass="image-clip"/>
-                                         <ImageView fitWidth="200" fitHeight="250" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png"/>
+                                         <Rectangle height="250" styleClass="image-clip" width="200" />
+                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                             <Image url="@images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
-                                         <Label text="The Great Gatsby" styleClass="book-title"/>
-                                         <Label text="F. Scott Fitzgerald" styleClass="book-author"/>
+                                         <Label styleClass="book-title" text="The Great Gatsby" />
+                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
                                          <HBox spacing="10" styleClass="button-container">
-                                             <Button text="View" styleClass="view-button"/>
-                                             <Button text="Borrow" styleClass="borrow-button"/>
+                                             <Button styleClass="view-button" text="View" />
+                                             <Button styleClass="borrow-button" text="Borrow" />
                                          </HBox>
                                      </VBox>
                                  </VBox>
@@ -388,54 +411,29 @@
                                <content>
                                    <VBox spacing="30" styleClass="content-container">
                                       <children>
-                                          <!-- Currently Reading -->
-                                          <VBox styleClass="section">
-                                             <children>
-                                                 <HBox alignment="CENTER_LEFT">
-                                                    <children>
-                                                        <Label styleClass="section-title" text="Currently Reading" />
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                        <Button styleClass="update-progress-button" text="Update Progress" />
-                                                    </children>
-                                                 </HBox>
-                                                 <HBox fx:id="currentlyReadingList" spacing="15" />
-                                             </children>
-                                          </VBox>
                   
                                           <!-- Borrowed Books -->
-                                          <VBox styleClass="section">
+                                          <VBox prefHeight="408.0" prefWidth="1220.0" styleClass="section">
                      <children>
                                                  <Label styleClass="section-title" text="Borrowed Books" />
-                                                 <TableView fx:id="borrowedBooksTable">
+                                                 <TableView fx:id="userBorrowedBooksTable" prefHeight="394.0" prefWidth="1220.0">
                                                      <columns>
+                                                         <TableColumn fx:id="borrowedUserDateColumn" prefWidth="120" text="Borrowed On" />
+                                                         <TableColumn fx:id="borrowedIDColumn" prefWidth="150" text="ID" />
+                                                <TableColumn fx:id="borrowedUsernameColumn" prefWidth="150" text="Username" />
+                                                         <TableColumn fx:id="borrowedISBNColumn" prefWidth="80" text="ISBN" />
                                                          <TableColumn fx:id="borrowedTitleColumn" prefWidth="200" text="Title" />
-                                                         <TableColumn fx:id="borrowedAuthorColumn" prefWidth="150" text="Author" />
-                                                         <TableColumn fx:id="borrowDateColumn" prefWidth="120" text="Borrowed On" />
-                                                         <TableColumn fx:id="dueDateColumn" prefWidth="120" text="Due Date" />
-                                                         <TableColumn fx:id="renewColumn" prefWidth="80" text="Renew" />
+                                                         <TableColumn fx:id="borrowedDueDateColumn" prefWidth="120" text="Due Date" />
                                                      </columns>
                                                  </TableView>
                      </children>
                                           </VBox>
+                                    <Button fx:id="refreshBorrowedBooksTable" mnemonicParsing="false" text="Refresh" />
                   
                                           <!-- Reading History -->
                                           <VBox styleClass="section">
                      <children>
-                                                 <HBox alignment="CENTER_LEFT">
-                                                    <children>
-                                                        <Label styleClass="section-title" text="Reading History" />
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                        <ComboBox fx:id="historyFilter" promptText="Filter by" />
-                                                    </children>
-                                                 </HBox>
-                                                 <TableView fx:id="readingHistoryTable">
-                                                     <columns>
-                                                         <TableColumn fx:id="historyTitleColumn" prefWidth="200" text="Title" />
-                                                         <TableColumn fx:id="historyAuthorColumn" prefWidth="150" text="Author" />
-                                                         <TableColumn fx:id="completionDateColumn" prefWidth="120" text="Completed On" />
-                                                         <TableColumn fx:id="userRatingColumn" prefWidth="100" text="Your Rating" />
-                                                     </columns>
-                                                 </TableView>
+                                                 <HBox alignment="CENTER_LEFT" />
                      </children>
                                           </VBox>
                                       </children>
@@ -610,6 +608,39 @@
                             </ScrollPane>
             </content>
                      </Tab>
+                  <Tab closable="false" text="Service">
+                     <content>
+                        <VBox spacing="20" styleClass="content-container">
+                           <children>
+                              <TabPane prefHeight="503.0" prefWidth="1220.0" tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                  <Tab text="Borrow">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="162.0" prefWidth="1220.0">
+                                             <children>
+                                                <TextField fx:id="userBorrowISBN" layoutX="66.0" layoutY="63.0" prefHeight="26.0" prefWidth="249.0" promptText="Enter ISBN" />
+                                                <DatePicker fx:id="userBorrowReturnDate" layoutX="354.0" layoutY="63.0" promptText="Enter Due " />
+                                                <Button fx:id="userBorrowButton" layoutX="592.0" layoutY="63.0" mnemonicParsing="false" text="BORROW" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Return">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="182.0" prefWidth="1220.0">
+                                             <children>
+                                                <TextField fx:id="userReturnISBN" layoutX="192.0" layoutY="55.0" prefHeight="26.0" prefWidth="300.0" promptText="Enter ISBN" />
+                                                <Button fx:id="userReturnButton" layoutX="507.0" layoutY="55.0" mnemonicParsing="false" text="RETURN" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
          </tabs>
               </TabPane>
       

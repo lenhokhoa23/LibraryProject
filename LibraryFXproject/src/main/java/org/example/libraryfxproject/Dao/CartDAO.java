@@ -2,7 +2,6 @@ package org.example.libraryfxproject.Dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.example.libraryfxproject.Model.Account;
 import org.example.libraryfxproject.Model.Cart;
 
 import java.io.BufferedReader;
@@ -94,103 +93,114 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         }
     }
 
-    public String getBookStatus(String username) {
-        Cart cart = fetchCartByUsername(username);
-        int Cart_ID = cart.getCart_ID();
-        try {
-            String query = "SELECT endDate FROM cart WHERE Cart_ID = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, Cart_ID); // Lấy endDate từ cart có ID tương ứng.
+    public static List<Cart> getBooksStatus(String bookTitle) {
+        List<Cart> cartList = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM cart WHERE title = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, bookTitle);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                // Lấy ra giá trị kiểu java.sql.Date từ cột "endDate"
-                Date eventDate = rs.getDate("endDate");
-                // Chuyển đổi java.sql.Date thành java.time.LocalDate để dễ so sánh
-                LocalDate eventLocalDate = eventDate.toLocalDate();
-                // Lấy thời gian hiện tại
-                LocalDate currentDate = LocalDate.now();
-                // So sánh thời gian hiện tại với thời gian trong cơ sở dữ liệu
-                if (currentDate.isBefore(eventLocalDate)) {
-                    return "\033[32mTrạng thái: Còn hạn.\033[0m";
-                } else {
-                    return "\033[31mTrạng thái: Quá hạn mượn.\033[0m";
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "Không xác định.";
-    }
 
-    public String checkCartUser(Account account, String user) {
-        int cartId = 0;
-        // Determine cartId based on user role
-        String role = account.getRole();
-        String username = account.getUsername();
-        if (role.equals("user")) {
-            Cart userCart = fetchCartByUsername(username);
-            if (userCart != null) {
-                cartId = userCart.getCart_ID();
-            }
-        } else if (role.equals("admin")) {
-            // Check if the username exists in accounts
-            String query = "SELECT username FROM accounts WHERE username = " + user;
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, user);
-                ResultSet rs = stmt.executeQuery();
-                if (!rs.next()) {
-                    return "Người dùng \"" + user + "\" không tồn tại.";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            cartId = fetchCartByUsername(user).getCart_ID();
-        }
-
-        // Lấy tổng số sách đã mượn và thông tin từng sách
-        String countQuery = "SELECT COUNT(*) AS totalBooks FROM cart WHERE Cart_ID = ?";
-        String detailQuery = "SELECT * FROM cart WHERE Cart_ID = ?";
-
-        StringBuilder result = new StringBuilder(); // result string
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement countStmt = conn.prepareStatement(countQuery);
-             PreparedStatement detailStmt = conn.prepareStatement(detailQuery)) {
-
-            // Lấy tổng số sách đã mượn
-            countStmt.setInt(1, cartId);
-            ResultSet countRs = countStmt.executeQuery();
-            if (countRs.next()) {
-                int totalBooks = countRs.getInt("totalBooks");
-                result.append("Số sách đã mượn: ").append(totalBooks).append("\n");
-            }
-            // Lấy thông tin chi tiết từng sách
-            detailStmt.setInt(1, cartId);
-            ResultSet detailRs = detailStmt.executeQuery();
-
-            // Kiểm tra nếu giỏ hàng trống
-            if (!detailRs.isBeforeFirst()) {
-                return "Giá sách cá nhân của người dùng \"" + username + "\" trống.";
-            }
-            // Duyệt qua tất cả các sách trong giỏ
-            while (detailRs.next()) {
+            while (rs.next()) {
                 Cart cart = new Cart(
-                        detailRs.getInt("Cart_ID"),
-                        detailRs.getString("startDate"),
-                        detailRs.getString("endDate"),
-                        detailRs.getString("ISBN"),
-                        detailRs.getString("title")
+                        rs.getInt("Cart_ID"),
+                        rs.getString("startDate"),
+                        rs.getString("endDate"),
+                        rs.getString("title"),
+                        rs.getString("ISBN")
                 );
-                result.append("Sách: ").append(cart.getTitle())
-                        .append(", ISBN: ").append(cart.getISBN())
-                        .append(", Ngày bắt đầu: ").append(cart.getStartDate())
-                        .append(", Ngày kết thúc: ").append(cart.getEndDate()).append("\n");
+                cartList.add(cart);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result.toString();
+        return cartList;
     }
+
+
+
+
+//    public static void checkCartUser(int cart_ID) {
+//            System.out.println("Nhập tên người dùng bạn muốn xem: ");
+//            try {
+//                //username = br.readLine(); // Admin nhập tên người dùng
+//
+//                String query = "SELECT username FROM accounts WHERE username = ?";
+//                try (Connection conn = DatabaseConnection.getConnection();
+//                     PreparedStatement stmt = conn.prepareStatement(query)) {
+//                    stmt.setString(1, username);
+//                    ResultSet rs = stmt.executeQuery();
+//                    if (!rs.next()) {
+//                        System.out.println("Người dùng \"" + username + "\" không tồn tại.");
+//                        return;
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                    return;
+//                }
+//
+//                //cartId = fetchCartIdByUsername(username);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return;
+//            }
+//        }
+//
+//        // Truy vấn thông tin sách
+//        String countQuery = "SELECT COUNT(*) AS totalBooks FROM cart WHERE Cart_ID = ?";
+//        String query = "SELECT c.Cart_ID, c.startDate, c.endDate, c.ISBN, b.title " +
+//                "FROM cart c " +
+//                "JOIN books b ON c.ISBN = b.ISBN " +
+//                "WHERE c.Cart_ID = ?";
+//
+//        try (Connection conn = DatabaseConnection.getConnection();
+//             PreparedStatement countStmt = conn.prepareStatement(countQuery);
+//             PreparedStatement stmt = conn.prepareStatement(query)) {
+//
+//            // Lấy tổng số sách đã mượn
+//            countStmt.setInt(1, cartId);
+//            ResultSet countRs = countStmt.executeQuery();
+//            if (countRs.next()) {
+//                int totalBooks = countRs.getInt("totalBooks");
+//                System.out.println("Số sách đã mượn: " + totalBooks);
+//            }
+//
+//            // Lấy thông tin chi tiết từng sách
+//            stmt.setInt(1, cartId);
+//            ResultSet rs = stmt.executeQuery();
+//
+//            // Kiểm tra nếu giỏ hàng trống
+//            if (!rs.isBeforeFirst()) {
+//                System.out.println("Giá sách cá nhân của người dùng \"" + username + "\" trống.");
+//                return;
+//            }
+//
+//            // Duyệt qua tất cả các sách trong giỏ
+//            System.out.println("Cart ID: " + cartId);
+//            System.out.println("------------------------------");
+//            while (rs.next()) {
+//                Cart cart = new Cart(
+//                        rs.getInt("Cart_ID"),
+//                        rs.getString("startDate"),
+//                        rs.getString("endDate"),
+//                        rs.getString("title"),
+//                        rs.getString("ISBN")
+//                );
+//                //cart.printInfo(); // In ra thông tin
+//                // Kiểm tra trạng thái của từng sách
+//                LocalDate eventDate = LocalDate.parse(cart.getEndDate());
+//                LocalDate currentDate = LocalDate.now();
+//                String status = currentDate.isBefore(eventDate)
+//                        ? "\033[32mCòn hạn\033[0m"
+//                        : "\033[31mQuá hạn\033[0m";
+//
+//                System.out.printf("Trạng thái: %s\n", status);
+//                System.out.println("+------------------------+");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public int getBooksBorrowedCount() {
         String sql = "SELECT COUNT(*) AS borrowedCount FROM Cart";
@@ -317,6 +327,39 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return activities;
     }
 
+    public ObservableList<ObservableList<String>> getActivitiesByCartId(int cartId) {
+        ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (conn != null) {
+                String query = "SELECT c.startDate AS time, c.Cart_ID AS userID, u.username, " +
+                        "c.title AS bookTitle, c.ISBN, c.endDate AS due " +
+                        "FROM cart c " +
+                        "JOIN user u ON c.Cart_ID = u.Cart_ID " +
+                        "WHERE c.Cart_ID = ? ORDER BY c.startDate DESC";
+
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setInt(1, cartId);
+                ResultSet result = statement.executeQuery();
+
+                while (result.next()) {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    row.add(result.getString("time"));
+                    row.add(String.valueOf(result.getInt("userID")));
+                    row.add(result.getString("username"));
+                    row.add(result.getString("bookTitle"));
+                    row.add(result.getString("ISBN"));
+                    row.add(result.getString("due"));
+                    activities.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn dữ liệu.");
+            e.printStackTrace();
+        }
+        return activities;
+    }
+
     public void addCart(Cart cart) {
         String sql = "INSERT INTO cart (Cart_ID, startDate, endDate, title, ISBN) "
                 + "VALUES (?, ?, ?, ?, ?)";
@@ -366,4 +409,31 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
             }
         }
     }
+
+    public boolean hasBookInCart(String isbn, int cartId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT 1 FROM cart WHERE ISBN = ? AND Cart_ID = ? LIMIT 1";
+        try {
+            connection = DatabaseConnection.getConnection();
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, isbn);
+            preparedStatement.setInt(2, cartId);
+            resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
 }

@@ -65,7 +65,7 @@ public class MainMenuController extends BaseController {
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         loadTableData();
         initializePagination();
-        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
+        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer);
     }
   
     public void registerEvent() {
@@ -163,6 +163,9 @@ public class MainMenuController extends BaseController {
         initializeLabel();
         initializePieChart();
         initializeBarChart();
+        initializeTable();
+        mainMenuView.getBorrowServiceButton().setOnAction(this::handleBorrowService);
+        mainMenuView.getReturnServiceButton().setOnAction(this::handleReturnService);
 
         mainMenuView.getExportDataButton().setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -307,42 +310,6 @@ public class MainMenuController extends BaseController {
 
         // Make sure pagination control uses available space
         VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
-
-        initializeTable();
-        mainMenuView.getRefresh1().setOnAction(actionEvent -> {
-            initializeTable();
-        });
-        mainMenuView.getSearch1().setOnAction(event -> {
-            String studentId = mainMenuView.getStudentID1().getText();
-            LocalDate borrowDate = mainMenuView.getStartDate1().getValue();
-            LocalDate dueDate = mainMenuView.getEndDate1().getValue();
-
-            int ID = 0;
-            if (!studentId.isEmpty()) {
-                ID = Integer.parseInt(studentId);
-            }
-
-            String brDate = null;
-            String dDate = null;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            if (borrowDate != null) {
-                brDate = borrowDate.format(formatter);
-            }
-            if (dueDate != null) {
-                dDate = dueDate.format(formatter);
-            }
-
-            mainMenuView.getBorrowDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
-            mainMenuView.getCartIdColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
-            mainMenuView.getUserNameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
-            mainMenuView.getBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
-            mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
-            mainMenuView.getDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
-            updateService.populateTableView(mainMenuView.getBorrowHistoryTable(), ID, brDate, dDate);
-        });
-
-        mainMenuView.getBorrowServiceButton().setOnAction(this::handleBorrowService);
-        mainMenuView.getReturnServiceButton().setOnAction(this::handleReturnService);
     }
 
     public void initializeLabel() {
@@ -388,6 +355,38 @@ public class MainMenuController extends BaseController {
         mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
         mainMenuView.getDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
         updateService.populateTableView(mainMenuView.getBorrowHistoryTable(), 0);
+
+        mainMenuView.getRefresh1().setOnAction(actionEvent -> {
+            initializeTable();
+        });
+        mainMenuView.getSearch1().setOnAction(event -> {
+            String studentId = mainMenuView.getStudentID1().getText();
+            LocalDate borrowDate = mainMenuView.getStartDate1().getValue();
+            LocalDate dueDate = mainMenuView.getEndDate1().getValue();
+
+            int ID = 0;
+            if (!studentId.isEmpty()) {
+                ID = Integer.parseInt(studentId);
+            }
+
+            String brDate = null;
+            String dDate = null;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            if (borrowDate != null) {
+                brDate = borrowDate.format(formatter);
+            }
+            if (dueDate != null) {
+                dDate = dueDate.format(formatter);
+            }
+
+            mainMenuView.getBorrowDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+            mainMenuView.getCartIdColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+            mainMenuView.getUserNameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+            mainMenuView.getBookTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+            mainMenuView.getIsbnColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+            mainMenuView.getDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+            updateService.populateTableView(mainMenuView.getBorrowHistoryTable(), ID, brDate, dDate);
+        });
     }
 
     public void handleBorrowService(Event event) {
@@ -399,6 +398,9 @@ public class MainMenuController extends BaseController {
             System.out.println("Error, please fill in all fields before borrowing a book.");
             return;
         }
+        if (!bookService.hasBookWithISBN(isbn)) {
+            showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             cartService.addCart(
@@ -408,6 +410,7 @@ public class MainMenuController extends BaseController {
                         isbn
             );
             System.out.println("Cart added successfully!");
+            showSuccessMessage("Mượn sách thành công");
         } catch (NumberFormatException e) {
             System.out.println("Error: Student ID must be a number.");
         } catch (Exception e) {
@@ -422,9 +425,14 @@ public class MainMenuController extends BaseController {
             System.out.println("Error, please fill in all fields before returning a book.");
             return;
         }
+        if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
+            showErrorMessage("Kho hàng của bạn không có sách này!");
+            return;
+        }
         try {
             cartService.deleteCart(isbn, Integer.parseInt(studentId));
             System.out.println("Cart removed successfully!");
+            showSuccessMessage("Trả sách thành công");
         } catch (NumberFormatException e) {
             System.out.println("Error: Student ID must be a number.");
         } catch (Exception e) {
@@ -476,7 +484,6 @@ public class MainMenuController extends BaseController {
     }
 
     public void updateBookTableView(ObservableList<Book> books) {
-
         mainMenuView.getCatalogTableView().getItems().clear();
         mainMenuView.getCatalogTableView().setItems(books);
     }
@@ -513,7 +520,6 @@ public class MainMenuController extends BaseController {
             }
         }
     }
-
 
     private void setupTableColumns () {
         mainMenuView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));

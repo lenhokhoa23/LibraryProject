@@ -5,6 +5,8 @@ import org.example.libraryfxproject.Dao.CartDAO;
 import org.example.libraryfxproject.Dao.UserDAO;
 import org.example.libraryfxproject.Model.Cart;
 
+import java.time.LocalDate;
+
 public class CartService {
     private final CartDAO cartDAO = new CartDAO();
     private final BookDAO bookDAO = new BookDAO();
@@ -37,4 +39,23 @@ public class CartService {
         cartDAO.deleteCart(isbn, ID);
         bookDAO.updateQuantity(username, title, "RETURN");
     }
+
+    public boolean hasBookInCart(String isbn, int cartId) {
+        return cartDAO.hasBookInCart(isbn, cartId);
+    }
+
+    public static String getBookStatus(String endDateString) {
+        LocalDate currentDate = LocalDate.now();  // Ngày hiện tại
+
+        // Chuyển đổi từ String thành LocalDate (giả sử định dạng yyyy-MM-dd)
+        LocalDate endDate = LocalDate.parse(endDateString);
+
+        // So sánh ngày hết hạn và ngày hiện tại
+        if (endDate.isBefore(currentDate)) {
+            return "Quá hạn";  // Nếu hết hạn
+        } else {
+            return "Còn hạn";  // Nếu chưa hết hạn
+        }
+    }
 }
+
