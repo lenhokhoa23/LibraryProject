@@ -28,7 +28,7 @@ public class LibraryApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//       LoginView loginView = new LoginView(primaryStage);
+       LoginView loginView = new LoginView(primaryStage);
 //       LoginController loginController = new LoginController(loginView);
        MainMenuView mainMenuView = new MainMenuView(primaryStage);
 //       UserView userMenuView = new UserView(primaryStage);
