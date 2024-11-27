@@ -94,6 +94,9 @@ public class BookService {
                 ISBN, price, subject, category, URL,
                 bookType, quantity);
     }
+    public void deleteBookFromDatabase(String title) {
+        bookDAO.deleteBookFromDatabase(title);
+    }
 
     public void modifyBook(String ISBN, String attribute, String newValue) {
         BookDAO.modifyBookAttribute(ISBN, attribute, newValue);

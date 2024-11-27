@@ -14,4 +14,5 @@ module org.example.libraryfxproject {
     opens org.example.libraryfxproject.Model to javafx.base;
     exports org.example.libraryfxproject;
     exports org.example.libraryfxproject.Dao;
+    exports org.example.libraryfxproject.Model;
 }
