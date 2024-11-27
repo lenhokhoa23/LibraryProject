@@ -3,9 +3,8 @@ module org.example.libraryfxproject {
     requires java.sql;
     requires mysql.connector.j;
     requires com.jfoenix;
-    requires javafx.graphics;
-    requires javafx.controls;
     requires org.apache.poi.ooxml;
+    requires org.controlsfx.controls;
     requires java.desktop;
 
 

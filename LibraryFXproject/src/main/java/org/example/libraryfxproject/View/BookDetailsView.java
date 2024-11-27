@@ -1,66 +1,160 @@
 package org.example.libraryfxproject.View;
 
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
-import org.example.libraryfxproject.Dao.CartDAO;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
+import org.example.libraryfxproject.Controller.BookDetailsController;
+import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Model.Cart;
-import org.example.libraryfxproject.Service.CartService;
+import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
-import java.util.List;
 
 public class BookDetailsView {
-    private final Stage dialog;
-    private final CartService cartService;
+    private Stage stage;
 
-    public BookDetailsView(Book book, Stage parentStage) {
-        cartService = CartService.getInstance();
-        dialog = new Stage();
-        dialog.initOwner(parentStage);
+    private AlertDisplayer alertDisplayer;
+
+    @FXML
+    Label titleLabel;
+    @FXML
+    Label authorLabel;
+    @FXML
+    Label isbnLabel;
+    @FXML
+    Label pubDateLabel;
+    @FXML
+    Label releaseDateLabel;
+    @FXML
+    Label priceLabel;
+    @FXML
+    Label subjectLabel;
+    @FXML
+    Label categoryLabel;
+    @FXML
+    Label bookTypeLabel;
+    @FXML
+    Label quantityLabel;
+    @FXML
+    Hyperlink urlHyperlink;
+
+    public Hyperlink getUrlHyperlink() {
+        return urlHyperlink;
+    }
+
+    public void setUrlHyperlink(Hyperlink urlHyperlink) {
+        this.urlHyperlink = urlHyperlink;
+    }
+
+    public Label getTitleLabel() {
+        return titleLabel;
+    }
+
+    public void setTitleLabel(Label titleLabel) {
+        this.titleLabel = titleLabel;
+    }
+
+    public Label getAuthorLabel() {
+        return authorLabel;
+    }
+
+    public void setAuthorLabel(Label authorLabel) {
+        this.authorLabel = authorLabel;
+    }
+
+    public Label getIsbnLabel() {
+        return isbnLabel;
+    }
+
+    public void setIsbnLabel(Label isbnLabel) {
+        this.isbnLabel = isbnLabel;
+    }
+
+    public Label getPubDateLabel() {
+        return pubDateLabel;
+    }
+
+    public void setPubDateLabel(Label pubDateLabel) {
+        this.pubDateLabel = pubDateLabel;
+    }
+
+    public Label getReleaseDateLabel() {
+        return releaseDateLabel;
+    }
+
+    public void setReleaseDateLabel(Label releaseDateLabel) {
+        this.releaseDateLabel = releaseDateLabel;
+
+    }
+
+    public Label getPriceLabel() {
+        return priceLabel;
+    }
+
+    public void setPriceLabel(Label priceLabel) {
+        this.priceLabel = priceLabel;
+    }
+
+    public Label getSubjectLabel() {
+        return subjectLabel;
+    }
+
+    public void setSubjectLabel(Label subjectLabel) {
+        this.subjectLabel = subjectLabel;
+    }
+
+    public Label getCategoryLabel() {
+        return categoryLabel;
+    }
+
+    public void setCategoryLabel(Label categoryLabel) {
+        this.categoryLabel = categoryLabel;
+    }
+
+    public Label getBookTypeLabel() {
+        return bookTypeLabel;
+    }
+
+    public void setBookTypeLabel(Label bookTypeLabel) {
+        this.bookTypeLabel = bookTypeLabel;
+    }
+
+    public Label getQuantityLabel() {
+        return quantityLabel;
+    }
+
+    public void setQuantityLabel(Label quantityLabel) {
+        this.quantityLabel = quantityLabel;
+    }
+
+    public BookDetailsView(Book book) {
+        initializeBookDetailsView(book);
+    }
+
+    public void initializeBookDetailsView(Book book) {
+        stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/BookDetailView.fxml"));
+        fxmlLoader.setController(this);
+        alertDisplayer = new JavaFXAlertDisplayer();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/BookDetailsView.fxml"));
-            Parent root = loader.load();
-
-            // Tìm danh sách các Label trong FXML
-            VBox statusContainer = (VBox) root.lookup("#statusContainer"); // VBox chứa trạng thái sách
-
-            // Lấy danh sách trạng thái sách từ CartDAO
-            List<Cart> cartList = CartDAO.getBooksStatus(book.getTitle());
-
-            // Thêm trạng thái sách vào VBox
-            if (cartList.isEmpty()) {
-                Label noBookLabel = new Label("Không có sách nào được mượn.");
-                statusContainer.getChildren().add(noBookLabel);
-            } else {
-                for (Cart cart : cartList) {
-                    // Sử dụng hàm CartService để xác định trạng thái sách
-                    String status = cartService.getBookStatus(cart.getEndDate());
-
-                    // Tạo Label cho từng Cart
-                    Label statusLabel = new Label(
-                            "Cart ID: " + cart.getCart_ID() +
-                                    "\nStatus: " + status +  // Hiển thị trạng thái "Còn hạn" hoặc "Quá hạn"
-                                    "\nDue Date: " + cart.getEndDate()
-                                    
-                    );
-                    statusContainer.getChildren().add(statusLabel);
-                }
-            }
-
-            Scene scene = new Scene(root);
-            dialog.setScene(scene);
+            Parent bookDetailsParent = fxmlLoader.load();
+            Scene scene = new Scene(bookDetailsParent);
+            stage.setScene(scene);
+            stage.show();
+            BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer);
+            bookDetailsController.registerEvent(book);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void show() {
-        dialog.showAndWait();
-    }
 }
