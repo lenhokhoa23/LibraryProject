@@ -41,7 +41,7 @@ public class LoginController extends BaseController {
                 if (loginService.authenticate(username, password) == 0) {
                     openLibrarianView((Stage) ((Node) event.getSource()).getScene().getWindow());
                 } else {
-                    openUserView((Stage) ((Node)event.getSource()).getScene().getWindow());
+                    openUserView((Stage) ((Node)event.getSource()).getScene().getWindow(), username);
                 }
             } else {
                 showErrorMessage("Wrong Username / Password!");
@@ -60,8 +60,9 @@ public class LoginController extends BaseController {
         RegisterView registerView = new RegisterView(stage);
     }
 
-    private void openUserView(Stage stage) {
-        UserView userView = new UserView(stage);
+    private void openUserView(Stage stage, String username) {
+        UserView userView = new UserView(stage, username);
+        System.out.println(username);
     }
 
 }

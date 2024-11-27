@@ -914,16 +914,9 @@ public class MainMenuView {
             throw new RuntimeException(e);
         }
     }
+
     public Button getModifyButton() {
         return modifyButton;
-    }
-
-    public void setModifyButton(Button modifyButton) {
-        this.modifyButton = modifyButton;
-    }
-    private void handleActionClick(Book book) {
-        // Handle button click event
-        System.out.println("Button clicked for book: " + book.getTitle());
     }
 
     public void initializeModifyBookView(MainMenuController mainMenuController) {
@@ -960,8 +953,6 @@ public class MainMenuView {
             throw new RuntimeException(e);
         }
     }
-
-
 
     public TableView<ObservableList<String>> getBorrowHistoryTable() {
         return borrowHistoryTable;

@@ -1,20 +1,23 @@
 package org.example.libraryfxproject.View;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
+import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
 
 public class UserView {
+    private String username;
+    private User user;
     private final Stage stage;
 
     @FXML
@@ -44,14 +47,52 @@ public class UserView {
     @FXML
     private Button club5;
 
-    private AlertDisplayer alertDisplayer;
+    @FXML
+    private TextField userBorrowISBN;
 
+    @FXML
+    private DatePicker userBorrowReturnDate;
+
+    @FXML
+    private TextField userReturnISBN;
+
+    @FXML
+    private Button userBorrowButton;
+
+    @FXML
+    private Button userReturnButton;
+
+    @FXML
+    private TableView<ObservableList<String>> userBorrowedBooksTable;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedUserDateColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedIDColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedUsernameColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedISBNColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedTitleColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> borrowedDueDateColumn;
+
+    @FXML
+    private Button refreshBorrowedBooksTable;
+
+    private AlertDisplayer alertDisplayer;
 
     private boolean isSelecting = false;
 
-
-    public UserView(Stage stage) {
+    public UserView(Stage stage, String username) {
         this.stage = stage;
+        this.username = username;
         initializeUserView();
     }
 
@@ -139,5 +180,123 @@ public class UserView {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TextField getUserBorrowISBN() {
+        return userBorrowISBN;
+    }
+
+    public void setUserBorrowISBN(TextField userBorrowISBN) {
+        this.userBorrowISBN = userBorrowISBN;
+    }
+
+    public DatePicker getUserBorrowReturnDate() {
+        return userBorrowReturnDate;
+    }
+
+    public void setUserBorrowReturnDate(DatePicker userBorrowReturnDate) {
+        this.userBorrowReturnDate = userBorrowReturnDate;
+    }
+
+    public TextField getUserReturnISBN() {
+        return userReturnISBN;
+    }
+
+    public void setUserReturnISBN(TextField userReturnISBN) {
+        this.userReturnISBN = userReturnISBN;
+    }
+
+    public Button getUserBorrowButton() {
+        return userBorrowButton;
+    }
+
+    public void setUserBorrowButton(Button userBorrowButton) {
+        this.userBorrowButton = userBorrowButton;
+    }
+
+    public Button getUserReturnButton() {
+        return userReturnButton;
+    }
+
+    public void setUserReturnButton(Button userReturnButton) {
+        this.userReturnButton = userReturnButton;
+    }
+
+    public TableView<ObservableList<String>> getUserBorrowedBooksTable() {
+        return userBorrowedBooksTable;
+    }
+
+    public void setUserBorrowedBooksTable(TableView<ObservableList<String>> userBorrowedBooksTable) {
+        this.userBorrowedBooksTable = userBorrowedBooksTable;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedUserDateColumn() {
+        return borrowedUserDateColumn;
+    }
+
+    public void setBorrowedUserDateColumn(TableColumn<ObservableList<String>, String> borrowedUserDateColumn) {
+        this.borrowedUserDateColumn = borrowedUserDateColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedIDColumn() {
+        return borrowedIDColumn;
+    }
+
+    public void setBorrowedIDColumn(TableColumn<ObservableList<String>, String> borrowedIDColumn) {
+        this.borrowedIDColumn = borrowedIDColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedUsernameColumn() {
+        return borrowedUsernameColumn;
+    }
+
+    public void setBorrowedUsernameColumn(TableColumn<ObservableList<String>, String> borrowedUsernameColumn) {
+        this.borrowedUsernameColumn = borrowedUsernameColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedISBNColumn() {
+        return borrowedISBNColumn;
+    }
+
+    public void setBorrowedISBNColumn(TableColumn<ObservableList<String>, String> borrowedISBNColumn) {
+        this.borrowedISBNColumn = borrowedISBNColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedTitleColumn() {
+        return borrowedTitleColumn;
+    }
+
+    public void setBorrowedTitleColumn(TableColumn<ObservableList<String>, String> borrowedTitleColumn) {
+        this.borrowedTitleColumn = borrowedTitleColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getBorrowedDueDateColumn() {
+        return borrowedDueDateColumn;
+    }
+
+    public void setBorrowedDueDateColumn(TableColumn<ObservableList<String>, String> borrowedDueDateColumn) {
+        this.borrowedDueDateColumn = borrowedDueDateColumn;
+    }
+
+    public Button getRefreshBorrowedBooksTable() {
+        return refreshBorrowedBooksTable;
+    }
+
+    public void setRefreshBorrowedBooksTable(Button refreshBorrowedBooksTable) {
+        this.refreshBorrowedBooksTable = refreshBorrowedBooksTable;
+    }
 }

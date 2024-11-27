@@ -1,25 +1,24 @@
 package org.example.libraryfxproject.Controller;
 
 import javafx.application.Platform;
-import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
+import javafx.event.Event;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
-
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -29,6 +28,10 @@ import java.util.concurrent.TimeUnit;
 public class UserMenuController extends BaseController {
     private final UserView userView;
     private final SearchService searchService;
+    private final UserService userService;
+    private final CartService cartService;
+    private final UpdateService updateService;
+    private final BookService bookService;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
@@ -37,11 +40,15 @@ public class UserMenuController extends BaseController {
         super(alertDisplayer);
         this.userView = userView;
         searchService = SearchService.getInstance();
+        userService = UserService.getInstance();
+        cartService = CartService.getInstance();
+        updateService = UpdateService.getInstance();
+        bookService = BookService.getInstance();
     }
 
     public void registerEvent() {
         hideSuggestions();
-
+        userView.setUser(userService.findUserByUsername(userView.getUsername()));
         userView.getLogoutItem().setOnAction(event -> {
             Stage stage = (Stage) userView.getProfileButton().getScene().getWindow();
             stage.close();
@@ -100,9 +107,7 @@ public class UserMenuController extends BaseController {
         userView.getContact().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/mgcfrog912"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -137,9 +142,7 @@ public class UserMenuController extends BaseController {
         userView.getClub1().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/groups/1138721139638235"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -147,9 +150,7 @@ public class UserMenuController extends BaseController {
         userView.getClub2().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/groups/1953714107984908"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -157,9 +158,7 @@ public class UserMenuController extends BaseController {
         userView.getClub3().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/groups/1928903884018373"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -167,9 +166,7 @@ public class UserMenuController extends BaseController {
         userView.getClub4().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/groups/theabcbookclub"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -177,15 +174,74 @@ public class UserMenuController extends BaseController {
         userView.getClub5().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/groups/152211783175655"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
 
+        userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
+        userView.getUserReturnButton().setOnAction(this::handleReturnService);
+        initializeTable();
+    }
 
+    public void initializeTable() {
+        userView.getBorrowedUserDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
+        userView.getBorrowedIDColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
+        userView.getBorrowedUsernameColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(2)));
+        userView.getBorrowedTitleColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(3)));
+        userView.getBorrowedISBNColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(4)));
+        userView.getBorrowedDueDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(5)));
+        updateService.populateTableViewByCartId(userView.getUserBorrowedBooksTable(), userView.getUser().getUserID());
+        userView.getRefreshBorrowedBooksTable().setOnAction(event -> {
+            updateService.populateTableViewByCartId(userView.getUserBorrowedBooksTable(), userView.getUser().getUserID());
+        });
+    }
 
+    public void handleBorrowService(Event event) {
+        int studentId = userView.getUser().getUserID();
+        String isbn = userView.getUserBorrowISBN().getText();
+        LocalDate dueDate = userView.getUserBorrowReturnDate().getValue();
+
+        if (isbn.isEmpty() || dueDate == null) {
+            System.out.println("Error, please fill in all fields before borrowing a book.");
+            return;
+        }
+        if (!bookService.hasBookWithISBN(isbn)) {
+            showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            cartService.addCart(
+                    studentId,
+                    LocalDate.now().format(formatter),
+                    dueDate.format(formatter),
+                    isbn
+            );
+            System.out.println("Cart added successfully!");
+            showSuccessMessage("Mượn sách thành công");
+        } catch (Exception e) {
+            System.out.println("An error occurred while adding the cart: " + e.getMessage());
+        }
+    }
+
+    public void handleReturnService(Event event) {
+        int studentId = userView.getUser().getUserID();
+        String isbn = userView.getUserReturnISBN().getText();
+        if (isbn.isEmpty()) {
+            System.out.println("Error, please fill in all fields before returning a book.");
+            return;
+        }
+        if (!cartService.hasBookInCart(isbn, studentId)) {
+            showErrorMessage("Kho hàng của bạn không có sách này!");
+            return;
+        }
+        try {
+            cartService.deleteCart(isbn, studentId);
+            System.out.println("Cart removed successfully!");
+            showSuccessMessage("Trả sách thành công");
+        } catch (Exception e) {
+            System.out.println("An error occurred while removing the cart: " + e.getMessage());
+        }
     }
 
     private void scheduleSearch() {

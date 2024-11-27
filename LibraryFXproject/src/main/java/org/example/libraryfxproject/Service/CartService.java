@@ -37,4 +37,8 @@ public class CartService {
         cartDAO.deleteCart(isbn, ID);
         bookDAO.updateQuantity(username, title, "RETURN");
     }
+
+    public boolean hasBookInCart(String isbn, int cartId) {
+        return cartDAO.hasBookInCart(isbn, cartId);
+    }
 }
