@@ -60,7 +60,7 @@ public class ContextMenuController {
         if (selectedBook != null) {
             // Hiển thị cửa sổ chi tiết
             Stage parentStage = (Stage) catalogTableView.getScene().getWindow(); // Ép kiểu thành Stage
-            new BookDetailsView(selectedBook, parentStage).show();
+            new BookDetailsView(selectedBook);
         }
     }
 }

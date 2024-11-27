@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BookService {
+public class    BookService {
     private final BookDAO bookDAO = new BookDAO();
     private static BookService bookService;
     public static synchronized BookService getInstance() {
