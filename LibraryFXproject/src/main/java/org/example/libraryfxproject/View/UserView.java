@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
+import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
@@ -63,6 +64,30 @@ public class UserView {
     private Button userReturnButton;
 
     @FXML
+    private Pagination catalogPagination;
+
+    @FXML
+    private TableColumn<Book, Integer> itemIdColumn;
+
+    @FXML
+    private TableColumn<Book, String> titleColumn;
+
+    @FXML
+    private TableColumn<Book, String> authorColumn;
+
+    @FXML
+    private TableColumn<Book, String> subjectColumn;
+
+    @FXML
+    private TableColumn<Book, String> bookTypeColumn;
+
+    @FXML
+    private TableColumn<Book, String> quantityColumn;
+
+    @FXML
+    private TableView<Book> catalogTableView;
+
+    @FXML
     private TableView<ObservableList<String>> userBorrowedBooksTable;
 
     @FXML
@@ -82,6 +107,23 @@ public class UserView {
 
     @FXML
     private TableColumn<ObservableList<String>, String> borrowedDueDateColumn;
+
+
+    @FXML
+    private Button searchButton;
+
+    @FXML
+    private TextField searchCatalog;
+
+    @FXML
+    private ComboBox<String> filterComboBox;
+
+    @FXML
+    private Button refreshButton;
+
+
+    @FXML
+    private ToggleButton searchToggle;
 
     @FXML
     private Button refreshBorrowedBooksTable;
@@ -160,24 +202,60 @@ public class UserView {
         isSelecting = selecting;
     }
 
-    public void initializeUserView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent userParent = fxmlLoader.load();
-            Scene scene = new Scene(userParent);
-            stage.setX(-5);
-            stage.setY(-5);
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
-            stage.setScene(scene);
-            stage.show();
-            UserMenuController userMenuController = new UserMenuController(this, alertDisplayer);
-            userMenuController.registerEvent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Pagination getCatalogPagination() {
+        return catalogPagination;
+    }
+
+    public void setCatalogPagination(Pagination catalogPagination) {
+        this.catalogPagination = catalogPagination;
+    }
+
+    public TableColumn<Book, Integer> getItemIdColumn() {
+        return itemIdColumn;
+    }
+
+    public void setItemIdColumn(TableColumn<Book, Integer> itemIdColumn) {
+        this.itemIdColumn = itemIdColumn;
+    }
+
+    public TableColumn<Book, String> getTitleColumn() {
+        return titleColumn;
+    }
+
+    public void setTitleColumn(TableColumn<Book, String> titleColumn) {
+        this.titleColumn = titleColumn;
+    }
+
+    public TableColumn<Book, String> getAuthorColumn() {
+        return authorColumn;
+    }
+
+    public void setAuthorColumn(TableColumn<Book, String> authorColumn) {
+        this.authorColumn = authorColumn;
+    }
+
+    public TableColumn<Book, String> getSubjectColumn() {
+        return subjectColumn;
+    }
+
+    public void setSubjectColumn(TableColumn<Book, String> subjectColumn) {
+        this.subjectColumn = subjectColumn;
+    }
+
+    public TableColumn<Book, String> getBookTypeColumn() {
+        return bookTypeColumn;
+    }
+
+    public void setBookTypeColumn(TableColumn<Book, String> bookTypeColumn) {
+        this.bookTypeColumn = bookTypeColumn;
+    }
+
+    public TableColumn<Book, String> getQuantityColumn() {
+        return quantityColumn;
+    }
+
+    public void setQuantityColumn(TableColumn<Book, String> quantityColumn) {
+        this.quantityColumn = quantityColumn;
     }
 
     public String getUsername() {
@@ -299,4 +377,78 @@ public class UserView {
     public void setRefreshBorrowedBooksTable(Button refreshBorrowedBooksTable) {
         this.refreshBorrowedBooksTable = refreshBorrowedBooksTable;
     }
+
+    public TableView<Book> getCatalogTableView() {
+        return catalogTableView;
+    }
+
+    public void setCatalogTableView(TableView<Book> catalogTableView) {
+        this.catalogTableView = catalogTableView;
+    }
+
+    public void setSearchField(TextField searchField) {
+        this.searchField = searchField;
+    }
+
+    public Button getSearchButton() {
+        return searchButton;
+    }
+
+    public void setSearchButton(Button searchButton) {
+        this.searchButton = searchButton;
+    }
+
+    public TextField getSearchCatalog() {
+        return searchCatalog;
+    }
+
+    public void setSearchCatalog(TextField searchCatalog) {
+        this.searchCatalog = searchCatalog;
+    }
+
+    public ComboBox<String> getFilterComboBox() {
+        return filterComboBox;
+    }
+
+    public void setFilterComboBox(ComboBox<String> filterComboBox) {
+        this.filterComboBox = filterComboBox;
+    }
+
+    public Button getRefreshButton() {
+        return refreshButton;
+    }
+
+    public void setRefreshButton(Button refreshButton) {
+        this.refreshButton = refreshButton;
+    }
+
+
+    public ToggleButton getSearchToggle() {
+        return searchToggle;
+    }
+
+    public void setSearchToggle(ToggleButton searchToggle) {
+        this.searchToggle = searchToggle;
+    }
+
+    public void initializeUserView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent userParent = fxmlLoader.load();
+            Scene scene = new Scene(userParent);
+            stage.setX(-5);
+            stage.setY(-5);
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
+            stage.setScene(scene);
+            stage.show();
+            UserMenuController userMenuController = new UserMenuController(this, alertDisplayer);
+            userMenuController.registerEvent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -163,9 +163,16 @@ public class BookDAO extends GeneralDAO<String, Book> {
             attribute = "no";
         }
         String query = "SELECT * FROM books WHERE " + attribute + " = ?";
+        if (!attribute.equals("no")) {
+            query = "SELECT * FROM books WHERE " + attribute + " like ?";
+        }
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, value);
+            if (!attribute.equals("no")) {
+                statement.setString(1, "%" + value + "%");
+            } else {
+                statement.setString(1, value);
+            }
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Book book = new Book(
