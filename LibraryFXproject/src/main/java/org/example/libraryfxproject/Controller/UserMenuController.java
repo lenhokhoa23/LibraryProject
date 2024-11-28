@@ -201,13 +201,18 @@ public class UserMenuController extends BaseController {
         int studentId = userView.getUser().getUserID();
         String isbn = userView.getUserBorrowISBN().getText();
         LocalDate dueDate = userView.getUserBorrowReturnDate().getValue();
-
         if (isbn.isEmpty() || dueDate == null) {
             System.out.println("Error, please fill in all fields before borrowing a book.");
             return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+        }
+        if (!bookService.hasEnoughQuantity(isbn)) {
+            showErrorMessage("Sách này hiện không còn trong kho, bạn vui lòng chờ dịp khác nhé!");
+        }
+        if (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) {
+            showErrorMessage("Ngày được chọn không hợp lệ!\nVui lòng thử lại");
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {

@@ -15,7 +15,6 @@ public class LoginService {
         return loginService;
     }
     private LoginService() {
-        LoadService loadService = LoadService.getInstance();
         LoadService.loadData(accountDAO);
     }
 

@@ -204,7 +204,6 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
-
     public void insertBookToDatabase(String title, String author, String pubdate, String releaseDate,
                                      String ISBN, String price, String subject, String category,
                                      String URL, String bookType, String quantity) {

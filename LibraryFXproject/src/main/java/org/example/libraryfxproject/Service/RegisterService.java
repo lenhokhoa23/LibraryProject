@@ -9,17 +9,17 @@ import java.util.regex.Pattern;
 public class RegisterService {
     AccountDAO accountDAO = new AccountDAO();
     private static RegisterService registerService;
+
     private RegisterService() {
-        LoadService loadService = LoadService.getInstance();
-        loadService.loadData(accountDAO);
+        LoadService.loadData(accountDAO);
     }
+
     public static synchronized RegisterService getInstance() {
         if (registerService == null) {
             registerService = new RegisterService();
         }
         return registerService;
     }
-
 
     public int validateInput(String username, String phoneNumber, String email) {
         String usernamePattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*_\\S]{8,20}$";

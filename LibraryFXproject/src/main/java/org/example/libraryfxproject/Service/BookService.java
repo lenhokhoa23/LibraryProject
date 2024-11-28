@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class BookService {
     private final BookDAO bookDAO = new BookDAO();
     private static BookService bookService;
+
     public static synchronized BookService getInstance() {
         if (bookService == null) {
             bookService = new BookService();
@@ -31,8 +32,7 @@ public class BookService {
     }
 
     private BookService() {
-        LoadService loadService = LoadService.getInstance();
-        loadService.loadData(bookDAO);
+        LoadService.loadData(bookDAO);
     }
 
     public int validateAddBookInput(String title, String author, String pubdateStr, String releaseDateStr,
@@ -97,6 +97,11 @@ public class BookService {
 
     public void modifyBook(String ISBN, String attribute, String newValue) {
         BookDAO.modifyBookAttribute(ISBN, attribute, newValue);
+    }
+
+    public boolean hasEnoughQuantity(String ISBN) {
+        int quantity = bookDAO.fetchQuantityFromBooks(ISBN, 3);
+        return quantity > 0;
     }
 
     public boolean hasBookWithISBN(String ISBN) {

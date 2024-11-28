@@ -13,9 +13,8 @@ public class UserService {
     private static UserService userService;
 
     private UserService() {
-        LoadService loadService = LoadService.getInstance();
-        loadService.loadData(userDAO);
-        loadService.loadData(accountDAO);
+        LoadService.loadData(userDAO);
+        LoadService.loadData(accountDAO);
     }
     public static synchronized UserService getInstance() {
         if (userService == null) {
