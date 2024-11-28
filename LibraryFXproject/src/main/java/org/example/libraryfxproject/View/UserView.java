@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
@@ -85,6 +86,27 @@ public class UserView {
 
     @FXML
     private Button refreshBorrowedBooksTable;
+
+    @FXML
+    private Button notificationButton;
+
+    @FXML
+    private TableView<ObservableList<String>> activityDueTable;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> timeDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> userIdDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> isbnDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> dueDueColumn;
+
+    @FXML
+    private StackPane notificationPanel;
 
     private AlertDisplayer alertDisplayer;
 
@@ -298,5 +320,61 @@ public class UserView {
 
     public void setRefreshBorrowedBooksTable(Button refreshBorrowedBooksTable) {
         this.refreshBorrowedBooksTable = refreshBorrowedBooksTable;
+    }
+
+    public TableView<ObservableList<String>> getActivityDueTable() {
+        return activityDueTable;
+    }
+
+    public void setActivityDueTable(TableView<ObservableList<String>> activityDueTable) {
+        this.activityDueTable = activityDueTable;
+    }
+
+    public TableColumn<ObservableList<String>, String> getTimeDueColumn() {
+        return timeDueColumn;
+    }
+
+    public void setTimeDueColumn(TableColumn<ObservableList<String>, String> timeDueColumn) {
+        this.timeDueColumn = timeDueColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getUserIdDueColumn() {
+        return userIdDueColumn;
+    }
+
+    public void setUserIdDueColumn(TableColumn<ObservableList<String>, String> userIdDueColumn) {
+        this.userIdDueColumn = userIdDueColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getIsbnDueColumn() {
+        return isbnDueColumn;
+    }
+
+    public void setIsbnDueColumn(TableColumn<ObservableList<String>, String> isbnDueColumn) {
+        this.isbnDueColumn = isbnDueColumn;
+    }
+
+    public TableColumn<ObservableList<String>, String> getDueDueColumn() {
+        return dueDueColumn;
+    }
+
+    public void setDueDueColumn(TableColumn<ObservableList<String>, String> dueDueColumn) {
+        this.dueDueColumn = dueDueColumn;
+    }
+
+    public StackPane getNotificationPanel() {
+        return notificationPanel;
+    }
+
+    public void setNotificationPanel(StackPane notificationPanel) {
+        this.notificationPanel = notificationPanel;
+    }
+
+    public Button getNotificationButton() {
+        return notificationButton;
+    }
+
+    public void setNotificationButton(Button notificationButton) {
+        this.notificationButton = notificationButton;
     }
 }

@@ -182,6 +182,7 @@ public class UserMenuController extends BaseController {
         userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
         userView.getUserReturnButton().setOnAction(this::handleReturnService);
         initializeTable();
+        initializeDueTable();
     }
 
     public void initializeTable() {
@@ -291,4 +292,25 @@ public class UserMenuController extends BaseController {
     public void shutdown() {
         scheduler.shutdownNow();
     }
+
+    public void initializeDueTable() {
+        userView.getTimeDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(0)));
+        userView.getUserIdDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(1)));
+        userView.getIsbnDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(4)));
+        userView.getDueDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(5)));
+        updateService.populateTableViewByCartId(userView.getActivityDueTable(), userView.getUser().getUserID());
+
+        userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
+    }
+
+    public void handleNotificationButtonAction(Event event) {
+        userView.getNotificationPanel().setVisible(true);
+        userView.getNotificationButton().setOnAction(this::closeNotificationPanel);
+    }
+
+    private void closeNotificationPanel(Event event) {
+        userView.getNotificationPanel().setVisible(false);
+        userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
+    }
+
 }

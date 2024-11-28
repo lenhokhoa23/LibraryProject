@@ -93,6 +93,17 @@
                                    </StackPane>
                                </graphic>
                            </Button>
+                           <StackPane fx:id="notificationPanel" visible="false">
+                               <TableView fx:id="activityDueTable" prefHeight="200" prefWidth="400">
+                                   <columns>
+                                       <TableColumn text="Thời gian" fx:id="timeDueColumn" />
+                                       <TableColumn text="Mã người dùng" fx:id="userIdDueColumn" />
+                                       <TableColumn text="ISBN" fx:id="isbnDueColumn" />
+                                       <TableColumn text="Ngày hết hạn" fx:id="dueDueColumn" />
+                                   </columns>
+                               </TableView>
+                           </StackPane>
+
                            <MenuButton fx:id="profileButton" prefHeight="84.0" prefWidth="111.0" styleClass="profile-button">
                                <graphic>
                                    <ImageView fitHeight="40" fitWidth="40">
@@ -112,7 +123,7 @@
                     </HBox>
                </children>
             </StackPane>
-      
+
               <!-- Main Content -->
               <TabPane styleClass="main-tabs" VBox.vgrow="ALWAYS">
          <tabs>
