@@ -1,0 +1,162 @@
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: #f5f5f5;
+}
+
+.main-container {
+    -fx-background-color: white;
+    -fx-padding: 20;
+}
+
+.content-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);
+    -fx-padding: 30;
+}
+
+.book-info-container {
+    -fx-max-width: 600px;
+}
+
+.header {
+    -fx-padding: 20;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f9f9f9);
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.image-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 10);
+    -fx-padding: 10;
+}
+
+.book-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);
+}
+
+.book-info {
+    -fx-spacing: 10;
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.author {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-text-fill: #34495e;
+}
+
+.isbn {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+}
+
+.price {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+}
+
+.quantity {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2ecc71;
+}
+
+.add-to-cart-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.add-to-cart-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.details-tabs {
+    -fx-background-color: transparent;
+}
+
+.details-tabs .tab-header-area .tab-header-background {
+    -fx-background-color: #ecf0f1;
+}
+
+.details-tabs .tab {
+    -fx-background-color: #bdc3c7;
+    -fx-text-fill: #2c3e50;
+}
+
+.details-tabs .tab:selected {
+    -fx-background-color: white;
+    -fx-text-fill: #2c3e50;
+}
+
+.details-grid {
+    -fx-padding: 15;
+}
+
+.detail-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+
+.description-area {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+}
+
+.comments-container {
+    -fx-padding: 0 0 0 20;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 0 1;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.comments-list {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+}
+
+.new-comment-area {
+    -fx-pref-height: 80px;
+    -fx-font-size: 14px;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+.submit-button {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.submit-button:hover {
+    -fx-background-color: #27ae60;
+}
+
+.url-link {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3498db;
+    -fx-underline: true;
+}
+
+.url-link:hover {
+    -fx-text-fill: #2980b9;
+}
+

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" prefHeight="760.0" prefWidth="1107.0" stylesheets="@bookdetail.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+       <AnchorPane prefHeight="734.0" prefWidth="1061.0" styleClass="main-container">
+          <children>
+              <HBox layoutX="23.0" layoutY="14.0" prefHeight="703.0" prefWidth="1050.0" spacing="30" styleClass="content-container">
+                 <children>
+                     <!-- Left Column: Book Information -->
+                     <VBox maxWidth="628.0" prefHeight="743.0" prefWidth="628.0" spacing="20" styleClass="book-info-container" HBox.hgrow="ALWAYS">
+                        <children>
+                            <HBox spacing="20" styleClass="header">
+                               <children>
+                                   <StackPane styleClass="image-container">
+                                      <children>
+                                          <ImageView fx:id="bookImage" fitHeight="300" fitWidth="200" preserveRatio="true" styleClass="book-image" />
+                                      </children>
+                                   </StackPane>
+                                   <VBox spacing="10" styleClass="book-info">
+                                      <children>
+                                          <Label fx:id="titleLabel" styleClass="title" />
+                                          <Label fx:id="authorLabel" styleClass="author" />
+                                          <Label fx:id="isbnLabel" styleClass="isbn" />
+                                    <Label fx:id="quantityLabel" styleClass="isbn" />
+                                          <Button fx:id="addToCartButton" styleClass="add-to-cart-button" text="Add to Cart" />
+                                      </children>
+                                   </VBox>
+                               </children>
+                            </HBox>
+            
+                            <TabPane styleClass="details-tabs">
+               <tabs>
+                                   <Tab styleClass="detail-label" closable="false" text="Detailed Informations">
+                                      <content>
+                                          <GridPane hgap="15" styleClass="details-grid" vgap="10">
+                                              <columnConstraints>
+                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200" minWidth="100" prefWidth="150" />
+                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="200" />
+                                              </columnConstraints>
+                                             <children>
+                     
+                                                 <Label styleClass="detail-label" text="Type:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                 <Label styleClass="detail-label" fx:id="bookTypeLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                     
+                                                 <Label styleClass="detail-label" text="Publish Date:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                 <Label styleClass="detail-label" fx:id="pubDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     
+                                                 <Label styleClass="detail-label" text="Release Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                 <Label styleClass="detail-label" fx:id="releaseDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     
+                                                 <Label styleClass="detail-label" text="Buy Price:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                                 <Label styleClass="detail-label" fx:id="priceLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     
+                                                 <Label styleClass="detail-label" text="Subject:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                                 <Label styleClass="detail-label" fx:id="subjectLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     
+                                                 <Label styleClass="detail-label" text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                                                 <Label styleClass="detail-label" fx:id="categoryLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                     
+                                                 <Label styleClass="detail-label" text="URL:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                                                 <Hyperlink fx:id="urlHyperlink" styleClass="url-link" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                             </children>
+                                       <rowConstraints>
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                       </rowConstraints>
+                                          </GridPane>
+                                      </content>
+                                   </Tab>
+               </tabs>
+                            </TabPane>
+                        </children>
+                     </VBox>
+         
+                     <!-- Right Column: Comments -->
+                     <VBox prefHeight="681.0" prefWidth="365.0" spacing="15" styleClass="comments-container" HBox.hgrow="ALWAYS">
+            <children>
+                            <Label styleClass="section-title" text="Comments" />
+                            <ListView fx:id="commentsListView" prefHeight="458.0" prefWidth="358.0" styleClass="comments-list" VBox.vgrow="ALWAYS" />
+                            <TextArea fx:id="newCommentArea" prefHeight="96.0" prefWidth="362.0" promptText="Please comment:" styleClass="new-comment-area" />
+                            <Button styleClass="submit-button" text="Submit" />
+            </children>
+                     </VBox>
+                 </children>
+              </HBox>
+          </children>
+       </AnchorPane>
+   </content>
+</ScrollPane>

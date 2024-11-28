@@ -65,7 +65,7 @@ public class MainMenuController extends BaseController {
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         loadTableData();
         initializePagination();
-        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView());
+        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer);
     }
   
     public void registerEvent() {

@@ -73,7 +73,7 @@ public class SystemController {
                                         break;
                                     }
                                     case 7: {
-                                        controller.checkCartUser(username, "admin");
+                                        controller.checkCartUser(username.trim(), "admin");
                                         break;
                                     }
                                     case 8: {

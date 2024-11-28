@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 import static org.example.javaapplicationproject.CartManagement.fetchCartIdByUsername;
@@ -233,15 +234,20 @@ public class Controller {
                     e.printStackTrace();
                     return;
                 }
+
                 cartId = fetchCartIdByUsername(username);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
         }
-        // Lấy tổng số sách đã mượn và thông tin từng sách
+
+        // Truy vấn thông tin sách
         String countQuery = "SELECT COUNT(*) AS totalBooks FROM cart WHERE Cart_ID = ?";
-        String query = "SELECT * FROM cart WHERE Cart_ID = ?";
+        String query = "SELECT c.Cart_ID, c.startDate, c.endDate, c.ISBN, b.title " +
+                "FROM cart c " +
+                "JOIN books b ON c.ISBN = b.ISBN " +
+                "WHERE c.Cart_ID = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement countStmt = conn.prepareStatement(countQuery);
@@ -254,14 +260,17 @@ public class Controller {
                 int totalBooks = countRs.getInt("totalBooks");
                 System.out.println("Số sách đã mượn: " + totalBooks);
             }
+
             // Lấy thông tin chi tiết từng sách
             stmt.setInt(1, cartId);
             ResultSet rs = stmt.executeQuery();
+
             // Kiểm tra nếu giỏ hàng trống
             if (!rs.isBeforeFirst()) {
                 System.out.println("Giá sách cá nhân của người dùng \"" + username + "\" trống.");
                 return;
             }
+
             // Duyệt qua tất cả các sách trong giỏ
             System.out.println("Cart ID: " + cartId);
             System.out.println("------------------------------");
@@ -270,12 +279,18 @@ public class Controller {
                         rs.getInt("Cart_ID"),
                         rs.getString("startDate"),
                         rs.getString("endDate"),
-                        rs.getString("ISBN"),
-                        rs.getString("title")
+                        rs.getString("title"),
+                        rs.getString("ISBN")
                 );
                 cart.printInfo(); // In ra thông tin
-                // Hiển thị trạng thái sách
-                System.out.println(CartManagement.getBookStatus(cartId));
+                // Kiểm tra trạng thái của từng sách
+                LocalDate eventDate = LocalDate.parse(cart.getEndDate());
+                LocalDate currentDate = LocalDate.now();
+                String status = currentDate.isBefore(eventDate)
+                        ? "\033[32mCòn hạn\033[0m"
+                        : "\033[31mQuá hạn\033[0m";
+
+                System.out.printf("Trạng thái: %s\n", status);
                 System.out.println("+------------------------+");
             }
         } catch (SQLException e) {
@@ -287,7 +302,7 @@ public class Controller {
         try {
             System.out.println("Nhập tên sách bạn muốn kiêm tra: ");
             String book_title = br.readLine(); // Admin nhập tên sách
-            System.out.println(BookManagement.getBooksStatus(book_title));
+            System.out.println(BookManagement.getBooksStatus(book_title.trim()));
         } catch (IOException e) {
             e.printStackTrace();
             return;
