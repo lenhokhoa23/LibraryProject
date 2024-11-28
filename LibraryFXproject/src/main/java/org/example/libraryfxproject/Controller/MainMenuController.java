@@ -398,8 +398,17 @@ public class MainMenuController extends BaseController {
             System.out.println("Error, please fill in all fields before borrowing a book.");
             return;
         }
+        if (!cartService.hasIDInUser(Integer.parseInt(studentId))) {
+            showErrorMessage("Không tìm thấy ID người dùng");
+        }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+        }
+        if (!bookService.hasEnoughQuantity(isbn)) {
+            showErrorMessage("Sách này hiện không còn trong kho, bạn vui lòng chờ dịp khác nhé!");
+        }
+        if (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) {
+            showErrorMessage("Ngày được chọn không hợp lệ!\nVui lòng thử lại");
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
@@ -413,6 +422,7 @@ public class MainMenuController extends BaseController {
             showSuccessMessage("Mượn sách thành công");
         } catch (NumberFormatException e) {
             System.out.println("Error: Student ID must be a number.");
+            showErrorMessage("Mã người dùng phải là một số!");
         } catch (Exception e) {
             System.out.println("An error occurred while adding the cart: " + e.getMessage());
         }
@@ -425,6 +435,9 @@ public class MainMenuController extends BaseController {
             System.out.println("Error, please fill in all fields before returning a book.");
             return;
         }
+        if (!cartService.hasIDInUser(Integer.parseInt(studentId))) {
+            showErrorMessage("Không tìm thấy ID người dùng");
+        }
         if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
             showErrorMessage("Kho hàng của bạn không có sách này!");
             return;
@@ -435,6 +448,7 @@ public class MainMenuController extends BaseController {
             showSuccessMessage("Trả sách thành công");
         } catch (NumberFormatException e) {
             System.out.println("Error: Student ID must be a number.");
+            showErrorMessage("Mã người dùng phải là một số!");
         } catch (Exception e) {
             System.out.println("An error occurred while removing the cart: " + e.getMessage());
         }
