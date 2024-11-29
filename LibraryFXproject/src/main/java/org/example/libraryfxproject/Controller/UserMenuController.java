@@ -5,18 +5,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
-import javafx.scene.Node;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
@@ -41,11 +32,9 @@ public class UserMenuController extends BaseController {
     private final CartService cartService;
     private final UpdateService updateService;
     private final BookService bookService;
-    private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
-    private ObservableList<Book> bookList = FXCollections.observableArrayList();
+
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
-    private boolean isFilteredView = false;
 
     public UserMenuController(UserView userView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -190,28 +179,10 @@ public class UserMenuController extends BaseController {
             }
         });
 
-        userView.getRefreshButton().setOnAction(event -> {
-            isFilteredView = false;
-            userView.getSearchToggle().setSelected(false);
-
-            userView.getSearchToggle().getStyleClass().remove("view-toggle:selected"); // Xóa trạng thái đã chọn
-            if (!userView.getSearchToggle().getStyleClass().contains("view-toggle")) {
-                userView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
-            }
-            userView.getSearchCatalog().setText("");
-            loadTableData();
-            initializePagination();
-        });
-        userView.getSearchToggle().setOnAction(event -> {
-            CatalogEvent();
-        });
-
         userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
         userView.getUserReturnButton().setOnAction(this::handleReturnService);
-        setupTableColumns();
-        loadTableData();
         initializeTable();
-        initializePagination();
+        initializeDueTable();
     }
 
     public void initializeTable() {
@@ -318,71 +289,28 @@ public class UserMenuController extends BaseController {
         hideSuggestions();
     }
 
-    private void initializePagination() {
-        int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
-        userView.getCatalogPagination().setPageCount(pageCount);
-        userView.getCatalogPagination().setPageFactory(new Callback<Integer, Node>() {
-            @Override
-            public TableView<Book> call(Integer pageIndex) {
-                updateBookTable(pageIndex);
-                return userView.getCatalogTableView();
-            }
-        });
-        VBox.setVgrow(userView.getCatalogPagination(), Priority.ALWAYS);
-        userView.getCatalogPagination().setMaxHeight(Double.MAX_VALUE);
-    }
-
-    public void updateBookTableView(ObservableList<Book> books) {
-        userView.getCatalogTableView().getItems().clear();
-        userView.getCatalogTableView().setItems(books);
-    }
-
-    private void updateBookTable(int pageIndex) {
-        int start = pageIndex * ROWS_PER_PAGE;
-        int end = Math.min(start + ROWS_PER_PAGE, bookList.size());
-        userView.getCatalogTableView().setItems(FXCollections.observableArrayList(bookList.subList(start, end)));
-    }
-
-    private void setupTableColumns () {
-        userView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));
-        userView.getTitleColumn().setCellValueFactory(new PropertyValueFactory<>("title"));
-        userView.getAuthorColumn().setCellValueFactory(new PropertyValueFactory<>("author"));
-        userView.getSubjectColumn().setCellValueFactory(new PropertyValueFactory<>("subject"));
-        userView.getBookTypeColumn().setCellValueFactory(new PropertyValueFactory<>("bookType"));
-        userView.getQuantityColumn().setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        userView.getCatalogTableView().getColumns().clear();
-        userView.getCatalogTableView().getColumns().addAll(
-                userView.getItemIdColumn(),
-                userView.getTitleColumn(),
-                userView.getAuthorColumn(),
-                userView.getSubjectColumn(),
-                userView.getBookTypeColumn(),
-                userView.getQuantityColumn());
-
-    }
-
-    public void loadTableData() {
-        bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
-        updateBookTableView(bookList);
-    }
-
-    public void CatalogEvent() {
-        if (isFilteredView) {
-            loadTableData();
-            isFilteredView = false;
-        } else {
-            String searchType = userView.getFilterComboBox().getValue();
-            String searchText = userView.getSearchCatalog().getText().toUpperCase();
-            ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
-            if (searchType != null && !searchText.isEmpty()) {
-                filteredBooks = searchService.searchBookByAttribute(searchType.toLowerCase(), searchText);
-                updateBookTableView(filteredBooks);
-                isFilteredView = true;
-            }
-        }
-    }
-
     public void shutdown() {
         scheduler.shutdownNow();
     }
+
+    public void initializeDueTable() {
+        userView.getTimeDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(0)));
+        userView.getUserIdDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(1)));
+        userView.getIsbnDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(4)));
+        userView.getDueDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(5)));
+        updateService.populateTableViewByCartId(userView.getActivityDueTable(), userView.getUser().getUserID());
+
+        userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
+    }
+
+    public void handleNotificationButtonAction(Event event) {
+        userView.getNotificationPanel().setVisible(true);
+        userView.getNotificationButton().setOnAction(this::closeNotificationPanel);
+    }
+
+    private void closeNotificationPanel(Event event) {
+        userView.getNotificationPanel().setVisible(false);
+        userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
+    }
+
 }
