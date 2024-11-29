@@ -6,10 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
-import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
@@ -64,30 +64,6 @@ public class UserView {
     private Button userReturnButton;
 
     @FXML
-    private Pagination catalogPagination;
-
-    @FXML
-    private TableColumn<Book, Integer> itemIdColumn;
-
-    @FXML
-    private TableColumn<Book, String> titleColumn;
-
-    @FXML
-    private TableColumn<Book, String> authorColumn;
-
-    @FXML
-    private TableColumn<Book, String> subjectColumn;
-
-    @FXML
-    private TableColumn<Book, String> bookTypeColumn;
-
-    @FXML
-    private TableColumn<Book, String> quantityColumn;
-
-    @FXML
-    private TableView<Book> catalogTableView;
-
-    @FXML
     private TableView<ObservableList<String>> userBorrowedBooksTable;
 
     @FXML
@@ -108,25 +84,29 @@ public class UserView {
     @FXML
     private TableColumn<ObservableList<String>, String> borrowedDueDateColumn;
 
-
-    @FXML
-    private Button searchButton;
-
-    @FXML
-    private TextField searchCatalog;
-
-    @FXML
-    private ComboBox<String> filterComboBox;
-
-    @FXML
-    private Button refreshButton;
-
-
-    @FXML
-    private ToggleButton searchToggle;
-
     @FXML
     private Button refreshBorrowedBooksTable;
+
+    @FXML
+    private Button notificationButton;
+
+    @FXML
+    private TableView<ObservableList<String>> activityDueTable;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> timeDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> userIdDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> isbnDueColumn;
+
+    @FXML
+    private TableColumn<ObservableList<String>, String> dueDueColumn;
+
+    @FXML
+    private StackPane notificationPanel;
 
     private AlertDisplayer alertDisplayer;
 
@@ -202,60 +182,24 @@ public class UserView {
         isSelecting = selecting;
     }
 
-    public Pagination getCatalogPagination() {
-        return catalogPagination;
-    }
-
-    public void setCatalogPagination(Pagination catalogPagination) {
-        this.catalogPagination = catalogPagination;
-    }
-
-    public TableColumn<Book, Integer> getItemIdColumn() {
-        return itemIdColumn;
-    }
-
-    public void setItemIdColumn(TableColumn<Book, Integer> itemIdColumn) {
-        this.itemIdColumn = itemIdColumn;
-    }
-
-    public TableColumn<Book, String> getTitleColumn() {
-        return titleColumn;
-    }
-
-    public void setTitleColumn(TableColumn<Book, String> titleColumn) {
-        this.titleColumn = titleColumn;
-    }
-
-    public TableColumn<Book, String> getAuthorColumn() {
-        return authorColumn;
-    }
-
-    public void setAuthorColumn(TableColumn<Book, String> authorColumn) {
-        this.authorColumn = authorColumn;
-    }
-
-    public TableColumn<Book, String> getSubjectColumn() {
-        return subjectColumn;
-    }
-
-    public void setSubjectColumn(TableColumn<Book, String> subjectColumn) {
-        this.subjectColumn = subjectColumn;
-    }
-
-    public TableColumn<Book, String> getBookTypeColumn() {
-        return bookTypeColumn;
-    }
-
-    public void setBookTypeColumn(TableColumn<Book, String> bookTypeColumn) {
-        this.bookTypeColumn = bookTypeColumn;
-    }
-
-    public TableColumn<Book, String> getQuantityColumn() {
-        return quantityColumn;
-    }
-
-    public void setQuantityColumn(TableColumn<Book, String> quantityColumn) {
-        this.quantityColumn = quantityColumn;
+    public void initializeUserView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent userParent = fxmlLoader.load();
+            Scene scene = new Scene(userParent);
+            stage.setX(-5);
+            stage.setY(-5);
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
+            stage.setScene(scene);
+            stage.show();
+            UserMenuController userMenuController = new UserMenuController(this, alertDisplayer);
+            userMenuController.registerEvent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {
@@ -378,77 +322,59 @@ public class UserView {
         this.refreshBorrowedBooksTable = refreshBorrowedBooksTable;
     }
 
-    public TableView<Book> getCatalogTableView() {
-        return catalogTableView;
+    public TableView<ObservableList<String>> getActivityDueTable() {
+        return activityDueTable;
     }
 
-    public void setCatalogTableView(TableView<Book> catalogTableView) {
-        this.catalogTableView = catalogTableView;
+    public void setActivityDueTable(TableView<ObservableList<String>> activityDueTable) {
+        this.activityDueTable = activityDueTable;
     }
 
-    public void setSearchField(TextField searchField) {
-        this.searchField = searchField;
+    public TableColumn<ObservableList<String>, String> getTimeDueColumn() {
+        return timeDueColumn;
     }
 
-    public Button getSearchButton() {
-        return searchButton;
+    public void setTimeDueColumn(TableColumn<ObservableList<String>, String> timeDueColumn) {
+        this.timeDueColumn = timeDueColumn;
     }
 
-    public void setSearchButton(Button searchButton) {
-        this.searchButton = searchButton;
+    public TableColumn<ObservableList<String>, String> getUserIdDueColumn() {
+        return userIdDueColumn;
     }
 
-    public TextField getSearchCatalog() {
-        return searchCatalog;
+    public void setUserIdDueColumn(TableColumn<ObservableList<String>, String> userIdDueColumn) {
+        this.userIdDueColumn = userIdDueColumn;
     }
 
-    public void setSearchCatalog(TextField searchCatalog) {
-        this.searchCatalog = searchCatalog;
+    public TableColumn<ObservableList<String>, String> getIsbnDueColumn() {
+        return isbnDueColumn;
     }
 
-    public ComboBox<String> getFilterComboBox() {
-        return filterComboBox;
+    public void setIsbnDueColumn(TableColumn<ObservableList<String>, String> isbnDueColumn) {
+        this.isbnDueColumn = isbnDueColumn;
     }
 
-    public void setFilterComboBox(ComboBox<String> filterComboBox) {
-        this.filterComboBox = filterComboBox;
+    public TableColumn<ObservableList<String>, String> getDueDueColumn() {
+        return dueDueColumn;
     }
 
-    public Button getRefreshButton() {
-        return refreshButton;
+    public void setDueDueColumn(TableColumn<ObservableList<String>, String> dueDueColumn) {
+        this.dueDueColumn = dueDueColumn;
     }
 
-    public void setRefreshButton(Button refreshButton) {
-        this.refreshButton = refreshButton;
+    public StackPane getNotificationPanel() {
+        return notificationPanel;
     }
 
-
-    public ToggleButton getSearchToggle() {
-        return searchToggle;
+    public void setNotificationPanel(StackPane notificationPanel) {
+        this.notificationPanel = notificationPanel;
     }
 
-    public void setSearchToggle(ToggleButton searchToggle) {
-        this.searchToggle = searchToggle;
+    public Button getNotificationButton() {
+        return notificationButton;
     }
 
-    public void initializeUserView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent userParent = fxmlLoader.load();
-            Scene scene = new Scene(userParent);
-            stage.setX(-5);
-            stage.setY(-5);
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
-            stage.setScene(scene);
-            stage.show();
-            UserMenuController userMenuController = new UserMenuController(this, alertDisplayer);
-            userMenuController.registerEvent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setNotificationButton(Button notificationButton) {
+        this.notificationButton = notificationButton;
     }
-
 }
