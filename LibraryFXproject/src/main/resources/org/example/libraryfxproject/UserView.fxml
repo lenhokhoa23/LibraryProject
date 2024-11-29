@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -35,7 +37,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@userviewStyle.css" />
     </stylesheets>
@@ -361,48 +363,63 @@
                      </Tab>
          
                      <!-- Catalog Tab -->
-                     <Tab closable="false" text="Catalog">
-            <content>
-                            <VBox spacing="20" styleClass="content-container">
-                               <children>
-                                   <HBox alignment="CENTER_LEFT" spacing="10" styleClass="catalog-controls">
-                                      <children>
-                                          <ComboBox fx:id="genreFilter" promptText="Genre" />
-                                          <ComboBox fx:id="availabilityFilter" promptText="Availability" />
-                                          <TextField fx:id="catalogSearch" promptText="Search in catalog" />
-                                          <ComboBox fx:id="sortOrder" promptText="Sort by" />
-                                          <Region HBox.hgrow="ALWAYS" />
-                                          <ToggleButton fx:id="viewToggle" styleClass="view-toggle">
-                                              <graphic>
-                                                  <ImageView fitHeight="20" fitWidth="20">
-                                                     <image>
-                                                         <Image url="@images/refresh.png" />
-                                                     </image>
-                                                  </ImageView>
-                                              </graphic>
-                                          </ToggleButton>
-                                      </children>
-                                   </HBox>
-                                   <StackPane VBox.vgrow="ALWAYS">
-                                      <children>
-                                          <TableView fx:id="bookTableView" visible="true">
-                                              <columns>
-                                                  <TableColumn fx:id="coverColumn" prefWidth="130.0" styleClass="name-column" text="Cover" />
-                                                  <TableColumn fx:id="titleColumn" prefWidth="170.0" styleClass="name-column" text="Title" />
-                                                  <TableColumn fx:id="authorColumn" prefWidth="150" styleClass="name-column" text="Author" />
-                                                  <TableColumn fx:id="genreColumn" prefWidth="100" styleClass="name-column" text="Genre" />
-                                                  <TableColumn fx:id="availabilityColumn" prefWidth="100" styleClass="name-column" text="Availability" />
-                                                  <TableColumn fx:id="ratingColumn" prefWidth="100" styleClass="name-column" text="Rating" />
-                                              </columns>
-                                          </TableView>
-                                          <FlowPane fx:id="bookGridView" hgap="15" vgap="15" visible="false" />
-                                      </children>
-                                   </StackPane>
-                                   <Pagination fx:id="catalogPagination" styleClass="catalog-pagination" />
-                               </children>
-                            </VBox>
-            </content>
-                     </Tab>
+             <Tab closable="false" text="Catalog">
+                 <content>
+                     <VBox spacing="10" styleClass="content-container">
+                         <children>
+                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="catalog-controls">
+                                 <children>
+                                     <ComboBox fx:id="filterComboBox" promptText="Filter by">
+                                         <items>
+                                             <FXCollections fx:factory="observableArrayList">
+                                                 <String fx:value="ID" />
+                                                 <String fx:value="Title" />
+                                                 <String fx:value="Author" />
+                                                 <String fx:value="Subject" />
+                                                 <String fx:value="Category" />
+                                                 <String fx:value="BookType" />
+                                             </FXCollections>
+                                         </items>
+                                     </ComboBox>
+                                     <TextField fx:id="searchCatalog" promptText="Search catalog" />
+                                     <ToggleButton fx:id="searchToggle" prefHeight="20.0" prefWidth="84.0" styleClass="view-toggle">
+                                         <graphic>
+                                             <ImageView fitHeight="15" fitWidth="15">
+                                                 <image>
+                                                     <Image url="@images/search.png" />
+                                                 </image>
+                                             </ImageView>
+                                         </graphic>
+                                         Search
+                                     </ToggleButton>
+                                     <Button fx:id="refreshButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
+                                         <graphic>
+                                             <ImageView fitHeight="20" fitWidth="20">
+                                                 <image>
+                                                     <Image url="@images/refresh.png" />
+                                                 </image>
+                                             </ImageView>
+                                         </graphic>
+                                         Refresh
+                                     </Button>
+                                     <Region HBox.hgrow="ALWAYS" />
+                                 </children>
+                             </HBox>
+                             <TableView fx:id="catalogTableView" VBox.vgrow="ALWAYS">
+                                 <columns>
+                                     <TableColumn fx:id="itemIdColumn" prefWidth="80" text="ID" />
+                                     <TableColumn fx:id="titleColumn" prefWidth="200" text="Title" />
+                                     <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
+                                     <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
+                                     <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
+                                     <TableColumn fx:id="quantityColumn" prefWidth="174.0" styleClass="centered-column" text="Quantity" />
+                                 </columns>
+                             </TableView>
+                             <Pagination fx:id="catalogPagination" prefHeight="0.0" prefWidth="1251.0" styleClass="catalog-pagination" />
+                         </children>
+                     </VBox>
+                 </content>
+             </Tab>
          
                      <!-- My Books Tab -->
                      <Tab closable="false" text="My Books">

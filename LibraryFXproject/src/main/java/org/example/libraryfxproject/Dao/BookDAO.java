@@ -163,9 +163,16 @@ public class BookDAO extends GeneralDAO<String, Book> {
             attribute = "no";
         }
         String query = "SELECT * FROM books WHERE " + attribute + " = ?";
+        if (!attribute.equals("no")) {
+            query = "SELECT * FROM books WHERE " + attribute + " like ?";
+        }
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, value);
+            if (!attribute.equals("no")) {
+                statement.setString(1, "%" + value + "%");
+            } else {
+                statement.setString(1, value);
+            }
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Book book = new Book(
@@ -202,6 +209,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
+
     public String fetchPriceFromBooks(String ISBN, int searchType) {
         String price = null;
         String query = "SELECT price FROM books WHERE ISBN = ?";  // Truy vấn trực tiếp cột price theo ISBN
@@ -219,7 +227,6 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
         return price;  // Trả về giá hoặc null nếu không tìm thấy
     }
-
 
     public void insertBookToDatabase(String title, String author, String pubdate, String releaseDate,
                                      String ISBN, String price, String subject, String category,

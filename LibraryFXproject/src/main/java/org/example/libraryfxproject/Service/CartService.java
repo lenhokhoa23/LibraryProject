@@ -14,8 +14,7 @@ public class CartService {
     private static CartService cartService;
 
     private CartService() {
-        LoadService loadService = LoadService.getInstance();
-        loadService.loadData(cartDAO);
+        LoadService.loadData(cartDAO);
     }
 
     public static synchronized CartService getInstance() {
@@ -44,6 +43,10 @@ public class CartService {
         return cartDAO.hasBookInCart(isbn, cartId);
     }
 
+    public boolean hasIDInUser(int ID) {
+        String username = userDAO.getUsernameByCartId(ID);
+        return username != null;
+    }
     public static String getBookStatus(String endDateString) {
         LocalDate currentDate = LocalDate.now();  // Ngày hiện tại
 
