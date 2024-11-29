@@ -121,5 +121,28 @@ public class UserDAO extends GeneralDAO<String, User> {
 
         return username;
     }
-
+    public void deleteUserForNextRun(String usernameToDelete) {
+        String deleteSQLUser = "DELETE FROM user WHERE username = ?";
+        String deleteSQLAccount = "DELETE FROM accounts WHERE username = ?";
+        try (PreparedStatement stmtUser = connection.prepareStatement(deleteSQLUser)) {
+            stmtUser.setString(1, usernameToDelete);
+            int rowsAffectedUser = stmtUser.executeUpdate();
+            if (rowsAffectedUser == 0) {
+                throw new SQLException("User not found in the database.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // Delete from 'accounts' table
+        try (PreparedStatement stmtAccount = connection.prepareStatement(deleteSQLAccount)) {
+            stmtAccount.setString(1, usernameToDelete);
+            int rowsAffectedAccount = stmtAccount.executeUpdate();
+            if (rowsAffectedAccount == 0) {
+                throw new SQLException("Account associated with user not found.");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        System.out.println("User and associated account deleted successfully.");
+    }
 }
