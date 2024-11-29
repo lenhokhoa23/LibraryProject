@@ -233,15 +233,14 @@ public class MainMenuController extends BaseController {
                 String attribute = mainMenuView.getAttributeField().getText();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    System.out.println("Please fill in all fields!");
+                    showErrorMessage("Please fill in all fields!");
                 } else {
                     bookService.modifyBook(ISBN, attribute, newValue);
-                    System.out.println("Book updated successfully!");
+                    showSuccessMessage("Book updated successfully!");
                     stage.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("An error occurred. Please check the input values.");
+                showErrorMessage("An error occurred. Please check the input values.");
             }
         });
         mainMenuView.getBackButton().setOnAction(event -> stage.close());mainMenuView.getUpdateButton().setOnAction(event -> {
@@ -250,15 +249,14 @@ public class MainMenuController extends BaseController {
                 String attribute = mainMenuView.getAttributeField().getText();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    System.out.println("Please fill in all fields!");
+                    showErrorMessage("Please fill in all fields!");
                 } else {
                     bookService.modifyBook(ISBN, attribute, newValue);
-                    System.out.println("Book updated successfully!");
+                    showSuccessMessage("Book updated successfully!");
                     stage.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("An error occurred. Please check the input values.");
+                showErrorMessage("An error occurred. Please check the input values.");
             }
         });
         mainMenuView.getBackButton().setOnAction(event -> stage.close());
@@ -395,7 +393,7 @@ public class MainMenuController extends BaseController {
         LocalDate dueDate = mainMenuView.getBorrowDueDatePicker1().getValue();
 
         if (studentId.isEmpty() || isbn.isEmpty() || dueDate == null) {
-            System.out.println("Error, please fill in all fields before borrowing a book.");
+            showErrorMessage("Error, please fill in all fields before borrowing a book.");
             return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
@@ -410,11 +408,11 @@ public class MainMenuController extends BaseController {
                         isbn
             );
             System.out.println("Cart added successfully!");
-            showSuccessMessage("Mượn sách thành công");
+            showSuccessMessage("Borrow book successfully!!!!!!");
         } catch (NumberFormatException e) {
-            System.out.println("Error: Student ID must be a number.");
+            showErrorMessage("Student ID must be a number.");
         } catch (Exception e) {
-            System.out.println("An error occurred while adding the cart: " + e.getMessage());
+            showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
     }
 
@@ -422,7 +420,7 @@ public class MainMenuController extends BaseController {
         String studentId = mainMenuView.getReturnStudentIdField1().getText();
         String isbn = mainMenuView.getReturnISBNField1().getText();
         if (studentId.isEmpty() || isbn.isEmpty()) {
-            System.out.println("Error, please fill in all fields before returning a book.");
+            showErrorMessage("Error, please fill in all fields before returning a book.");
             return;
         }
         if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
@@ -434,9 +432,9 @@ public class MainMenuController extends BaseController {
             System.out.println("Cart removed successfully!");
             showSuccessMessage("Trả sách thành công");
         } catch (NumberFormatException e) {
-            System.out.println("Error: Student ID must be a number.");
+            showErrorMessage("Error: Student ID must be a number.");
         } catch (Exception e) {
-            System.out.println("An error occurred while removing the cart: " + e.getMessage());
+            showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
     }
 
@@ -558,9 +556,13 @@ public class MainMenuController extends BaseController {
             int pageNumber = Integer.parseInt(mainMenuView.getPageNumberField().getText()) - 1;
             if (pageNumber >= 0 && pageNumber < mainMenuView.getCatalogPagination().getPageCount()) {
                 mainMenuView.getCatalogPagination().setCurrentPageIndex(pageNumber);
+            } else {
+                throw new RuntimeException();
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            alertDisplayer.showErrorAlert("Number Formatting Error","Page must be an positive integer.");
+        } catch (RuntimeException e) {
+            alertDisplayer.showErrorAlert("Exceed Number", "Page not found!");
         }
     }
 
@@ -593,30 +595,24 @@ public class MainMenuController extends BaseController {
                         ISBN, price, subject, category, URL, bookType, quantity);
 
                 switch (validate) {
-                    case 1 -> alertDisplayer.showErrorAlert("Invalid ISBN. It must be exactly 13 digits.", "Lỗi");
-                    case 2 ->
-                            alertDisplayer.showErrorAlert("Invalid title. Special characters are not allowed.", "Lỗi");
-                    case 3 ->
-                            alertDisplayer.showErrorAlert("Invalid price or quantity. Both must be positive numbers.", "Lỗi");
-                    case 4 -> alertDisplayer.showErrorAlert("Invalid subject. Numbers are not allowed.", "Lỗi");
-                    case 5 -> alertDisplayer.showErrorAlert("Invalid category. Numbers are not allowed.", "Lỗi");
-                    case 6 ->
-                            alertDisplayer.showErrorAlert("Invalid URL. It must follow the format http:// or https://.", "Lỗi");
-                    case 7 ->
-                            alertDisplayer.showErrorAlert("Invalid book type. Special characters are not allowed.", "Lỗi");
-                    case 8 ->
-                            alertDisplayer.showErrorAlert("Invalid quantity. It must be a positive integer.", "Lỗi");
-                    case 9 ->
-                            alertDisplayer.showErrorAlert("Invalid author. Special characters are not allowed.", "Lỗi");
+                    case 1 -> alertDisplayer.showErrorAlert("Error", "Invalid ISBN. It must be exactly 13 digits.");
+                    case 2 -> alertDisplayer.showErrorAlert("Error", "Invalid title. Special characters are not allowed.");
+                    case 3 -> alertDisplayer.showErrorAlert("Error", "Invalid price or quantity. Both must be positive numbers.");
+                    case 4 -> alertDisplayer.showErrorAlert("Error", "Invalid subject. Numbers are not allowed.");
+                    case 5 -> alertDisplayer.showErrorAlert("Error", "Invalid category. Numbers are not allowed.");
+                    case 6 -> alertDisplayer.showErrorAlert("Error", "Invalid URL. It must follow the format http:// or https://.");
+                    case 7 -> alertDisplayer.showErrorAlert("Error", "Invalid book type. Special characters are not allowed.");
+                    case 8 -> alertDisplayer.showErrorAlert("Error", "Invalid quantity. It must be a positive integer.");
+                    case 9 -> alertDisplayer.showErrorAlert("Error", "Invalid author. Special characters are not allowed.");
                     default -> {
                         // Nếu tất cả đều hợp lệ, thêm sách vào database
                         bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
-                        alertDisplayer.showConfirmationAlert("Thêm sách thành công", "Thông báo");
+                        alertDisplayer.showInformationAlert("Successful message!", "Add book successfully!");
                         addBookStage.close();
                     }
                 }
             } catch (Exception e) {
-                alertDisplayer.showErrorAlert("Lỗi khi thêm sách", "Lỗi");
+                alertDisplayer.showErrorAlert( "Error", "An error occured when adding book!");
             }
         });
         // Handle Back button click

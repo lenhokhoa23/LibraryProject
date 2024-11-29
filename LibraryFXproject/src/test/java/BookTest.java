@@ -42,7 +42,7 @@ public class BookTest {
         String author = "Joshua Bloch";
         String pubdateStr = "01-Jan-01";
         String releaseDateStr = "01-Feb-01";
-        String ISBN = "978-0134685991";
+        String ISBN = "9780134685991";
         String price = "45.99";
         String subject = "Programming";
         String category = "Computing";
