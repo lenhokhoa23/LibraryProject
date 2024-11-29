@@ -38,4 +38,8 @@ public class UserService {
     public User findUserByUsername(String username) {
         return userDAO.findUserByUsername(username);
     }
+
+    public void deleteUser(String usernameToDelete) {
+        userDAO.deleteUserForNextRun(usernameToDelete);
+    }
 }

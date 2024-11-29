@@ -49,7 +49,7 @@ public class    BookService {
         }
 
         try {
-            Integer.parseInt(price);
+            Double.parseDouble(price);
         } catch (NumberFormatException e) {
             return 3; // Invalid price
         }

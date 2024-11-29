@@ -47,14 +47,18 @@ public class ContextMenuController extends BaseController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setContentText("This action cannot be undone.");
-        showConfirmation("Are you sure you want to delete this record?");
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                Book selectedBook = catalogTableView.getSelectionModel().getSelectedItem();
-                if (selectedBook != null) {
-                    bookService.deleteBookFromDatabase(selectedBook.getTitle());
-                    catalogTableView.getItems().remove(selectedBook);
-                }
+        alert.showAndWait().ifPresent(response1 -> {
+            if (response1 == ButtonType.OK) {
+                showConfirmation("Are you sure you want to delete this record?");
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        Book selectedBook = catalogTableView.getSelectionModel().getSelectedItem();
+                        if (selectedBook != null) {
+                            bookService.deleteBookFromDatabase(selectedBook.getTitle());
+                            catalogTableView.getItems().remove(selectedBook);
+                        }
+                    }
+                });
             }
         });
     }

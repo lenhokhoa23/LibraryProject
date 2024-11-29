@@ -8,8 +8,9 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -207,6 +208,7 @@ public class MainMenuController extends BaseController {
                 new Thread(exportTask).start();
             }
         });
+        setupContextMenuForStudent();
     }
 
     public void registerForAddStudent(Stage addStudentStage) {
@@ -618,6 +620,44 @@ public class MainMenuController extends BaseController {
         // Handle Back button click
         mainMenuView.getBackButton().setOnAction(event -> {
             addBookStage.close();
+        });
+    }
+
+
+    private void setupContextMenuForStudent() {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete");
+        contextMenu.getItems().addAll(deleteItem);
+        deleteItem.setOnAction(event -> handleDeleteStudentAction());
+        mainMenuView.getStudentTableView().setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                User selectedUser = mainMenuView.getStudentTableView().getSelectionModel().getSelectedItem();
+                if (selectedUser != null) {
+                    contextMenu.show(mainMenuView.getStudentTableView(), event.getScreenX(), event.getScreenY());
+                } else {
+                    contextMenu.hide();
+                }
+            }
+        });
+    }
+
+    private void handleDeleteStudentAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setContentText("This action cannot be undone.");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                showConfirmation("Are you sure you want to delete this record?");
+                alert.showAndWait().ifPresent(response2 -> {
+                    if (response2 == ButtonType.OK) {
+                        User selectedUser = mainMenuView.getStudentTableView().getSelectionModel().getSelectedItem();
+                        if (selectedUser != null) {
+                            userService.deleteUser(selectedUser.getUsername());
+                            mainMenuView.getStudentTableView().getItems().remove(selectedUser);
+                        }
+                    }
+                });
+            }
         });
     }
 

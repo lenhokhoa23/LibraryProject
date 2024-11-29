@@ -57,29 +57,44 @@ public class UserDAO extends GeneralDAO<String, User> {
     }
 
     public void saveUserToDatabase(String name, String email, String phoneNumber, String username, String password, String membershipType) {
-        String insertUserSQL = "INSERT INTO user (username, name, email, phoneNumber, borrowedBooks, membershipType) VALUES (?, ?, ?, ?, 0, ?)";
+        String findNextUserIDQuery = "SELECT t1.cart_id + 1 AS next_id FROM user t1 "
+                + "LEFT JOIN user t2 ON t1.cart_id + 1 = t2.cart_id WHERE t2.cart_id IS NULL LIMIT 1";
+        String insertUserSQL = "INSERT INTO user (cart_id, username, name, email, phoneNumber, borrowedBooks, membershipType) "
+                + "VALUES (?, ?, ?, ?, ?, 0, ?)";
+
         String insertAccountSQL = "INSERT INTO accounts (username, password, role) VALUES (?, ?, 'user')";
-
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatementUser = connection.prepareStatement(insertUserSQL);
-             PreparedStatement preparedStatementAccount = connection.prepareStatement(insertAccountSQL)) {
+             PreparedStatement findNextUserIDStmt = connection.prepareStatement(findNextUserIDQuery);
+             PreparedStatement insertUserStmt = connection.prepareStatement(insertUserSQL);
+             PreparedStatement insertAccountStmt = connection.prepareStatement(insertAccountSQL)) {
 
-            preparedStatementAccount.setString(1, username);
-            preparedStatementAccount.setString(2, password);
-            preparedStatementAccount.executeUpdate();
+            // Tìm cart_id tiếp theo cho bảng user
+            int nextCartID = 0;
+            ResultSet rsUserID = findNextUserIDStmt.executeQuery();
+            if (rsUserID.next()) {
+                nextCartID = rsUserID.getInt("next_id");
+            } else {
+                throw new SQLException("Failed to find the next cart_id.");
+            }
+            insertAccountStmt.setString(1, username);
+            insertAccountStmt.setString(2, password);
+            insertAccountStmt.executeUpdate();
 
-            preparedStatementUser.setString(1, username);
-            preparedStatementUser.setString(2, name);
-            preparedStatementUser.setString(3, email);
-            preparedStatementUser.setString(4, phoneNumber);
-            preparedStatementUser.setString(5, membershipType);
-            preparedStatementUser.executeUpdate();
 
+            insertUserStmt.setInt(1, nextCartID); // cart_id
+            insertUserStmt.setString(2, username); // username
+            insertUserStmt.setString(3, name); // name
+            insertUserStmt.setString(4, email); // email
+            insertUserStmt.setString(5, phoneNumber); // phoneNumber
+            insertUserStmt.setString(6, membershipType); // membershipType
+            insertUserStmt.executeUpdate();
+            System.out.println("User and account added successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error adding user and account: " + e.getMessage());
         }
-
     }
+
 
     public List<User> findUserByComponentOfUserName(String component) {
         List<User> userList = new ArrayList<>();
@@ -121,28 +136,34 @@ public class UserDAO extends GeneralDAO<String, User> {
 
         return username;
     }
+
     public void deleteUserForNextRun(String usernameToDelete) {
         String deleteSQLUser = "DELETE FROM user WHERE username = ?";
         String deleteSQLAccount = "DELETE FROM accounts WHERE username = ?";
-        try (PreparedStatement stmtUser = connection.prepareStatement(deleteSQLUser)) {
-            stmtUser.setString(1, usernameToDelete);
-            int rowsAffectedUser = stmtUser.executeUpdate();
-            if (rowsAffectedUser == 0) {
-                throw new SQLException("User not found in the database.");
+
+        try {
+            connection.setAutoCommit(false); // Begin transaction
+            try (PreparedStatement stmtAccount = connection.prepareStatement(deleteSQLAccount)) {
+                stmtAccount.setString(1, usernameToDelete);
+                stmtAccount.executeUpdate(); // No exception if no rows affected
             }
+            connection.commit();
+            System.out.println("User and associated account deleted successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // Delete from 'accounts' table
-        try (PreparedStatement stmtAccount = connection.prepareStatement(deleteSQLAccount)) {
-            stmtAccount.setString(1, usernameToDelete);
-            int rowsAffectedAccount = stmtAccount.executeUpdate();
-            if (rowsAffectedAccount == 0) {
-                throw new SQLException("Account associated with user not found.");
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
             }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete user and account: " + e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Reset auto-commit
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-        System.out.println("User and associated account deleted successfully.");
     }
+
 }
