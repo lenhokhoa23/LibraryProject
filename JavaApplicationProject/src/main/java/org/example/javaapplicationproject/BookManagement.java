@@ -1,10 +1,8 @@
 package org.example.javaapplicationproject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class BookManagement {
@@ -290,12 +288,18 @@ public class BookManagement {
                 String isbn = rs3.getString("isbn");
                 String title = rs3.getString("title");
                 int cartId = rs3.getInt("Cart_ID");
-                String endDate = rs3.getString("endDate");
-
+                Date endDate = rs3.getDate("endDate");
+                LocalDate eventDate = endDate.toLocalDate();
+                LocalDate currentDate = LocalDate.now();
+                // Kiểm tra trạng thái sách
+                String status = currentDate.isBefore(eventDate)
+                        ? "\033[32mCòn hạn\033[0m"
+                        : "\033[31mQuá hạn\033[0m";
                 statusBuilder.append("Cart ID: ").append(cartId)
-                        .append(", ISBN: ").append(isbn)
-                        .append(", sách \"").append(title)
-                        .append("\"\nHạn: ").append(endDate)
+                        .append("\n ISBN: ").append(isbn)
+                        .append("\n Sách \"").append(title)
+                        .append("\"\nHạn: ").append(String.valueOf(endDate))
+                        .append("Trạng thái: " + status)
                         .append("\n*------------------------------------*\n");
             }
 

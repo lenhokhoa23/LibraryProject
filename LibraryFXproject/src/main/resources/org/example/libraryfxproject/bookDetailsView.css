@@ -1,0 +1,73 @@
+/* General styling for the BookDetailsView */
+.book-details-container {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* Title styling */
+.book-details-container Label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-alignment: center;
+    -fx-padding: 10px 0;
+}
+
+/* VBox container for statuses */
+#statusContainer {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-alignment: top-left;
+    -fx-background-radius: 10px;
+}
+
+/* Styling individual status Labels */
+.status-label {
+    -fx-background-color: #ecf0f1;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-alignment: top-left;
+    -fx-min-width: 300px;
+}
+
+/* Styling for the Due Date */
+.status-label .due-date {
+    -fx-font-style: italic;
+    -fx-text-fill: #7f8c8d;
+}
+
+/* Styling for "Due Date" label */
+.status-label .status {
+    -fx-font-weight: bold;
+}
+
+/* Add some spacing and padding between status entries */
+.status-label + .status-label {
+    -fx-margin-top: 10px;
+}
+
+/* Hover effect for status labels */
+.status-label:hover {
+    -fx-background-color: #dfe6e9;
+    -fx-cursor: hand;
+}
+
+/* Styling for the "No book borrowed" message */
+.no-book-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}

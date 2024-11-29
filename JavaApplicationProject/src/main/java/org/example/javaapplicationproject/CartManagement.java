@@ -92,37 +92,6 @@ public class CartManagement {
         return cartId;
     }
 
-    /** This function cho biết trạng thái của quyển sách trong giỏ hàng. */
-    public static String getBookStatus(int Cart_ID) {
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            String query = "SELECT endDate FROM cart WHERE Cart_ID = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, Cart_ID); // Lấy endDate từ cart có ID tương ứng.
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                // Lấy ra giá trị kiểu java.sql.Date từ cột "endDate"
-                Date eventDate = rs.getDate("endDate");
-
-                // Chuyển đổi java.sql.Date thành java.time.LocalDate để dễ so sánh
-                LocalDate eventLocalDate = eventDate.toLocalDate();
-
-                // Lấy thời gian hiện tại
-                LocalDate currentDate = LocalDate.now();
-
-                // So sánh thời gian hiện tại với thời gian trong cơ sở dữ liệu
-                if (currentDate.isBefore(eventLocalDate)) {
-                    return "\033[32mTrạng thái: Còn hạn.\033[0m";
-                } else {
-                    return "\033[31mTrạng thái: Quá hạn mượn.\033[0m";
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "Không xác định.";
-    }
-
     public void deleteCart(String isbn, int cartId) {
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
