@@ -6,6 +6,9 @@ module org.example.libraryfxproject {
     requires org.apache.poi.ooxml;
     requires org.controlsfx.controls;
     requires java.desktop;
+    requires com.google.zxing;
+    requires org.apache.commons.io;
+    requires com.google.zxing.javase;
 
 
     opens org.example.libraryfxproject to javafx.fxml;

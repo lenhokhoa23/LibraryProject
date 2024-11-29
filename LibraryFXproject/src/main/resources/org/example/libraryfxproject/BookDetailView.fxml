@@ -37,7 +37,7 @@
             
                             <TabPane styleClass="details-tabs">
                <tabs>
-                                   <Tab styleClass="detail-label" closable="false" text="Detailed Informations">
+                                   <Tab closable="false" styleClass="detail-label" text="Detailed Informations">
                                       <content>
                                           <GridPane hgap="15" styleClass="details-grid" vgap="10">
                                               <columnConstraints>
@@ -47,22 +47,22 @@
                                              <children>
                      
                                                  <Label styleClass="detail-label" text="Type:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                 <Label styleClass="detail-label" fx:id="bookTypeLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                 <Label fx:id="bookTypeLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                      
                                                  <Label styleClass="detail-label" text="Publish Date:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                 <Label styleClass="detail-label" fx:id="pubDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                 <Label fx:id="pubDateLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      
                                                  <Label styleClass="detail-label" text="Release Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                                 <Label styleClass="detail-label" fx:id="releaseDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                 <Label fx:id="releaseDateLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      
                                                  <Label styleClass="detail-label" text="Buy Price:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                                 <Label styleClass="detail-label" fx:id="priceLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                 <Label fx:id="priceLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      
                                                  <Label styleClass="detail-label" text="Subject:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                                                 <Label styleClass="detail-label" fx:id="subjectLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                 <Label fx:id="subjectLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      
                                                  <Label styleClass="detail-label" text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                                                 <Label styleClass="detail-label" fx:id="categoryLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                 <Label fx:id="categoryLabel" styleClass="detail-label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      
                                                  <Label styleClass="detail-label" text="URL:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                                                  <Hyperlink fx:id="urlHyperlink" styleClass="url-link" GridPane.columnIndex="1" GridPane.rowIndex="6" />
@@ -87,8 +87,15 @@
                      <!-- Right Column: Comments -->
                      <VBox prefHeight="681.0" prefWidth="365.0" spacing="15" styleClass="comments-container" HBox.hgrow="ALWAYS">
             <children>
+                            <VBox alignment="CENTER" spacing="10" styleClass="qr-code-container">
+                               <children>
+                               <Label styleClass="section-title" text="QR Code" />
+                               <ImageView fx:id="qrCodeImageView" fitHeight="200" fitWidth="200" preserveRatio="true" />
+                                   <Button fx:id="saveQrCodeButton" styleClass="save-qr-button" text="Save QR Code"/>
+                               </children>
+                            </VBox>
                             <Label styleClass="section-title" text="Comments" />
-                            <ListView fx:id="commentsListView" prefHeight="458.0" prefWidth="358.0" styleClass="comments-list" VBox.vgrow="ALWAYS" />
+                            <ListView fx:id="commentsListView" prefHeight="218.0" prefWidth="352.0" styleClass="comments-list" VBox.vgrow="ALWAYS" />
                             <TextArea fx:id="newCommentArea" prefHeight="96.0" prefWidth="362.0" promptText="Please comment:" styleClass="new-comment-area" />
                             <Button styleClass="submit-button" text="Submit" />
             </children>
