@@ -139,8 +139,6 @@ public class BookDAO extends GeneralDAO<String, Book> {
                 book.setURL(resultSet.getString("URL"));
                 book.setBookType(resultSet.getString("bookType"));
                 book.setQuantity(resultSet.getString("quantity"));
-            } else {
-                System.out.println("Không tìm thấy sách có tựa đề " + type);
             }
 
         } catch (SQLException e) {
@@ -202,6 +200,24 @@ public class BookDAO extends GeneralDAO<String, Book> {
 
     public String fetchTitleFromBooks(String type, int searchType) {
         return findBookByDistinctAttribute(type, searchType).getTitle();
+    }
+
+    public String fetchPriceFromBooks(String ISBN, int searchType) {
+        String price = null;
+        String query = "SELECT price FROM books WHERE ISBN = ?";  // Truy vấn trực tiếp cột price theo ISBN
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, ISBN);  // Set ISBN vào câu truy vấn
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    price = resultSet.getString("price");  // Lấy giá trực tiếp từ kết quả
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return price;  // Trả về giá hoặc null nếu không tìm thấy
     }
 
 
@@ -307,32 +323,6 @@ public class BookDAO extends GeneralDAO<String, Book> {
             e.printStackTrace();
         }
     }
-
-    /*public String getBooksStatus(String bookTitle) {
-        StringBuilder statusBuilder = new StringBuilder();
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            // Truy vấn để lấy số lượng sách cùng tên và trạng thái của từng quyển sách
-            String query = "SELECT Cart_ID, endDate FROM cart WHERE title = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, bookTitle);
-            ResultSet rs = stmt.executeQuery();
-
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                int cartId = rs.getInt("Cart_ID");
-                String status = CartDAO.getBookStatus("viettran97"); // Gọi hàm lấy trạng thái
-                statusBuilder.append("Cart ID: ").append(cartId)
-                        .append(" - ").append(status).append("\n");
-            }
-
-            // Thêm thông tin số lượng sách vào kết quả
-            statusBuilder.insert(0, "Số lượng sách \"" + bookTitle + "\": " + count + "\n");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return statusBuilder.toString();
-    }*/
 
     public void loadGenreCirculationData(PieChart genreCirculationChart) {
         String sql = "SELECT category, SUM(quantity) AS total_quantity " +

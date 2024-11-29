@@ -115,6 +115,7 @@ public class BookDetailsView {
 
     public void setReleaseDateLabel(Label releaseDateLabel) {
         this.releaseDateLabel = releaseDateLabel;
+
     }
 
     public Label getPriceLabel() {
