@@ -327,10 +327,19 @@ public class MainMenuView {
     @FXML
     private Button searchButton1;
 
+    @FXML
+    private Button quickAddBookButton;
+
+
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
     }
+
+    public Button getQuickAddBookButton() {
+        return quickAddBookButton;
+    }
+
     public TableColumn<Book, Integer> getItemIdColumn() {
         return itemIdColumn;
     }
@@ -874,7 +883,7 @@ public class MainMenuView {
     }
 
     public void initializeMainMenuView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
+        alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
         fxmlLoader.setController(this);
         try {

@@ -509,7 +509,7 @@ public class UserView {
     }
 
     public void initializeUserView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
+        alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
         fxmlLoader.setController(this);
         try {

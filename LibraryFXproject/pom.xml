@@ -73,6 +73,14 @@
             <artifactId>javase</artifactId>
             <version>3.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-books</artifactId>
+            <version>v1-rev20201021-1.30.10</version>
+        </dependency>
+
+
+
 
     </dependencies>
 
