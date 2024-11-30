@@ -8,7 +8,9 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
@@ -37,6 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
@@ -50,7 +53,7 @@ public class MainMenuController extends BaseController {
     private ObservableList<User> studentList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
-    private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
+    private final int ROWS_PER_PAGE = 15;
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
 
@@ -69,7 +72,9 @@ public class MainMenuController extends BaseController {
     }
   
     public void registerEvent() {
-        hideSuggestions();
+        hideSuggestions(mainMenuView.getSuggestions());
+        hideSuggestions(mainMenuView.getSuggestions1());
+        hideSuggestions(mainMenuView.getSuggestions2());
 
         mainMenuView.getLogoutItem().setOnAction(event -> {
             Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
@@ -77,46 +82,9 @@ public class MainMenuController extends BaseController {
             LoginView.openLoginView(new Stage());
         });
 
-        mainMenuView.getSearchField().setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                performSearch();
-            } else {
-                scheduleSearch();
-            }
-        });
-
-        mainMenuView.getSuggestions().setOnMouseClicked((MouseEvent event) -> {
-            if (event.getClickCount() == 1) {
-                mainMenuView.setSelecting(false);
-                String selectedItem = mainMenuView.getSuggestions().getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    mainMenuView.getSearchField().setText(selectedItem);
-                    hideSuggestions();
-                    performSearch();
-                }
-            }
-        });
-
-        mainMenuView.getSearchField().focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                showSuggestionsIfNotEmpty();
-            } else {
-                Platform.runLater(() -> {
-                    if (!mainMenuView.isSelecting()) {
-                        hideSuggestions();
-                    }
-                });
-            }
-        });
-
-        mainMenuView.getSearchField().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                hideSuggestions();
-            } else {
-                scheduleSearch();
-            }
-        });
-
+        handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
+        handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
+        handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
 
         mainMenuView.getModifyButton().setOnAction(event -> {
             mainMenuView.initializeModifyBookView(this);
@@ -126,7 +94,7 @@ public class MainMenuController extends BaseController {
             isFilteredView = false;
             mainMenuView.getSearchToggle().setSelected(false);
 
-            mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected"); // Xóa trạng thái đã chọn
+            mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected");
             if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
                 mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
             }
@@ -134,6 +102,7 @@ public class MainMenuController extends BaseController {
             loadTableData();
             initializePagination();
         });
+
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
@@ -164,6 +133,7 @@ public class MainMenuController extends BaseController {
         initializePieChart();
         initializeBarChart();
         initializeTable();
+
         mainMenuView.getBorrowServiceButton().setOnAction(this::handleBorrowService);
         mainMenuView.getReturnServiceButton().setOnAction(this::handleReturnService);
 
@@ -205,6 +175,77 @@ public class MainMenuController extends BaseController {
 
                 mainMenuView.getProgressIndicator().setVisible(true);
                 new Thread(exportTask).start();
+            }
+        });
+        mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
+
+        mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
+        mainMenuView.getSuggestions1().setOnMousePressed(event -> mainMenuView.setSelecting1(true));
+        mainMenuView.getSuggestions2().setOnMousePressed(event -> mainMenuView.setSelecting2(true));
+
+        mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
+            if (!mainMenuView.getSearchField().isFocused() && !mainMenuView.getSuggestions().isFocused()) {
+                hideSuggestions(mainMenuView.getSuggestions());
+            }
+            if (!mainMenuView.getBorrowISBNField1().isFocused() && !mainMenuView.getSuggestions1().isFocused()) {
+                hideSuggestions(mainMenuView.getSuggestions1());
+            }
+            if (!mainMenuView.getReturnISBNField1().isFocused() && !mainMenuView.getSuggestions2().isFocused()) {
+                hideSuggestions(mainMenuView.getSuggestions2());
+            }
+        });
+    }
+
+    private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
+        textField.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                performSearch(listView);
+            } else {
+                scheduleSearch(textField, listView);
+            }
+        });
+
+        listView.setOnMouseClicked((MouseEvent event) -> {
+            if (event.getClickCount() == 1) {
+                if (x == 0) {
+                    mainMenuView.setSelecting(false);
+                } else if (x == 1) {
+                    mainMenuView.setSelecting1(false);
+                } else if (x == 2) {
+                    mainMenuView.setSelecting2(false);
+                }
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    textField.setText(selectedItem);
+                    hideSuggestions(listView);
+                    performSearch(listView);
+                }
+            }
+        });
+
+        textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                showSuggestionsIfNotEmpty(listView);
+            } else {
+                Platform.runLater(() -> {
+                    if (!mainMenuView.isSelecting() && x == 0) {
+                        hideSuggestions(listView);
+                    }
+                    if (!mainMenuView.isSelecting1() && x == 1) {
+                        hideSuggestions(listView);
+                    }
+                    if (!mainMenuView.isSelecting2() && x == 2) {
+                        hideSuggestions(listView);
+                    }
+                });
+            }
+        });
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                hideSuggestions(listView);
+            } else {
+                scheduleSearch(textField, listView);
             }
         });
     }
@@ -292,15 +333,6 @@ public class MainMenuController extends BaseController {
             }
         });
         VBox.setVgrow(mainMenuView.getStudentPagination(), Priority.ALWAYS);
-        mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
-        mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
-
-        // Add a click listener to the root pane to hide suggestions when clicking outside
-        mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
-            if (!mainMenuView.getSearchField().isFocused() && !mainMenuView.getSuggestions().isFocused()) {
-                hideSuggestions();
-            }
-        });
 
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -388,12 +420,13 @@ public class MainMenuController extends BaseController {
     }
 
     public void handleBorrowService(Event event) {
-        String studentId = mainMenuView.getBorrowStudentIdField1().getText();
+        String title = mainMenuView.getBorrowStudentIdField1().getText();
+        String studentId = bookService.fetchISBNByTitle(title);
         String isbn = mainMenuView.getBorrowISBNField1().getText();
         LocalDate dueDate = mainMenuView.getBorrowDueDatePicker1().getValue();
 
         if (studentId.isEmpty() || isbn.isEmpty() || dueDate == null) {
-            showErrorMessage("Error, please fill in all fields before borrowing a book.");
+            showErrorMessage("Vui lòng nhập đầy đủ thông tin!");
             return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
@@ -418,9 +451,10 @@ public class MainMenuController extends BaseController {
 
     public void handleReturnService(Event event) {
         String studentId = mainMenuView.getReturnStudentIdField1().getText();
-        String isbn = mainMenuView.getReturnISBNField1().getText();
+        String title = mainMenuView.getReturnISBNField1().getText();
+        String isbn = bookService.fetchISBNByTitle(title);
         if (studentId.isEmpty() || isbn.isEmpty()) {
-            showErrorMessage("Error, please fill in all fields before returning a book.");
+            showErrorMessage("Vui lòng điền đầy đủ thông tin.");
             return;
         }
         if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
@@ -438,43 +472,39 @@ public class MainMenuController extends BaseController {
         }
     }
 
-    private void scheduleSearch() {
+    private void scheduleSearch(TextField textField, ListView<String> listView) {
         if (searchTask != null && !searchTask.isDone()) {
             searchTask.cancel(false);
         }
-
-        // Đặt lại searchTask với tác vụ mới
-        searchTask = scheduler.schedule(this::updateSuggestions, 50, TimeUnit.MILLISECONDS);
+        searchTask = scheduler.schedule(() -> updateSuggestions(textField, listView), 50, TimeUnit.MILLISECONDS);
     }
 
-    private void updateSuggestions() {
+    private void updateSuggestions(TextField textField, ListView<String> listView) {
         Platform.runLater(() -> {
-            String query = mainMenuView.getSearchField().getText().toLowerCase();
+            String query = textField.getText().toLowerCase();
             if (!query.trim().isEmpty()) {
                 List<String> filteredBooks = searchService.searchBookByPrefix(query);
                 ObservableList<String> suggestionList = FXCollections.observableArrayList(filteredBooks);
-                mainMenuView.getSuggestions().setItems(suggestionList);
-                showSuggestionsIfNotEmpty();
+                listView.setItems(suggestionList);
+                showSuggestionsIfNotEmpty(listView);
             } else {
-                hideSuggestions();
+                hideSuggestions(listView);
             }
         });
     }
 
-    private void showSuggestionsIfNotEmpty() {
-        if (!mainMenuView.getSuggestions().getItems().isEmpty()) {
-            mainMenuView.getSuggestions().setVisible(true);
+    private void showSuggestionsIfNotEmpty(ListView<String> listView) {
+        if (!listView.getItems().isEmpty()) {
+            listView.setVisible(true);
         }
     }
 
-    private void hideSuggestions() {
-        mainMenuView.getSuggestions().setVisible(false);
+    private void hideSuggestions(ListView<String> listView) {
+        listView.setVisible(false);
     }
 
-    private void performSearch() {
-        // Implement your search logic here
-
-        hideSuggestions();
+    private void performSearch(ListView<String> listView) {
+        hideSuggestions(listView);
     }
 
     public void shutdown() {

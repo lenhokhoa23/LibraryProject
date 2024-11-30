@@ -3,37 +3,26 @@ package org.example.libraryfxproject.View;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Pane;
 
 
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.example.libraryfxproject.Controller.MainMenuController;
-import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainMenuView {
     @FXML
@@ -115,11 +104,19 @@ public class MainMenuView {
     private ListView<String> suggestions = new ListView<>();
 
     @FXML
+    private ListView<String> suggestions1 = new ListView<>();
+
+    @FXML
+    private ListView<String> suggestions2 = new ListView<>();
+
+    @FXML
     private MenuItem logoutItem;
 
     @FXML
     private MenuButton profileButton;
-    private boolean isSelecting = false;
+    private boolean isSelecting;
+    private boolean isSelecting1 = false;
+    private boolean isSelecting2 = false;
 
     @FXML
     private Label totalBooksLabel;
@@ -873,87 +870,6 @@ public class MainMenuView {
         this.userNameColumn = userNameColumn;
     }
 
-    public void initializeMainMenuView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent mainViewParent = fxmlLoader.load();
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth());
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight());
-            stage.setX((Screen.getPrimary().getBounds().getWidth() - stage.getWidth()) / 2);
-            stage.setY((Screen.getPrimary().getBounds().getHeight() - stage.getHeight()) / 2);
-            Scene scene = new Scene(mainViewParent);
-            stage.setX(-5);
-            stage.setY(-5);
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
-            stage.setScene(scene);
-            stage.show();
-            stage.setResizable(false);
-            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
-            mainMenuController.registerEvent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initializeAddStudentView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent addStudentParent = fxmlLoader.load();
-            Scene addStudentScene = new Scene(addStudentParent);
-            Stage addStudentStage = new Stage();
-            addStudentStage.setScene(addStudentScene);
-            addStudentStage.initModality(Modality.APPLICATION_MODAL);
-            addStudentStage.initOwner(stage);
-            addStudentStage.show();
-            mainMenuController.registerForAddStudent(addStudentStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Button getModifyButton() {
-        return modifyButton;
-    }
-
-    public void initializeModifyBookView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent modifyBookParent = fxmlLoader.load();
-            Scene modifyBookScene = new Scene(modifyBookParent);
-            Stage modifyBookStage = new Stage();
-            modifyBookStage.setTitle("Modify Book");
-            modifyBookStage.setScene(modifyBookScene);
-            modifyBookStage.initModality(Modality.APPLICATION_MODAL);
-            modifyBookStage.initOwner(stage);
-            modifyBookStage.show();
-            mainMenuController.registerForModifyBook(modifyBookStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void initializeAddBookView(MainMenuController mainMenuController) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addBookView.fxml"));
-        loader.setController(this);
-        try {
-            Parent addBookParent = loader.load();
-            Scene addBookScene = new Scene(addBookParent);
-            Stage addBookStage = new Stage();
-            addBookStage.setScene(addBookScene);
-            addBookStage.initModality(Modality.APPLICATION_MODAL);
-            addBookStage.initOwner(stage);
-            addBookStage.show();
-            mainMenuController.registerForAddBook(addBookStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public TableView<ObservableList<String>> getBorrowHistoryTable() {
         return borrowHistoryTable;
     }
@@ -1066,4 +982,118 @@ public class MainMenuView {
     public void setRefresh1(Button refresh1) {
         this.refresh1 = refresh1;
     }
+
+    public ListView<String> getSuggestions1() {
+        return suggestions1;
+    }
+
+    public void setSuggestions1(ListView<String> suggestions1) {
+        this.suggestions1 = suggestions1;
+    }
+
+    public boolean isSelecting1() {
+        return isSelecting1;
+    }
+
+    public void setSelecting1(boolean selecting1) {
+        isSelecting1 = selecting1;
+    }
+
+    public ListView<String> getSuggestions2() {
+        return suggestions2;
+    }
+
+    public void setSuggestions2(ListView<String> suggestions2) {
+        this.suggestions2 = suggestions2;
+    }
+
+    public boolean isSelecting2() {
+        return isSelecting2;
+    }
+
+    public void setSelecting2(boolean selecting2) {
+        isSelecting2 = selecting2;
+    }
+
+    public void initializeMainMenuView() {
+        alertDisplayer = new JavaFXAlertDisplayer();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent mainViewParent = fxmlLoader.load();
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth());
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight());
+            stage.setX((Screen.getPrimary().getBounds().getWidth() - stage.getWidth()) / 2);
+            stage.setY((Screen.getPrimary().getBounds().getHeight() - stage.getHeight()) / 2);
+            Scene scene = new Scene(mainViewParent);
+            stage.setX(-5);
+            stage.setY(-5);
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(false);
+            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
+            mainMenuController.registerEvent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initializeAddStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent addStudentParent = fxmlLoader.load();
+            Scene addStudentScene = new Scene(addStudentParent);
+            Stage addStudentStage = new Stage();
+            addStudentStage.setScene(addStudentScene);
+            addStudentStage.initModality(Modality.APPLICATION_MODAL);
+            addStudentStage.initOwner(stage);
+            addStudentStage.show();
+            mainMenuController.registerForAddStudent(addStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Button getModifyButton() {
+        return modifyButton;
+    }
+
+    public void initializeModifyBookView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent modifyBookParent = fxmlLoader.load();
+            Scene modifyBookScene = new Scene(modifyBookParent);
+            Stage modifyBookStage = new Stage();
+            modifyBookStage.setTitle("Modify Book");
+            modifyBookStage.setScene(modifyBookScene);
+            modifyBookStage.initModality(Modality.APPLICATION_MODAL);
+            modifyBookStage.initOwner(stage);
+            modifyBookStage.show();
+            mainMenuController.registerForModifyBook(modifyBookStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void initializeAddBookView(MainMenuController mainMenuController) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addBookView.fxml"));
+        loader.setController(this);
+        try {
+            Parent addBookParent = loader.load();
+            Scene addBookScene = new Scene(addBookParent);
+            Stage addBookStage = new Stage();
+            addBookStage.setScene(addBookScene);
+            addBookStage.initModality(Modality.APPLICATION_MODAL);
+            addBookStage.initOwner(stage);
+            addBookStage.show();
+            mainMenuController.registerForAddBook(addBookStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

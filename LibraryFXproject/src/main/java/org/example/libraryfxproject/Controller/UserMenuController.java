@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -39,7 +41,7 @@ public class UserMenuController extends BaseController {
     private final CartService cartService;
     private final UpdateService updateService;
     private final BookService bookService;
-    private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
+    private final int ROWS_PER_PAGE = 15;
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> searchTask;
@@ -56,60 +58,36 @@ public class UserMenuController extends BaseController {
     }
 
     public void registerEvent() {
-        hideSuggestions();
         userView.setUser(userService.findUserByUsername(userView.getUsername()));
+
+        hideSuggestions(userView.getSuggestions());
+        hideSuggestions(userView.getSuggestions1());
+        hideSuggestions(userView.getSuggestions2());
+
         userView.getLogoutItem().setOnAction(event -> {
             Stage stage = (Stage) userView.getProfileButton().getScene().getWindow();
             stage.close();
             LoginView.openLoginView(new Stage());
         });
-
-        userView.getSearchField().setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                performSearch();
-            } else {
-                scheduleSearch();
-            }
-        });
-
-        userView.getSuggestions().setOnMouseClicked((MouseEvent event) -> {
-            if (event.getClickCount() == 1) {
-                userView.setSelecting(false);
-                String selectedItem = userView.getSuggestions().getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    userView.getSearchField().setText(selectedItem);
-                    hideSuggestions();
-                    performSearch();
-                }
-            }
-        });
-
-        userView.getSearchField().focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                showSuggestionsIfNotEmpty();
-            } else {
-                Platform.runLater(() -> {
-                    if (!userView.isSelecting()) {
-                        hideSuggestions();
-                    }
-                });
-            }
-        });
-
-        userView.getSearchField().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                hideSuggestions();
-            } else {
-                scheduleSearch();
-            }
-        });
+        
+        handleUsingTextField(userView.getSearchField(), userView.getSuggestions(), 0);
+        handleUsingTextField(userView.getUserBorrowISBN(), userView.getSuggestions1(), 1);
+        handleUsingTextField(userView.getUserReturnISBN(), userView.getSuggestions2(), 2);
 
         userView.getSuggestions().setOnMousePressed(event -> userView.setSelecting(true));
+        userView.getSuggestions1().setOnMousePressed(event -> userView.setSelecting1(true));
+        userView.getSuggestions2().setOnMousePressed(event -> userView.setSelecting2(true));
 
         // Add a click listener to the root pane to hide suggestions when clicking outside
         userView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
             if (!userView.getSearchField().isFocused() && !userView.getSuggestions().isFocused()) {
-                hideSuggestions();
+                hideSuggestions(userView.getSuggestions());
+            }
+            if (!userView.getUserBorrowISBN().isFocused() && !userView.getSuggestions1().isFocused()) {
+                hideSuggestions(userView.getSuggestions1());
+            }
+            if (!userView.getUserReturnISBN().isFocused() && !userView.getSuggestions2().isFocused()) {
+                hideSuggestions(userView.getSuggestions2());
             }
         });
 
@@ -200,16 +178,19 @@ public class UserMenuController extends BaseController {
             loadTableData();
             initializePagination();
         });
+
         userView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
 
         userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
         userView.getUserReturnButton().setOnAction(this::handleReturnService);
+
         setupTableColumns();
         loadTableData();
         initializeTable();
         initializePagination();
+        initializeDueTable();
     }
 
     public void initializeTable() {
@@ -277,43 +258,93 @@ public class UserMenuController extends BaseController {
         }
     }
 
-    private void scheduleSearch() {
-        if (searchTask != null && !searchTask.isDone()) {
-            searchTask.cancel(false);
-        }
-
-        // Đặt lại searchTask với tác vụ mới
-        searchTask = scheduler.schedule(this::updateSuggestions, 50, TimeUnit.MILLISECONDS);
-    }
-
-    private void updateSuggestions() {
-        Platform.runLater(() -> {
-            String query = userView.getSearchField().getText().toLowerCase();
-            if (!query.trim().isEmpty()) {
-                List<String> filteredBooks = searchService.searchBookByPrefix(query);
-                ObservableList<String> suggestionList = FXCollections.observableArrayList(filteredBooks);
-                userView.getSuggestions().setItems(suggestionList);
-                showSuggestionsIfNotEmpty();
+    private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
+        textField.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                performSearch(listView);
             } else {
-                hideSuggestions();
+                scheduleSearch(textField, listView);
+            }
+        });
+
+        listView.setOnMouseClicked((MouseEvent event) -> {
+            if (event.getClickCount() == 1) {
+                if (x == 0) {
+                    userView.setSelecting(false);
+                } else if (x == 1) {
+                    userView.setSelecting1(false);
+                } else if (x == 2) {
+                    userView.setSelecting2(false);
+                }
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    textField.setText(selectedItem);
+                    hideSuggestions(listView);
+                    performSearch(listView);
+                }
+            }
+        });
+
+        textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                showSuggestionsIfNotEmpty(listView);
+            } else {
+                Platform.runLater(() -> {
+                    if (!userView.isSelecting() && x == 0) {
+                        hideSuggestions(listView);
+                    }
+                    if (!userView.isSelecting1() && x == 1) {
+                        hideSuggestions(listView);
+                    }
+                    if (!userView.isSelecting2() && x == 2) {
+                        hideSuggestions(listView);
+                    }
+                });
+            }
+        });
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                hideSuggestions(listView);
+            } else {
+                scheduleSearch(textField, listView);
             }
         });
     }
 
-    private void showSuggestionsIfNotEmpty() {
-        if (!userView.getSuggestions().getItems().isEmpty()) {
-            userView.getSuggestions().setVisible(true);
+    private void scheduleSearch(TextField textField, ListView<String> listView) {
+        if (searchTask != null && !searchTask.isDone()) {
+            searchTask.cancel(false);
+        }
+        searchTask = scheduler.schedule(() -> updateSuggestions(textField, listView), 50, TimeUnit.MILLISECONDS);
+    }
+
+    private void updateSuggestions(TextField textField, ListView<String> listView) {
+        Platform.runLater(() -> {
+            String query = textField.getText().toLowerCase();
+            if (!query.trim().isEmpty()) {
+                List<String> filteredBooks = searchService.searchBookByPrefix(query);
+                ObservableList<String> suggestionList = FXCollections.observableArrayList(filteredBooks);
+                listView.setItems(suggestionList);
+                showSuggestionsIfNotEmpty(listView);
+            } else {
+                hideSuggestions(listView);
+            }
+        });
+    }
+
+    private void showSuggestionsIfNotEmpty(ListView<String> listView) {
+        if (!listView.getItems().isEmpty()) {
+            listView.setVisible(true);
         }
     }
 
-    private void hideSuggestions() {
-        userView.getSuggestions().setVisible(false);
+    private void hideSuggestions(ListView<String> listView) {
+        listView.setVisible(false);
     }
 
-    private void performSearch() {
-        // Implement your search logic here
-
-        hideSuggestions();
+    private void performSearch(ListView<String> listView) {
+        hideSuggestions(listView);
     }
 
     public void shutdown() {
@@ -331,12 +362,12 @@ public class UserMenuController extends BaseController {
     }
 
     public void handleNotificationButtonAction(Event event) {
-        userView.getNotificationPanel().setVisible(true);
+        userView.getActivityDueTable().setVisible(true);
         userView.getNotificationButton().setOnAction(this::closeNotificationPanel);
     }
 
     private void closeNotificationPanel(Event event) {
-        userView.getNotificationPanel().setVisible(false);
+        userView.getActivityDueTable().setVisible(false);
         userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
     }
 

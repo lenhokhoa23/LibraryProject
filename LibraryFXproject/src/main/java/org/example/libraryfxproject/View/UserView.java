@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -28,6 +29,10 @@ public class UserView {
     private MenuButton profileButton;
     @FXML
     private ListView<String> suggestions;
+    @FXML
+    private ListView<String> suggestions1;
+    @FXML
+    private ListView<String> suggestions2;
     @FXML
     private TextField searchField;
     @FXML
@@ -145,13 +150,11 @@ public class UserView {
     @FXML
     private ToggleButton searchToggle;
 
-
-    @FXML
-    private StackPane notificationPanel;
-
     private AlertDisplayer alertDisplayer;
 
     private boolean isSelecting = false;
+    private boolean isSelecting1 = false;
+    private boolean isSelecting2 = false;
 
     public UserView(Stage stage, String username) {
         this.stage = stage;
@@ -492,20 +495,44 @@ public class UserView {
         this.dueDueColumn = dueDueColumn;
     }
 
-    public StackPane getNotificationPanel() {
-        return notificationPanel;
-    }
-
-    public void setNotificationPanel(StackPane notificationPanel) {
-        this.notificationPanel = notificationPanel;
-    }
-
     public Button getNotificationButton() {
         return notificationButton;
     }
 
     public void setNotificationButton(Button notificationButton) {
         this.notificationButton = notificationButton;
+    }
+
+    public ListView<String> getSuggestions1() {
+        return suggestions1;
+    }
+
+    public void setSuggestions1(ListView<String> suggestions1) {
+        this.suggestions1 = suggestions1;
+    }
+
+    public ListView<String> getSuggestions2() {
+        return suggestions2;
+    }
+
+    public void setSuggestions2(ListView<String> suggestions2) {
+        this.suggestions2 = suggestions2;
+    }
+
+    public boolean isSelecting1() {
+        return isSelecting1;
+    }
+
+    public void setSelecting1(boolean selecting1) {
+        isSelecting1 = selecting1;
+    }
+
+    public boolean isSelecting2() {
+        return isSelecting2;
+    }
+
+    public void setSelecting2(boolean selecting2) {
+        isSelecting2 = selecting2;
     }
 
     public void initializeUserView() {
@@ -527,4 +554,5 @@ public class UserView {
             e.printStackTrace();
         }
     }
+
 }

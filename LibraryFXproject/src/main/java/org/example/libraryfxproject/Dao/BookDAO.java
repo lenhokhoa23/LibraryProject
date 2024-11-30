@@ -209,7 +209,6 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
-
     public String fetchPriceFromBooks(String ISBN, int searchType) {
         String price = null;
         String query = "SELECT price FROM books WHERE ISBN = ?";  // Truy vấn trực tiếp cột price theo ISBN
