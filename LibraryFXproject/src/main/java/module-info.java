@@ -10,6 +10,10 @@ module org.example.libraryfxproject {
     requires org.apache.commons.io;
     requires com.google.zxing.javase;
     requires java.desktop;
+    requires com.google.api.services.books;
+    requires google.api.client;
+    requires com.google.api.client;
+    requires com.google.api.client.json.jackson2;
 
     opens org.example.libraryfxproject to javafx.fxml;
     opens org.example.libraryfxproject.View to javafx.fxml;

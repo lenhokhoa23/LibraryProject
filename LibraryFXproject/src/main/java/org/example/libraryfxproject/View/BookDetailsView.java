@@ -166,7 +166,7 @@ public class BookDetailsView {
         stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/BookDetailView.fxml"));
         fxmlLoader.setController(this);
-        alertDisplayer = new JavaFXAlertDisplayer();
+        alertDisplayer = JavaFXAlertDisplayer.getInstance();
         try {
             Parent bookDetailsParent = fxmlLoader.load();
             Scene scene = new Scene(bookDetailsParent);
