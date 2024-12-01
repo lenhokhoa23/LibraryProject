@@ -28,7 +28,7 @@ public class CartService {
         String title = bookDAO.fetchTitleFromBooks(isbn, 3);
         String username = userDAO.getUsernameByCartId(ID);
         bookDAO.updateQuantity(username, title,"BORROW");
-        Cart cart = new Cart(ID, startDate, dueDate, isbn, title);
+        Cart cart = new Cart(ID, startDate, dueDate, title, isbn);
         cartDAO.addCart(cart);
     }
 
@@ -43,10 +43,6 @@ public class CartService {
         return cartDAO.hasBookInCart(isbn, cartId);
     }
 
-    public boolean hasIDInUser(int ID) {
-        String username = userDAO.getUsernameByCartId(ID);
-        return username != null;
-    }
     public static String getBookStatus(String endDateString) {
         LocalDate currentDate = LocalDate.now();  // Ngày hiện tại
 

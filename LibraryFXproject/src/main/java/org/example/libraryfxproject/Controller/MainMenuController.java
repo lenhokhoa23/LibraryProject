@@ -420,14 +420,16 @@ public class MainMenuController extends BaseController {
     }
 
     public void handleBorrowService(Event event) {
-        String title = mainMenuView.getBorrowStudentIdField1().getText();
-        String studentId = bookService.fetchISBNByTitle(title);
-        String isbn = mainMenuView.getBorrowISBNField1().getText();
+        String studentId = mainMenuView.getBorrowStudentIdField1().getText();
+        String title = mainMenuView.getBorrowISBNField1().getText();
+        String isbn = bookService.fetchISBNByTitle(title);
         LocalDate dueDate = mainMenuView.getBorrowDueDatePicker1().getValue();
-
         if (studentId.isEmpty() || isbn.isEmpty() || dueDate == null) {
             showErrorMessage("Vui lòng nhập đầy đủ thông tin!");
             return;
+        }
+        if (!userService.hasIDInUser(Integer.parseInt(studentId))) {
+            showErrorMessage("Không tìm thấy ID người dùng!\nVui lòng thử lại");
         }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
@@ -456,6 +458,9 @@ public class MainMenuController extends BaseController {
         if (studentId.isEmpty() || isbn.isEmpty()) {
             showErrorMessage("Vui lòng điền đầy đủ thông tin.");
             return;
+        }
+        if (!userService.hasIDInUser(Integer.parseInt(studentId))) {
+            showErrorMessage("Không tìm thấy ID người dùng!\nVui lòng thử lại");
         }
         if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
             showErrorMessage("Kho hàng của bạn không có sách này!");

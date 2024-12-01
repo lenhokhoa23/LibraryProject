@@ -208,10 +208,11 @@ public class UserMenuController extends BaseController {
 
     public void handleBorrowService(Event event) {
         int studentId = userView.getUser().getUserID();
-        String isbn = userView.getUserBorrowISBN().getText();
+        String title = userView.getUserBorrowISBN().getText();
+        String isbn = bookService.fetchISBNByTitle(title);
         LocalDate dueDate = userView.getUserBorrowReturnDate().getValue();
         if (isbn.isEmpty() || dueDate == null) {
-            System.out.println("Error, please fill in all fields before borrowing a book.");
+            System.out.println("Vui lòng nhập đầy đủ thông tin.");
             return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
@@ -240,9 +241,10 @@ public class UserMenuController extends BaseController {
 
     public void handleReturnService(Event event) {
         int studentId = userView.getUser().getUserID();
-        String isbn = userView.getUserReturnISBN().getText();
+        String title = userView.getUserReturnISBN().getText();
+        String isbn = bookService.fetchISBNByTitle(title);
         if (isbn.isEmpty()) {
-            System.out.println("Error, please fill in all fields before returning a book.");
+            System.out.println("Vui lòng điền đầy đủ thông tin.");
             return;
         }
         if (!cartService.hasBookInCart(isbn, studentId)) {
