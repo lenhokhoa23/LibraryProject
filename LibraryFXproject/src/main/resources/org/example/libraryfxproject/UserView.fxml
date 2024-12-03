@@ -67,20 +67,6 @@
                                   <Label styleClass="app-subtitle" text="Your Gateway to Knowledge" />
                               </children>
                            </VBox>
-                           <HBox alignment="CENTER" prefHeight="50.0" prefWidth="673.0" styleClass="search-container">
-                              <children>
-                                  <TextField fx:id="searchField" prefHeight="40.0" prefWidth="590.0" promptText="Search books, authors, genres..." HBox.hgrow="ALWAYS" />
-                                  <Button styleClass="search-button">
-                                      <graphic>
-                                          <ImageView fitHeight="20" fitWidth="20">
-                                             <image>
-                                                 <Image url="@images/search.png" />
-                                             </image>
-                                          </ImageView>
-                                      </graphic>
-                                  </Button>
-                              </children>
-                           </HBox>
                            <Button fx:id="notificationButton" styleClass="icon-button">
                                <graphic>
                                    <StackPane>
@@ -95,17 +81,6 @@
                                    </StackPane>
                                </graphic>
                            </Button>
-                           <StackPane fx:id="notificationPanel" visible="false">
-                               <TableView fx:id="activityDueTable" prefHeight="200" prefWidth="400">
-                                   <columns>
-                                       <TableColumn text="Thời gian" fx:id="timeDueColumn" />
-                                       <TableColumn text="Mã người dùng" fx:id="userIdDueColumn" />
-                                       <TableColumn text="ISBN" fx:id="isbnDueColumn" />
-                                       <TableColumn text="Ngày hết hạn" fx:id="dueDueColumn" />
-                                   </columns>
-                               </TableView>
-                           </StackPane>
-
                            <MenuButton fx:id="profileButton" prefHeight="84.0" prefWidth="111.0" styleClass="profile-button">
                                <graphic>
                                    <ImageView fitHeight="40" fitWidth="40">
@@ -134,8 +109,10 @@
                         <content>
                             <ScrollPane fitToWidth="true" styleClass="content-scroll">
                                <content>
-                                   <VBox spacing="30" styleClass="content-container">
+                                   <VBox prefHeight="1913.0" prefWidth="1520.0" spacing="30" styleClass="content-container">
                                       <children>
+                                        <TextField fx:id="searchField" prefHeight="40.0" prefWidth="590.0" promptText="Search books, authors, genres..." />
+                                    <ListView fx:id="suggestions" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="159.0" prefWidth="619.0" />
                                           <!-- Welcome Message -->
                                           <HBox prefHeight="123.0" prefWidth="880.0" styleClass="welcome-banner">
                                              <children>
@@ -146,7 +123,17 @@
                                                     </children>
                                                  </VBox>
                                                  <Region HBox.hgrow="ALWAYS" />
-                                                 <Button styleClass="cta-button" text="Explore New Arrivals" />
+                                          <TableView fx:id="activityDueTable" maxHeight="100.0" maxWidth="521.0" minHeight="100.0" minWidth="442.0" prefHeight="100.0" prefWidth="521.0" visible="false">
+                                             <columns>
+                                                <TableColumn fx:id="timeDueColumn" text="Thời gian" />
+                                                <TableColumn fx:id="userIdDueColumn" text="Mã người dùng" />
+                                                <TableColumn fx:id="isbnDueColumn" text="ISBN" />
+                                                <TableColumn fx:id="dueDueColumn" prefWidth="126.39999389648438" text="Ngày hết hạn" />
+                                             </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
                                              </children>
                                           </HBox>
                   
@@ -418,13 +405,16 @@
                              </HBox>
                              <TableView fx:id="catalogTableView" VBox.vgrow="ALWAYS">
                                  <columns>
-                                     <TableColumn fx:id="itemIdColumn" prefWidth="80" text="ID" />
-                                     <TableColumn fx:id="titleColumn" prefWidth="200" text="Title" />
-                                     <TableColumn fx:id="authorColumn" prefWidth="150" text="Author" />
+                                     <TableColumn fx:id="itemIdColumn" prefWidth="108.79998636245728" text="ID" />
+                                     <TableColumn fx:id="titleColumn" prefWidth="379.2000198364258" text="Title" />
+                                     <TableColumn fx:id="authorColumn" prefWidth="150.0" text="Author" />
                                      <TableColumn fx:id="subjectColumn" prefWidth="100" text="Subject" />
                                      <TableColumn fx:id="bookTypeColumn" prefWidth="132.0" text="Type" />
                                      <TableColumn fx:id="quantityColumn" prefWidth="174.0" styleClass="centered-column" text="Quantity" />
                                  </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                              </TableView>
                              <Pagination fx:id="catalogPagination" prefHeight="0.0" prefWidth="1251.0" styleClass="catalog-pagination" />
                          </children>
@@ -435,16 +425,16 @@
                      <!-- My Books Tab -->
                      <Tab closable="false" text="My Books">
             <content>
-                            <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                            <ScrollPane fitToWidth="true" prefHeight="1770.0" prefWidth="1520.0" styleClass="content-scroll">
                                <content>
                                    <VBox spacing="30" styleClass="content-container">
                                       <children>
                   
                                           <!-- Borrowed Books -->
-                                          <VBox prefHeight="408.0" prefWidth="1220.0" styleClass="section">
+                                          <VBox prefHeight="345.0" prefWidth="1459.0" styleClass="section">
                      <children>
                                                  <Label styleClass="section-title" text="Borrowed Books" />
-                                                 <TableView fx:id="userBorrowedBooksTable" prefHeight="394.0" prefWidth="1220.0">
+                                                 <TableView fx:id="userBorrowedBooksTable" prefHeight="354.0" prefWidth="1459.0">
                                                      <columns>
                                                          <TableColumn fx:id="borrowedUserDateColumn" prefWidth="120" text="Borrowed On" />
                                                          <TableColumn fx:id="borrowedIDColumn" prefWidth="150" text="ID" />
@@ -453,6 +443,9 @@
                                                          <TableColumn fx:id="borrowedTitleColumn" prefWidth="200" text="Title" />
                                                          <TableColumn fx:id="borrowedDueDateColumn" prefWidth="120" text="Due Date" />
                                                      </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
                                                  </TableView>
                      </children>
                                           </VBox>
@@ -595,7 +588,6 @@
                                                  </HBox>
                                              </children>
                                           </VBox>
-                                    <ListView fx:id="suggestions" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="159.0" prefWidth="619.0" />
                   
                                           <!-- Discussion Forums -->
                                           <VBox styleClass="section">
@@ -642,23 +634,28 @@
                            <children>
                               <TabPane prefHeight="503.0" prefWidth="1220.0" tabClosingPolicy="UNAVAILABLE">
                                 <tabs>
-                                  <Tab text="Borrow">
+                                  <Tab text="Borrow a new book by title">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="162.0" prefWidth="1220.0">
                                              <children>
-                                                <TextField fx:id="userBorrowISBN" layoutX="66.0" layoutY="63.0" prefHeight="26.0" prefWidth="249.0" promptText="Enter ISBN" />
+                                                <TextField fx:id="userBorrowISBN" layoutX="66.0" layoutY="63.0" prefHeight="26.0" prefWidth="249.0" promptText="Enter book title" />
                                                 <DatePicker fx:id="userBorrowReturnDate" layoutX="354.0" layoutY="63.0" promptText="Enter Due " />
                                                 <Button fx:id="userBorrowButton" layoutX="592.0" layoutY="63.0" mnemonicParsing="false" text="BORROW" />
+                                                <ListView fx:id="suggestions1" layoutX="66.0" layoutY="89.0" prefHeight="200.0" prefWidth="248.0" />
+                                                <Label layoutX="66.0" layoutY="38.0" text="Title:" />
+                                                <Label layoutX="354.0" layoutY="38.0" text="Due:" />
                                              </children>
                                           </AnchorPane>
                                     </content>
                                   </Tab>
-                                  <Tab text="Return">
+                                  <Tab text="Return a book by title">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="182.0" prefWidth="1220.0">
                                              <children>
-                                                <TextField fx:id="userReturnISBN" layoutX="192.0" layoutY="55.0" prefHeight="26.0" prefWidth="300.0" promptText="Enter ISBN" />
+                                                <TextField fx:id="userReturnISBN" layoutX="192.0" layoutY="55.0" prefHeight="26.0" prefWidth="300.0" promptText="Enter book title" />
                                                 <Button fx:id="userReturnButton" layoutX="507.0" layoutY="55.0" mnemonicParsing="false" text="RETURN" />
+                                                <ListView fx:id="suggestions2" layoutX="192.0" layoutY="81.0" prefHeight="200.0" prefWidth="299.0" />
+                                                <Label layoutX="192.0" layoutY="28.0" text="Enter book title" />
                                              </children>
                                           </AnchorPane>
                                     </content>
