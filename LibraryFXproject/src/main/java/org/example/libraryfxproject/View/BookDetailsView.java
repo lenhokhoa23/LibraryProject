@@ -52,6 +52,12 @@ public class BookDetailsView {
     ImageView qrCodeImageView;
     @FXML
     Button saveQrCodeButton;
+    @FXML
+    ImageView bookImage;
+
+    public ImageView getBookImage() {
+        return bookImage;
+    }
 
     public ImageView getQrCodeImageView() {
         return qrCodeImageView;

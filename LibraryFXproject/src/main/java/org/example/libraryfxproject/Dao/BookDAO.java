@@ -345,6 +345,9 @@ public class BookDAO extends GeneralDAO<String, Book> {
             return null;
         }
     }
+    public Book getBookByBookname(String title) {
+        return dataMap.get(title);
+    }
 
     public static void modifyBookAttribute(String ISBN, String attribute, String newValue) {
         String sql = "UPDATE books SET " + attribute + " = ? WHERE ISBN = ?";

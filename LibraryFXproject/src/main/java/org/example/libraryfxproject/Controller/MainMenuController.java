@@ -26,6 +26,7 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.Exception.ExportException;
 import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 import java.io.IOException;
@@ -83,13 +84,13 @@ public class MainMenuController extends BaseController {
             LoginView.openLoginView(new Stage());
         });
 
-        mainMenuView.getSearchField().setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                performSearch();
-            } else {
-                scheduleSearch();
-            }
-        });
+//        mainMenuView.getSearchField().setOnKeyReleased(event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//                performSearch(mainMenuView.get);
+//            } else {
+//                scheduleSearch();
+//            }
+//        });
 
         mainMenuView.getSuggestions().setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 1) {
@@ -98,9 +99,12 @@ public class MainMenuController extends BaseController {
                 if (selectedItem != null) {
                     mainMenuView.getSearchField().setText(selectedItem);
                     hideSuggestions();
-                    performSearch();
                 }
             }
+        });
+        mainMenuView.getSearchBookButton().setOnAction(e -> {
+            String bookTitle = mainMenuView.getSearchField().getText();
+            performSearch(bookTitle);
         });
 
         mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
@@ -467,9 +471,9 @@ public class MainMenuController extends BaseController {
         mainMenuView.getSuggestions().setVisible(false);
     }
 
-    private void performSearch() {
-        // Implement your search logic here
-
+    private void performSearch(String selectedItem) {
+        Book book = bookService.getBookByTitle(selectedItem);
+        new BookDetailsView(book);
         hideSuggestions();
     }
 

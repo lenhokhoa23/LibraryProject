@@ -62,7 +62,6 @@ public class ContextMenuController extends BaseController {
     private void handleDetailsAction() {
         Book selectedBook = catalogTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
-            Stage parentStage = (Stage) catalogTableView.getScene().getWindow(); // Ép kiểu thành Stage
             new BookDetailsView(selectedBook);
         }
     }
