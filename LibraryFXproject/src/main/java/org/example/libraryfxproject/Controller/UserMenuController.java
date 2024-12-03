@@ -210,6 +210,7 @@ public class UserMenuController extends BaseController {
         loadTableData();
         initializeTable();
         initializePagination();
+        initializeDueTable();
     }
 
     public void initializeTable() {
@@ -230,7 +231,7 @@ public class UserMenuController extends BaseController {
         String isbn = userView.getUserBorrowISBN().getText();
         LocalDate dueDate = userView.getUserBorrowReturnDate().getValue();
         if (isbn.isEmpty() || dueDate == null) {
-            System.out.println("Error, please fill in all fields before borrowing a book.");
+            showErrorMessage("Error, please fill in all fields before borrowing a book.");
             return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
@@ -253,7 +254,7 @@ public class UserMenuController extends BaseController {
             System.out.println("Cart added successfully!");
             showSuccessMessage("Mượn sách thành công");
         } catch (Exception e) {
-            System.out.println("An error occurred while adding the cart: " + e.getMessage());
+            showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
     }
 
@@ -273,7 +274,7 @@ public class UserMenuController extends BaseController {
             System.out.println("Cart removed successfully!");
             showSuccessMessage("Trả sách thành công");
         } catch (Exception e) {
-            System.out.println("An error occurred while removing the cart: " + e.getMessage());
+            showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
     }
 

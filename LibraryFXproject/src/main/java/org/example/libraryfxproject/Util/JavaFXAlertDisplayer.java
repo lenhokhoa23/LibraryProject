@@ -3,6 +3,16 @@ package org.example.libraryfxproject.Util;
 import javafx.scene.control.Alert;
 
 public class JavaFXAlertDisplayer implements AlertDisplayer {
+    private static JavaFXAlertDisplayer javaFXAlertDisplayer;
+    private JavaFXAlertDisplayer () {
+
+    }
+    public static synchronized JavaFXAlertDisplayer getInstance() {
+        if (javaFXAlertDisplayer == null) {
+            javaFXAlertDisplayer = new JavaFXAlertDisplayer();
+        }
+        return javaFXAlertDisplayer;
+    }
     @Override
     public void showInformationAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

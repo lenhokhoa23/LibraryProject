@@ -54,6 +54,7 @@ public class MainMenuController extends BaseController {
     private final int ROWS_PER_PAGE = 15; // Số lượng records trên 1 page
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
+    private GoogleBooksService googleBooksService;
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -64,6 +65,11 @@ public class MainMenuController extends BaseController {
         this.userService = UserService.getInstance();
         this.cartService = CartService.getInstance();
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
+        try {
+            this.googleBooksService = new GoogleBooksService();
+        } catch (Exception e) {
+            showErrorMessage("An error occured when working with Google API Books: " + e.getMessage());
+        }
         loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer);
@@ -98,15 +104,9 @@ public class MainMenuController extends BaseController {
             }
         });
 
-        mainMenuView.getSearchField().focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                showSuggestionsIfNotEmpty();
-            } else {
-                Platform.runLater(() -> {
-                    if (!mainMenuView.isSelecting()) {
-                        hideSuggestions();
-                    }
-                });
+        mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
+            if (!mainMenuView.getSearchField().isFocused() && !mainMenuView.getSuggestions().isFocused()) {
+                hideSuggestions();
             }
         });
 
@@ -298,11 +298,7 @@ public class MainMenuController extends BaseController {
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
         // Add a click listener to the root pane to hide suggestions when clicking outside
-        mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
-            if (!mainMenuView.getSearchField().isFocused() && !mainMenuView.getSuggestions().isFocused()) {
-                hideSuggestions();
-            }
-        });
+
 
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -620,6 +616,26 @@ public class MainMenuController extends BaseController {
         // Handle Back button click
         mainMenuView.getBackButton().setOnAction(event -> {
             addBookStage.close();
+        });
+
+        mainMenuView.getQuickAddBookButton().setOnAction(event -> {
+            Book book = null;
+            try {
+                book = googleBooksService.getBookByISBN(mainMenuView.getISBN().getText());
+            } catch (Exception e) {
+                showErrorMessage("An error occur when getting book by ISBN: " + e.getMessage());
+            }
+            if (book == null) {
+                showErrorMessage("No book found for this ISBN");
+            } else {
+                mainMenuView.getTitle().setText(book.getTitle());
+                mainMenuView.getAuthor().setText(book.getAuthor());
+                mainMenuView.getPrice().setText(book.getPrice());
+                mainMenuView.getSubject().setText(book.getSubject());
+                mainMenuView.getCategory().setText(book.getCategory());
+                mainMenuView.getURL().setText(book.getURL());
+                mainMenuView.getBookType().setText(book.getBookType());
+            }
         });
     }
 

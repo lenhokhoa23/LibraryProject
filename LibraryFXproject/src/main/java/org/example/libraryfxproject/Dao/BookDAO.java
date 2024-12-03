@@ -9,6 +9,8 @@ import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.Trie;
 import org.example.libraryfxproject.Model.TrieNode;
 import org.example.libraryfxproject.Service.LoadService;
+import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
+
 import java.time.format.DateTimeParseException;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.concurrent.*;
 
 public class BookDAO extends GeneralDAO<String, Book> {
     private Trie trie = new Trie();
@@ -86,11 +89,11 @@ public class BookDAO extends GeneralDAO<String, Book> {
                     int quantity = Integer.parseInt(book.getQuantity());
                     totalQuantity += quantity;
                 } catch (NumberFormatException e) {
-                    System.out.println("Không thể chuyển đổi quantity thành số cho sách: " + book.getTitle());
+                    JavaFXAlertDisplayer.getInstance().showErrorAlert("Error","Không thể chuyển đổi quantity thành số cho sách: " + book.getTitle());
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            JavaFXAlertDisplayer.getInstance().showErrorAlert("Error", "Load book Error");
         }
     }
 
@@ -156,44 +159,81 @@ public class BookDAO extends GeneralDAO<String, Book> {
     }
 
     public List<Book> findBooksByAttribute(String attribute, String value) {
+        // List to hold the result
         List<Book> books = new ArrayList<>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        if (attribute.equals("id")) {
-            attribute = "no";
-        }
-        String query = "SELECT * FROM books WHERE " + attribute + " = ?";
-        if (!attribute.equals("no")) {
-            query = "SELECT * FROM books WHERE " + attribute + " like ?";
-        }
+
+        // Callable to perform the database operation
+        Callable<List<Book>> task = () -> {
+            List<Book> result = new ArrayList<>();
+            PreparedStatement statement = null;
+            ResultSet resultSet = null;
+            String query;
+            // Adjust attribute if necessary
+            if (attribute.equals("id")) {
+                query = "SELECT * FROM books WHERE " + "no" + " = ?";
+            }
+            else query = "SELECT * FROM books WHERE " + attribute + " = ?";
+            if (!attribute.equals("id")) {
+                query = "SELECT * FROM books WHERE " + attribute + " LIKE ?";
+            }
+            System.out.println(query);
+
+            try {
+                statement = connection.prepareStatement(query);
+                if (!attribute.equals("id")) {
+                    statement.setString(1, "%" + value + "%");
+                } else {
+                    statement.setString(1, value);
+                }
+
+                // Execute the query
+                resultSet = statement.executeQuery();
+
+                // Populate the result list
+                while (resultSet.next()) {
+                    Book book = new Book(
+                            resultSet.getInt("no"),
+                            resultSet.getString("title"),
+                            resultSet.getString("author"),
+                            resultSet.getString("pubdate"),
+                            resultSet.getString("releaseDate"),
+                            resultSet.getString("ISBN"),
+                            resultSet.getString("price"),
+                            resultSet.getString("subject"),
+                            resultSet.getString("category"),
+                            resultSet.getString("URL"),
+                            resultSet.getString("bookType"),
+                            resultSet.getString("quantity")
+                    );
+                    result.add(book);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (resultSet != null) resultSet.close();
+                    if (statement != null) statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
+        };
+
+        // Execute the task in a separate thread
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<List<Book>> future = executor.submit(task);
+
         try {
-            statement = connection.prepareStatement(query);
-            if (!attribute.equals("no")) {
-                statement.setString(1, "%" + value + "%");
-            } else {
-                statement.setString(1, value);
-            }
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Book book = new Book(
-                        resultSet.getInt("no"),
-                        resultSet.getString("title"),
-                        resultSet.getString("author"),
-                        resultSet.getString("pubdate"),
-                        resultSet.getString("releaseDate"),
-                        resultSet.getString("ISBN"),
-                        resultSet.getString("price"),
-                        resultSet.getString("subject"),
-                        resultSet.getString("category"),
-                        resultSet.getString("URL"),
-                        resultSet.getString("bookType"),
-                        resultSet.getString("quantity")
-                );
-                books.add(book);
-            }
-        } catch (SQLException e) {
+            // Wait for the task to complete and get the result
+            books = future.get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+        } finally {
+            executor.shutdown();
         }
+
         return books;
     }
 
@@ -231,46 +271,58 @@ public class BookDAO extends GeneralDAO<String, Book> {
     public void insertBookToDatabase(String title, String author, String pubdate, String releaseDate,
                                      String ISBN, String price, String subject, String category,
                                      String URL, String bookType, String quantity) {
-        String findNextAvailableIDQuery = "SELECT t1.no + 1 AS next_id FROM books t1 "
-                + "LEFT JOIN books t2 ON t1.no + 1 = t2.no WHERE t2.no IS NULL LIMIT 1";
-        String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Callable<Void> task = () -> {
+            String findNextAvailableIDQuery = "SELECT t1.no + 1 AS next_id FROM books t1 "
+                    + "LEFT JOIN books t2 ON t1.no + 1 = t2.no WHERE t2.no IS NULL LIMIT 1";
+            String sql = "INSERT INTO books (no, title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement findIDStmt = conn.prepareStatement(findNextAvailableIDQuery);
-             ResultSet rs = findIDStmt.executeQuery()) {
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement findIDStmt = conn.prepareStatement(findNextAvailableIDQuery);
+                 ResultSet rs = findIDStmt.executeQuery()) {
 
-            int nextAvailableID = -1;
-            if (rs.next()) {
-                nextAvailableID = rs.getInt("next_id");
+                int nextAvailableID = -1;
+                if (rs.next()) {
+                    nextAvailableID = rs.getInt("next_id");
+                }
+
+                // Nếu không tìm thấy ID trống, thì sử dụng ID tự động tăng.
+                if (nextAvailableID == -1) {
+                    nextAvailableID = getNextAutoIncrementID(conn); // Lấy ID tiếp theo tự động tăng
+                }
+
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setInt(1, nextAvailableID);
+                    pstmt.setString(2, title);
+                    pstmt.setString(3, author);
+                    pstmt.setString(4, pubdate);
+                    pstmt.setString(5, releaseDate);
+                    pstmt.setString(6, ISBN);
+                    pstmt.setString(7, price);
+                    pstmt.setString(8, subject);
+                    pstmt.setString(9, category);
+                    pstmt.setString(10, URL);
+                    pstmt.setString(11, bookType);
+                    pstmt.setString(12, quantity);
+                    pstmt.executeUpdate();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error while inserting book data.");
             }
-
-            // Nếu không tìm thấy ID trống, thì sử dụng ID tự động tăng.
-            if (nextAvailableID == -1) {
-                nextAvailableID = getNextAutoIncrementID(conn); // Lấy ID tiếp theo tự động tăng
-            }
-
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, nextAvailableID);
-                pstmt.setString(2, title);
-                pstmt.setString(3, author);
-                pstmt.setString(4, pubdate);
-                pstmt.setString(5, releaseDate);
-                pstmt.setString(6, ISBN);
-                pstmt.setString(7, price);
-                pstmt.setString(8, subject);
-                pstmt.setString(9, category);
-                pstmt.setString(10, URL);
-                pstmt.setString(11, bookType);
-                pstmt.setString(12, quantity);
-
-                pstmt.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error while inserting book data.");
+            return null;
+        };
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Void> future = executorService.submit(task);
+        try {
+            future.get();
+        } catch (Exception e) {
+            JavaFXAlertDisplayer.getInstance().showErrorAlert("Error", "An error occured when inserting book!");
+        } finally {
+            executorService.shutdown();
         }
+
     }
 
     private int getNextAutoIncrementID(Connection conn) throws SQLException {
