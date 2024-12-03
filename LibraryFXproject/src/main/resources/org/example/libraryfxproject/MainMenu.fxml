@@ -113,7 +113,7 @@
                                                 <TextField fx:id="searchField" prefHeight="48.0" prefWidth="865.0" promptText="Search books, students, or resources..." />
                                                 <HBox alignment="CENTER" styleClass="search-container">
                                                    <children>
-                                                      <Button fx:id="searchButton" styleClass="search-button">
+                                                      <Button fx:id="searchBookButton" styleClass="search-button">
                                                          <graphic>
                                                             <ImageView fitHeight="20.0" fitWidth="20.0">
                                                                <image>
@@ -129,16 +129,6 @@
                                           <ListView fx:id="suggestions" layoutX="145.0" layoutY="48.0" prefHeight="179.0" prefWidth="851.0" />
                                        </children>
                                     </Pane>
-                                    <!-- Quick Actions -->
-                                    <HBox spacing="10" styleClass="quick-actions">
-                                       <children>
-                                          <Button styleClass="action-button" text="Check In" />
-                                          <Button styleClass="action-button" text="Check Out" />
-                                          <Button styleClass="action-button" text="Manage Holds" />
-                                          <Button styleClass="action-button" text="Add New Item" />
-                                          <Button styleClass="action-button" text="Generate Reports" />
-                                       </children>
-                                    </HBox>
 
                                     <!-- Library Stats -->
                                     <HBox spacing="15" styleClass="library-stats">

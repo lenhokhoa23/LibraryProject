@@ -100,6 +100,10 @@ public class BookService {
         return quantity > 0;
     }
 
+    public Book getBookByTitle(String title) {
+        return bookDAO.getBookByBookname(title);
+    }
+
     public boolean hasBookWithISBN(String ISBN) {
         Book book = bookDAO.findBookByDistinctAttribute(ISBN, 3);
         return book != null;

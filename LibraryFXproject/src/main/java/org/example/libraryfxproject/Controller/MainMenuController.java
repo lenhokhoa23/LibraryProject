@@ -27,6 +27,7 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.Exception.ExportException;
 import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 import java.io.IOException;
@@ -86,6 +87,7 @@ public class MainMenuController extends BaseController {
             stage.close();
             LoginView.openLoginView(new Stage());
         });
+
 
         handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
         handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
@@ -521,8 +523,10 @@ public class MainMenuController extends BaseController {
         listView.setVisible(false);
     }
 
-    private void performSearch(ListView<String> listView) {
-        hideSuggestions(listView);
+    private void performSearch(String selectedItem) {
+        Book book = bookService.getBookByTitle(selectedItem);
+        new BookDetailsView(book);
+        hideSuggestions();
     }
 
     public void shutdown() {

@@ -83,7 +83,7 @@ public class MainMenuView {
     private TextField searchField;
 
     @FXML
-    private Button searchButton;
+    private Button searchBookButton;
 
     @FXML
     private TextField searchCatalog;
@@ -501,12 +501,12 @@ public class MainMenuView {
         this.searchField = searchField;
     }
 
-    public Button getSearchButton() {
-        return searchButton;
+    public Button getSearchBookButton() {
+        return searchBookButton;
     }
 
-    public void setSearchButton(Button searchButton) {
-        this.searchButton = searchButton;
+    public void setSearchBookButton(Button searchButton) {
+        this.searchBookButton = searchButton;
     }
 
     public TextField getSearchCatalog() {

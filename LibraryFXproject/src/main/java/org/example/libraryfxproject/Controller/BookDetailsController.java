@@ -1,5 +1,6 @@
 package org.example.libraryfxproject.Controller;
 
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Service.QRCodeService;
@@ -40,6 +41,7 @@ public class BookDetailsController extends BaseController {
                 exception.printStackTrace();
             }
         });
+        bookDetailsView.getBookImage().setImage(new Image(getClass().getResource("/org/example/libraryfxproject/images/image_book2.png").toString(), true));
         try {
             bookDetailsView.getQrCodeImageView().setImage(qrCodeService.generateQRCode(book, 200, 200));
         } catch (Exception e) {
