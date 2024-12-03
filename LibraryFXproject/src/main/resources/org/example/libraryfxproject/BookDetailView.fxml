@@ -97,7 +97,7 @@
                             <Label styleClass="section-title" text="Comments" />
                             <ListView fx:id="commentsListView" prefHeight="218.0" prefWidth="352.0" styleClass="comments-list" VBox.vgrow="ALWAYS" />
                             <TextArea fx:id="newCommentArea" prefHeight="96.0" prefWidth="362.0" promptText="Please comment:" styleClass="new-comment-area" />
-                            <Button styleClass="submit-button" text="Submit" />
+                            <Button fx:id="submitButton" styleClass="submit-button" text="Submit" />
             </children>
                      </VBox>
                  </children>
