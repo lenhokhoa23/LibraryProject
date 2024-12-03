@@ -8,7 +8,7 @@ public class ValidationUtils {
     private static final String SUBJECT_PATTERN = "^[A-Za-z ]+$";
     private static final String CATEGORY_PATTERN = "^[A-Za-z ]+$";
     private static final String URL_PATTERN = "^(http:\\/\\/|https:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[^\\s]*)?$";
-    private static final String AUTHOR_PATTERN = "^[A-Za-z ]+$";
+    private static final String AUTHOR_PATTERN = "^[A-Za-z. ]+$";
     private static final String USERNAME_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*_\\S]{8,20}$";
     private static final String PHONE_PATTERN = "^0\\d{9,}$";
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@gmail\\.com$";

@@ -1,22 +1,10 @@
 package org.example.libraryfxproject.Service;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.util.Callback;
 import org.example.libraryfxproject.Dao.BookDAO;
-import org.example.libraryfxproject.Model.Account;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Util.ValidationUtils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class    BookService {
+public class BookService {
     private final BookDAO bookDAO = new BookDAO();
     private static BookService bookService;
 
@@ -38,54 +26,58 @@ public class    BookService {
     public int validateAddBookInput(String title, String author, String pubdateStr, String releaseDateStr,
                                     String ISBN, String price, String subject, String category, String URL,
                                     String bookType, String quantity) {
-        String isbnPattern = "^\\d{13}$";
-        if (!ISBN.matches(isbnPattern)) {
-            return 1;
+
+        // Kiểm tra ISBN
+        if (!ValidationUtils.isValidISBN(ISBN)) {
+            return 1; // Invalid ISBN
         }
 
-        String titlePattern = "^[A-Za-z0-9 ]+$";
-        if (!title.matches(titlePattern)) {
-            return 2;
+        // Kiểm tra tiêu đề sách
+        if (!ValidationUtils.isValidTitle(title)) {
+            return 2; // Invalid title
         }
 
+        // Kiểm tra giá
         try {
-            Integer.parseInt(price);
+            Double.parseDouble(price);
         } catch (NumberFormatException e) {
             return 3; // Invalid price
         }
 
-        String subjectPattern = "^[A-Za-z ]+$";
-        if (!subject.matches(subjectPattern)) {
-            return 4;
+        // Kiểm tra thể loại
+        if (!ValidationUtils.isValidSubject(subject)) {
+            return 4; // Invalid subject
         }
 
-        String categoryPattern = "^[A-Za-z ]+$";
-        if (!category.matches(categoryPattern)) {
-            return 5;
+        // Kiểm tra danh mục
+        if (!ValidationUtils.isValidCategory(category)) {
+            return 5; // Invalid category
         }
 
-        String urlPattern = "^(http:\\/\\/|https:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[^\\s]*)?$";
-        if (!URL.matches(urlPattern)) {
-            return 6;
+        // Kiểm tra URL
+        if (!ValidationUtils.isValidURL(URL)) {
+            return 6; // Invalid URL
         }
 
-        if (!bookType.matches(titlePattern)) {
-            return 7;
+        // Kiểm tra loại sách
+        if (!ValidationUtils.isValidTitle(bookType)) {
+            return 7; // Invalid bookType
         }
 
+        // Kiểm tra số lượng
         try {
             Integer.parseInt(quantity);
         } catch (NumberFormatException e) {
-            return 8;
+            return 8; // Invalid quantity
         }
 
-        String authorPattern = "^[A-Za-z ]+$";
-        if (!author.matches(authorPattern)) {
-            return 9;
+        if (!ValidationUtils.isValidAuthor(author)) {
+            return 9; // Invalid author
         }
 
-        return 0;
+        return 0; // Tất cả hợp lệ
     }
+
 
     public void insertBookToDatabase(String title, String author, String pubdateStr, String releaseDateStr,
                                      String ISBN, String price, String subject, String category, String URL,
@@ -94,6 +86,7 @@ public class    BookService {
                 ISBN, price, subject, category, URL,
                 bookType, quantity);
     }
+
     public void deleteBookFromDatabase(String title) {
         bookDAO.deleteBookFromDatabase(title);
     }
@@ -114,5 +107,9 @@ public class    BookService {
     public boolean hasBookWithISBN(String ISBN) {
         Book book = bookDAO.findBookByDistinctAttribute(ISBN, 3);
         return book != null;
+    }
+
+    public String fetchISBNByTitle(String title) {
+        return bookDAO.fetchISBNFromBooks(title, 2);
     }
 }

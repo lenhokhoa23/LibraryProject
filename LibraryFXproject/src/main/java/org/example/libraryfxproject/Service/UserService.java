@@ -16,6 +16,7 @@ public class UserService {
         LoadService.loadData(userDAO);
         LoadService.loadData(accountDAO);
     }
+
     public static synchronized UserService getInstance() {
         if (userService == null) {
             userService = new UserService();
@@ -31,11 +32,14 @@ public class UserService {
         return userDAO;
     }
 
-    public int fetchCartIdByUsername(String username) {
-        return userDAO.fetchCartIdByUsername(username);
-    }
-
     public User findUserByUsername(String username) {
         return userDAO.findUserByUsername(username);
+    }
+
+    public void deleteUser(String usernameToDelete) {
+        userDAO.deleteUserForNextRun(usernameToDelete);
+    public boolean hasIDInUser(int ID) {
+        String username = userDAO.getUsernameByCartId(ID);
+        return username != null;
     }
 }

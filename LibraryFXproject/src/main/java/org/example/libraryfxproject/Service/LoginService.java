@@ -14,6 +14,7 @@ public class LoginService {
         }
         return loginService;
     }
+
     private LoginService() {
         LoadService.loadData(accountDAO);
     }
