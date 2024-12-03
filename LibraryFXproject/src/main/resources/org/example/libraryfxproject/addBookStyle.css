@@ -1,52 +1,117 @@
+/* Background for the main root container */
 .add-book-root {
     -fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);
+    -fx-padding: 15px; /* Giảm padding cho container */
 }
 
+/* Title label with larger, bolder font */
 .label-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 26px; /* Giảm kích thước font */
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-padding: 10px 0;
 }
 
+/* Style for general labels */
 .label {
     -fx-text-fill: black;
     -fx-font-size: 16px;
+    -fx-padding: 5px 0;
 }
 
+/* Style for the form container (background color) */
+.form-container {
+    -fx-background-color: #F0F8FF; /* Soft light blue background for the form */
+    -fx-border-radius: 10px; /* Rounded corners */
+    -fx-padding: 15px; /* Padding around the form */
+    -fx-spacing: 15px; /* Space between form elements */
+}
+
+/* Style for the text fields and date pickers */
 .text-field, .date-picker {
-    -fx-background-color: transparent;
-    -fx-border-color: white;
-    -fx-border-radius: 10;
-    -fx-padding: 8 20;
-    -fx-text-fill: black;
+    -fx-background-color: #E0FFFF; /* Light cyan background for input fields */
+    -fx-border-color: #50C9C3; /* Light cyan border color */
+    -fx-border-radius: 8px; /* Rounded borders */
+    -fx-padding: 8px 15px;
+    -fx-text-fill: #333333; /* Dark text color for readability */
+    -fx-font-size: 14px; /* Suitable font size */
 }
 
-#addBookButton, #backButton {
+/* Style when focused */
+.text-field:focused, .date-picker:focused {
+    -fx-border-color: #4A90E2; /* Change border to a stronger blue on focus */
+}
+
+/* Button style with smaller size and transitions */
+#addBookButton, #backButton, #quickAddBookButton {
     -fx-background-color: rgba(255, 255, 255, 0.2);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px; /* Giảm kích thước font */
     -fx-background-radius: 25px;
-    -fx-padding: 10 20;
+    -fx-padding: 8px 20px; /* Giảm padding cho nút */
     -fx-border-color: white;
     -fx-border-radius: 25px;
     -fx-border-width: 2px;
     -fx-transition: all 0.3s ease;
+    -fx-font-weight: bold;
+    -fx-cursor: pointer;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 2);
 }
 
-#addBookButton:hover, #backButton:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.5);
+/* Hover effect for buttons */
+#addBookButton:hover, #backButton:hover, #quickAddBookButton:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
     -fx-cursor: hand;
 }
 
-#addBookButton:pressed, #backButton:pressed {
-    -fx-background-color: rgba(255, 255, 255, 0.7);
+/* Pressed effect for buttons */
+#addBookButton:pressed, #backButton:pressed, #quickAddBookButton:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
 }
 
+/* HBox styling with reduced spacing */
 .hbox {
-    -fx-spacing: 10px;
+    -fx-spacing: 8px; /* Giảm khoảng cách giữa các phần tử */
     -fx-alignment: center-left;
-    -fx-border-color: gray; /* Gray border */
-    -fx-border-width: 1px; /* Border width */
-    -fx-border-radius: 5px; /* Optional rounded corners */
-    -fx-padding: 5px; /* Padding inside each HBox */
+    -fx-border-color: #B0B0B0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-padding: 5px; /* Giảm padding bên trong HBox */
+}
+
+/* Scrollpane background with a subtle light blue-greenish tint */
+.scroll-pane {
+    -fx-background-color: #E8F8F3; /* Light blue-greenish color */
+    -fx-border-color: transparent;
+}
+
+/* Hide the scrollbar arrows */
+.scroll-pane .scroll-bar:horizontal .increment-button,
+.scroll-pane .scroll-bar:horizontal .decrement-button,
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-opacity: 0;
+}
+
+/* Remove default window decoration (close button) */
+.stage {
+    -fx-decoration: none;
+}
+
+/* Make the scrollbar more subtle on hover */
+.scroll-pane .scroll-bar:horizontal:hover .thumb,
+.scroll-pane .scroll-bar:vertical:hover .thumb {
+    -fx-background-color: #4A90E2; /* Slightly darker turquoise for hover effect */
+}
+
+/* Scrollbar button */
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Make the scrollbar invisible */
+.scroll-pane .scroll-bar {
+    -fx-background-color: transparent; /* Hide the scrollbar */
 }

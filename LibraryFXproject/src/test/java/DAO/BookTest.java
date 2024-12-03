@@ -19,7 +19,6 @@ public class BookTest {
     // Set up an in-memory database before running tests
     @BeforeAll
     public static void setupDatabase() throws SQLException {
-        DatabaseInit.initializeDatabase();  // Initialize the in-memory database
         connection = DatabaseInit.getConnection(); // Get the connection to the in-memory database
     }
 
@@ -36,7 +35,7 @@ public class BookTest {
         }
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM books WHERE title = 'Effective Java'")) {
             ResultSet rs = stmt.executeQuery();
-            //assertFalse(rs.next(), "Book should be deleted from the database");
+            assertFalse(rs.next(), "Book should be deleted from the database");
         } catch (SQLException e) {
             fail("Error querying the database: " + e.getMessage());
         }
@@ -69,11 +68,8 @@ public class BookTest {
             assertEquals(title, rs.getString("title"));
             assertEquals(author, rs.getString("author"));
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
-            LocalDate expectedPubDate = LocalDate.parse(pubdateStr, formatter);
-            LocalDate expectedReleaseDate = LocalDate.parse(releaseDateStr, formatter);
-            assertEquals(Date.valueOf(expectedPubDate), rs.getDate("pubdate"));
-            assertEquals(Date.valueOf(expectedReleaseDate), rs.getDate("releaseDate"));
+            assertEquals(pubdateStr, rs.getString("pubdate"));
+            assertEquals(releaseDateStr, rs.getString("releaseDate"));
             assertEquals(price, rs.getString("price"));
             assertEquals(subject, rs.getString("subject"));
             assertEquals(category, rs.getString("category"));
@@ -185,14 +181,14 @@ public class BookTest {
         String bookName = "Effective Java";
         String operation = "BORROW";
 
-            bookDAO.updateQuantity(username, bookName, operation);
+        bookDAO.updateQuantity(username, bookName, operation);
 
         // Verify the quantity in the books table after borrowing
         try (PreparedStatement stmt = connection.prepareStatement("SELECT quantity FROM books WHERE title = ?")) {
             stmt.setString(1, bookName);
             ResultSet rs = stmt.executeQuery();
             assertTrue(rs.next(), "Book should be found in the database");
-            assertEquals(5, rs.getInt("quantity"), "Quantity should be decreased by 1");
+            assertEquals(4, rs.getInt("quantity"), "Quantity should be decreased by 1");
         }
 
     }
