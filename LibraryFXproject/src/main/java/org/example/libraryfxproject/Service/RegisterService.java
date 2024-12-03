@@ -6,6 +6,8 @@ import org.example.libraryfxproject.Model.Account;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.example.libraryfxproject.Util.ValidationUtils.*;
+
 public class RegisterService {
     AccountDAO accountDAO = new AccountDAO();
     private static RegisterService registerService;
@@ -22,27 +24,15 @@ public class RegisterService {
     }
 
     public int validateInput(String username, String phoneNumber, String email) {
-        String usernamePattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*_\\S]{8,20}$";
-        Pattern patternUsername = Pattern.compile(usernamePattern);
-        Matcher matcherUsername = patternUsername.matcher(username);
-
-        if (!matcherUsername.matches()) {
+        if (!isValidUsername(username)) {
             return 1;
         }
 
-        String phonePattern = "^0\\d{9,}$";
-        Pattern patternPhone = Pattern.compile(phonePattern);
-        Matcher matcherPhone = patternPhone.matcher(phoneNumber);
-
-        if (!matcherPhone.matches()) {
+        if (!isValidPhoneNumber(phoneNumber)) {
             return 2;
         }
 
-        String emailPattern = "^[A-Za-z0-9._%+-]+@gmail\\.com$";
-        Pattern patternEmail = Pattern.compile(emailPattern);
-        Matcher matcherEmail = patternEmail.matcher(email);
-
-        if (!matcherEmail.matches()) {
+        if (!isValidEmail(email)) {
             return 3;
         }
 
