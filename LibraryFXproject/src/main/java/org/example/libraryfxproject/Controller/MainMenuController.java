@@ -639,7 +639,6 @@ public class MainMenuController extends BaseController {
         });
     }
 
-
     private void setupContextMenuForStudent() {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Delete");
