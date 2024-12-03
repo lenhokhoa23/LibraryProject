@@ -324,10 +324,19 @@ public class MainMenuView {
     @FXML
     private Button searchButton1;
 
+    @FXML
+    private Button quickAddBookButton;
+
+
     public MainMenuView(Stage stage) {
         this.stage = stage;
         initializeMainMenuView();
     }
+
+    public Button getQuickAddBookButton() {
+        return quickAddBookButton;
+    }
+
     public TableColumn<Book, Integer> getItemIdColumn() {
         return itemIdColumn;
     }

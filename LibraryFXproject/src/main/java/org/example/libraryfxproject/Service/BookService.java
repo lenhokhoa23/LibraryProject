@@ -64,7 +64,7 @@ public class    BookService {
             return 5;
         }
 
-        String urlPattern = "^(http:\\/\\/|https:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[\\w\\-]*)*$";
+        String urlPattern = "^(http:\\/\\/|https:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[^\\s]*)?$";
         if (!URL.matches(urlPattern)) {
             return 6;
         }

@@ -56,6 +56,7 @@ public class MainMenuController extends BaseController {
     private final int ROWS_PER_PAGE = 15;
     private boolean isFilteredView = false;
     private final ContextMenuController contextMenuController;
+    private GoogleBooksService googleBooksService;
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -66,6 +67,11 @@ public class MainMenuController extends BaseController {
         this.userService = UserService.getInstance();
         this.cartService = CartService.getInstance();
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
+        try {
+            this.googleBooksService = new GoogleBooksService();
+        } catch (Exception e) {
+            showErrorMessage("An error occured when working with Google API Books: " + e.getMessage());
+        }
         loadTableData();
         initializePagination();
         contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer);
@@ -85,6 +91,7 @@ public class MainMenuController extends BaseController {
         handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
         handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
         handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
+
 
         mainMenuView.getModifyButton().setOnAction(event -> {
             mainMenuView.initializeModifyBookView(this);
@@ -333,6 +340,12 @@ public class MainMenuController extends BaseController {
             }
         });
         VBox.setVgrow(mainMenuView.getStudentPagination(), Priority.ALWAYS);
+
+        mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
+        mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
+
+        // Add a click listener to the root pane to hide suggestions when clicking outside
+
 
         mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
         mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -653,6 +666,26 @@ public class MainMenuController extends BaseController {
         // Handle Back button click
         mainMenuView.getBackButton().setOnAction(event -> {
             addBookStage.close();
+        });
+
+        mainMenuView.getQuickAddBookButton().setOnAction(event -> {
+            Book book = null;
+            try {
+                book = googleBooksService.getBookByISBN(mainMenuView.getISBN().getText());
+            } catch (Exception e) {
+                showErrorMessage("An error occur when getting book by ISBN: " + e.getMessage());
+            }
+            if (book == null) {
+                showErrorMessage("No book found for this ISBN");
+            } else {
+                mainMenuView.getTitle().setText(book.getTitle());
+                mainMenuView.getAuthor().setText(book.getAuthor());
+                mainMenuView.getPrice().setText(book.getPrice());
+                mainMenuView.getSubject().setText(book.getSubject());
+                mainMenuView.getCategory().setText(book.getCategory());
+                mainMenuView.getURL().setText(book.getURL());
+                mainMenuView.getBookType().setText(book.getBookType());
+            }
         });
     }
 
