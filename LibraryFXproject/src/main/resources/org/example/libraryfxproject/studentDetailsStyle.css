@@ -1,0 +1,56 @@
+/* User View Container */
+.user-view {
+    -fx-background-color: #f4f4f4; /* Light background color */
+    -fx-padding: 20px;
+    -fx-alignment: center;
+    -fx-font-family: Arial, sans-serif;
+    -fx-spacing: 20px;
+}
+
+/* User's Avatar */
+.user-avatar {
+    -fx-border-color: #007bff; /* Blue border color */
+    -fx-border-width: 3px;
+    -fx-border-radius: 50%; /* Make the border round */
+    -fx-background-image: url("@images/student.png"); /* Avatar image */
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-width: 80px;
+    -fx-height: 80px;
+}
+
+/* Username Label */
+.username-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333; /* Dark text color */
+    -fx-padding-bottom: 10px;
+}
+
+/* Profile Labels */
+.profile-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333; /* Darker text color for better contrast */
+    -fx-padding-bottom: 5px; /* Spacing between labels */
+}
+
+/* Membership Type Label */
+#membershipTypeLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #888; /* Lighter text color for secondary information */
+}
+
+/* Button Styling */
+.button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+/* Hover effect for buttons */
+.button:hover {
+    -fx-background-color: #0056b3;
+}

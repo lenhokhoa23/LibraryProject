@@ -1,7 +1,10 @@
 package org.example.libraryfxproject.Service;
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Util.ValidationUtils;
+
+import java.util.List;
 
 
 public class BookService {
@@ -110,5 +113,14 @@ public class BookService {
 
     public String fetchISBNByTitle(String title) {
         return bookDAO.fetchISBNFromBooks(title, 2);
+    }
+
+    public void addComment(Book book, Comment comment) throws RuntimeException {
+        bookDAO.addNewComment(book, comment);
+    }
+
+    public List<Comment> getAllComment(Book book) {
+        String ISBN = book.getISBN();
+        return bookDAO.getBookComment(ISBN);
     }
 }

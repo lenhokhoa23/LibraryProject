@@ -13,6 +13,12 @@ public class Comment {
         this.timestamp = LocalDateTime.now();
     }
 
+    public Comment(String author, String content, LocalDateTime timestamp) {
+        this.author = author;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
+
     public String getAuthor() {
         return author;
     }

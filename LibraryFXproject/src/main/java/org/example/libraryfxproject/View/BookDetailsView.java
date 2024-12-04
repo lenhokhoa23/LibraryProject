@@ -4,14 +4,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.BookDetailsController;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
@@ -21,6 +19,8 @@ public class BookDetailsView {
     private Stage stage;
 
     private AlertDisplayer alertDisplayer;
+
+    private String username;
 
     @FXML
     Label titleLabel;
@@ -54,6 +54,17 @@ public class BookDetailsView {
     TextArea newCommentArea;
     @FXML
     Button submitButton;
+    @FXML
+    ListView<Comment> commentsListView;
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public ListView<Comment> getCommentsListView() {
+        return commentsListView;
+    }
 
     public Button getSubmitButton() {
         return submitButton;
@@ -172,8 +183,11 @@ public class BookDetailsView {
         this.quantityLabel = quantityLabel;
     }
 
-    public BookDetailsView(Book book) {
+    public BookDetailsView(Book book, String username) {
+        commentsListView = new ListView<>();
+        this.username = username;
         initializeBookDetailsView(book);
+
     }
 
     public void initializeBookDetailsView(Book book) {
@@ -186,7 +200,7 @@ public class BookDetailsView {
             Scene scene = new Scene(bookDetailsParent);
             stage.setScene(scene);
             stage.show();
-            BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer);
+            BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer, username);
             bookDetailsController.registerEvent(book);
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?> -->
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
@@ -91,7 +100,7 @@
                                    </ImageView>
                                </graphic>
                                <items>
-                                   <MenuItem text="View Profile" />
+                                   <MenuItem fx:id="studentProfileDetails" text="View Profile" />
                                    <MenuItem text="Settings" />
                                    <SeparatorMenuItem />
                                    <MenuItem fx:id="logoutItem" text="Logout" />
@@ -103,7 +112,7 @@
             </StackPane>
 
               <!-- Main Content -->
-              <TabPane prefWidth="1520.0" styleClass="main-tabs" VBox.vgrow="ALWAYS">
+              <TabPane fx:id="tabPane" prefWidth="1520.0" styleClass="main-tabs" VBox.vgrow="ALWAYS">
          <tabs>
                      <!-- Home Tab -->
                      <Tab closable="false" text="Home">
@@ -116,7 +125,8 @@
                                        <children>
                                           <ListView fx:id="suggestions" layoutX="7.0" layoutY="46.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="106.0" prefWidth="885.0" />
                                               <TextField fx:id="searchField" layoutX="7.0" layoutY="6.0" prefHeight="40.0" prefWidth="885.0" promptText="Search books, authors, genres..." />
-                                          <TableView fx:id="activityDueTable" layoutX="963.0" layoutY="-27.0" maxHeight="147.0" maxWidth="550.0" minHeight="100.0" minWidth="442.0" prefHeight="147.0" prefWidth="496.0" visible="false">
+                                           <Button fx:id="searchBookButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="77.0" text="Search" />
+                                           <TableView fx:id="activityDueTable" layoutX="963.0" layoutY="-27.0" maxHeight="147.0" maxWidth="550.0" minHeight="100.0" minWidth="442.0" prefHeight="147.0" prefWidth="496.0" visible="false">
                                              <columns>
                                                 <TableColumn fx:id="timeDueColumn" text="Thời gian" />
                                                 <TableColumn fx:id="userIdDueColumn" text="Mã người dùng" />
@@ -145,8 +155,8 @@
                                           <!-- Quick Actions -->
                                           <HBox spacing="15" styleClass="quick-actions">
                      <children>
-                                                 <Button styleClass="action-button" text="Borrow a Book" />
-                                                 <Button styleClass="action-button" text="Return a Book" />
+                                                 <Button fx:id="borrowBook" styleClass="action-button" text="Borrow a Book" />
+                                                 <Button fx:id="returnBook" styleClass="action-button" text="Return a Book" />
                                                  <Button styleClass="action-button" text="Renew Loan" />
                                                  <Button styleClass="action-button" text="Book a Study Room" />
                      </children>
@@ -468,40 +478,7 @@
                             </ScrollPane>
             </content>
                      </Tab>
-         
-                     <!-- Events Tab -->
-                     <Tab closable="false" text="Events">
-            <content>
-                            <VBox spacing="20" styleClass="content-container">
-                               <children>
-                                   <HBox alignment="CENTER_LEFT" spacing="10" styleClass="events-controls">
-                                      <children>
-                                          <DatePicker fx:id="eventDatePicker" promptText="Select Date" />
-                                          <ComboBox fx:id="eventTypeFilter" promptText="Event Type" />
-                                          <TextField fx:id="eventSearch" promptText="Search events" />
-                                          <Region HBox.hgrow="ALWAYS" />
-                                          <Button styleClass="add-calendar-button" text="Add to Calendar" />
-                                      </children>
-                                   </HBox>
-                                   <TableView fx:id="eventsTable">
-                                       <columns>
-                                           <TableColumn fx:id="eventDateColumn" prefWidth="120" text="Date" />
-                                           <TableColumn fx:id="eventTitleColumn" prefWidth="200" text="Event" />
-                                           <TableColumn fx:id="eventDescriptionColumn" prefWidth="300" text="Description" />
-                                           <TableColumn fx:id="eventLocationColumn" prefWidth="150" text="Location" />
-                                           <TableColumn fx:id="eventRegisterColumn" prefWidth="100" text="Register" />
-                                       </columns>
-                                   </TableView>
-                                   <HBox alignment="CENTER_RIGHT">
-                                      <children>
-                                          <Button styleClass="suggest-event-button" text="Suggest an Event" />
-                                      </children>
-                                   </HBox>
-                               </children>
-                            </VBox>
-            </content>
-                     </Tab>
-         
+
                      <!-- Community Tab -->
                      <Tab closable="false" text="Community">
             <content>
@@ -593,46 +570,14 @@
                                                  </HBox>
                                              </children>
                                           </VBox>
-                  
-                                          <!-- Discussion Forums -->
-                                          <VBox styleClass="section">
-                     <children>
-                                                 <Label styleClass="section-title" text="Discussion Forums" />
-                                                 <TableView fx:id="forumTopicsTable">
-                                                     <columns>
-                                                         <TableColumn fx:id="topicTitleColumn" prefWidth="300" text="Topic" />
-                                                         <TableColumn fx:id="topicAuthorColumn" prefWidth="150" text="Started by" />
-                                                         <TableColumn fx:id="topicRepliesColumn" prefWidth="100" text="Replies" />
-                                                         <TableColumn fx:id="topicLastActivityColumn" prefWidth="150" text="Last Activity" />
-                                                     </columns>
-                                                 </TableView>
-                                                 <HBox alignment="CENTER_RIGHT" styleClass="forum-actions">
-                                                    <children>
-                                                        <Button styleClass="new-topic-button" text="New Topic" />
-                                                    </children>
-                                                 </HBox>
-                     </children>
-                                          </VBox>
-                  
-                                          <!-- Reading Buddies -->
-                                          <VBox styleClass="section">
-                     <children>
-                                                 <HBox alignment="CENTER_LEFT">
-                                                    <children>
-                                                        <Label styleClass="section-title" text="Reading Buddies" />
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                        <Button styleClass="find-buddy-button" text="Find a Buddy" />
-                                                    </children>
-                                                 </HBox>
-                                                 <FlowPane fx:id="readingBuddiesGrid" hgap="15" vgap="15" />
-                     </children>
-                                          </VBox>
                                       </children>
                                    </VBox>
                                </content>
                             </ScrollPane>
             </content>
                      </Tab>
+
+
                   <Tab closable="false" text="Service">
                      <content>
                         <VBox spacing="20" styleClass="content-container">

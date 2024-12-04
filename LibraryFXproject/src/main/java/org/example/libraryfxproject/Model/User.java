@@ -7,10 +7,10 @@ public class User extends Person {
 
     public User(String username, String name, String email, String phoneNumber, int id,
                 int borrowedBooks, String membershipType) {
-        super(username, name, email, phoneNumber);
-        this.Cart_ID = id;
-        this.borrowedBooks = borrowedBooks;
-        this.membershipType = membershipType;
+            super(username, name, email, phoneNumber);
+            this.Cart_ID = id;
+            this.borrowedBooks = borrowedBooks;
+            this.membershipType = membershipType;
     }
 
     public int getUserID() {

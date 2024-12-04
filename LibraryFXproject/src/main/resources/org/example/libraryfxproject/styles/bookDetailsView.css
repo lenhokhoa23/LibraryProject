@@ -71,3 +71,65 @@
     -fx-font-size: 14px;
     -fx-padding: 10px;
 }
+
+.comments-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 15;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.comments-list {
+    -fx-background-color: transparent;
+}
+
+.comment-cell {
+    -fx-background-color: white;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.comment-author {
+    -fx-font-weight: bold;
+    -fx-text-fill: #007bff;
+}
+
+.comment-content {
+    -fx-wrap-text: true;
+}
+
+.comment-timestamp {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 0.9em;
+}
+
+.new-comment-container {
+    -fx-background-color: white;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+}
+
+.new-comment-area, .comment-author-field {
+    -fx-background-color: #f1f3f5;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.submit-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.submit-button:hover {
+    -fx-background-color: #0056b3;
+}

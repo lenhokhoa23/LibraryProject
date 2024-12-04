@@ -3,10 +3,6 @@ package org.example.libraryfxproject.Dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.example.libraryfxproject.Model.Cart;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -74,25 +70,6 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return cart; // Return the Cart object or null if not found
     }
 
-    public String fetchFromCart(String username, String attribute) {
-        // Check which attribute to fetch from the Cart object
-        Cart cart = fetchCartByUsername(username);
-        switch (attribute) {
-            case "ISBN":
-                return cart.getISBN();
-            case "title":
-                return cart.getTitle();
-            case "startDate":
-                return cart.getStartDate();
-            case "endDate":
-                return cart.getEndDate();
-            case "Cart_ID":
-                return String.valueOf(cart.getCart_ID());
-            default:
-                return "Invalid attribute"; // Handle case for an invalid attribute
-        }
-    }
-
     public static List<Cart> getBooksStatus(String bookTitle) {
         List<Cart> cartList = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -118,89 +95,6 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
     }
 
 
-
-
-//    public static void checkCartUser(int cart_ID) {
-//            System.out.println("Nhập tên người dùng bạn muốn xem: ");
-//            try {
-//                //username = br.readLine(); // Admin nhập tên người dùng
-//
-//                String query = "SELECT username FROM accounts WHERE username = ?";
-//                try (Connection conn = DatabaseConnection.getConnection();
-//                     PreparedStatement stmt = conn.prepareStatement(query)) {
-//                    stmt.setString(1, username);
-//                    ResultSet rs = stmt.executeQuery();
-//                    if (!rs.next()) {
-//                        System.out.println("Người dùng \"" + username + "\" không tồn tại.");
-//                        return;
-//                    }
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                    return;
-//                }
-//
-//                //cartId = fetchCartIdByUsername(username);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                return;
-//            }
-//        }
-//
-//        // Truy vấn thông tin sách
-//        String countQuery = "SELECT COUNT(*) AS totalBooks FROM cart WHERE Cart_ID = ?";
-//        String query = "SELECT c.Cart_ID, c.startDate, c.endDate, c.ISBN, b.title " +
-//                "FROM cart c " +
-//                "JOIN books b ON c.ISBN = b.ISBN " +
-//                "WHERE c.Cart_ID = ?";
-//
-//        try (Connection conn = DatabaseConnection.getConnection();
-//             PreparedStatement countStmt = conn.prepareStatement(countQuery);
-//             PreparedStatement stmt = conn.prepareStatement(query)) {
-//
-//            // Lấy tổng số sách đã mượn
-//            countStmt.setInt(1, cartId);
-//            ResultSet countRs = countStmt.executeQuery();
-//            if (countRs.next()) {
-//                int totalBooks = countRs.getInt("totalBooks");
-//                System.out.println("Số sách đã mượn: " + totalBooks);
-//            }
-//
-//            // Lấy thông tin chi tiết từng sách
-//            stmt.setInt(1, cartId);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            // Kiểm tra nếu giỏ hàng trống
-//            if (!rs.isBeforeFirst()) {
-//                System.out.println("Giá sách cá nhân của người dùng \"" + username + "\" trống.");
-//                return;
-//            }
-//
-//            // Duyệt qua tất cả các sách trong giỏ
-//            System.out.println("Cart ID: " + cartId);
-//            System.out.println("------------------------------");
-//            while (rs.next()) {
-//                Cart cart = new Cart(
-//                        rs.getInt("Cart_ID"),
-//                        rs.getString("startDate"),
-//                        rs.getString("endDate"),
-//                        rs.getString("title"),
-//                        rs.getString("ISBN")
-//                );
-//                //cart.printInfo(); // In ra thông tin
-//                // Kiểm tra trạng thái của từng sách
-//                LocalDate eventDate = LocalDate.parse(cart.getEndDate());
-//                LocalDate currentDate = LocalDate.now();
-//                String status = currentDate.isBefore(eventDate)
-//                        ? "\033[32mCòn hạn\033[0m"
-//                        : "\033[31mQuá hạn\033[0m";
-//
-//                System.out.printf("Trạng thái: %s\n", status);
-//                System.out.println("+------------------------+");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public int getBooksBorrowedCount() {
         String sql = "SELECT COUNT(*) AS borrowedCount FROM Cart";

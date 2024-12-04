@@ -5,8 +5,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,11 +18,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
 
@@ -183,6 +190,20 @@ public class UserMenuController extends BaseController {
             CatalogEvent();
         });
 
+        userView.getBorrowBook().setOnAction(event -> {
+            TabPane tabPane = userView.getTabPane();
+            tabPane.getSelectionModel().select(4);
+        });
+
+        userView.getReturnBook().setOnAction(event -> {
+            TabPane tabPane = userView.getTabPane();
+            tabPane.getSelectionModel().select(4);
+        });
+
+        userView.getStudentProfileDetails().setOnAction(event -> {
+            userView.initializeStudentDetailsView(this);
+        });
+
         userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
         userView.getUserReturnButton().setOnAction(this::handleReturnService);
 
@@ -191,6 +212,13 @@ public class UserMenuController extends BaseController {
         initializeTable();
         initializePagination();
         initializeDueTable();
+
+        userView.getSearchBookButton().setOnAction(e -> {
+            Book book = bookService.getBookByTitle(userView.getSearchField().getText());
+            new BookDetailsView(book, userView.getUsername());
+        });
+
+
     }
 
     public void initializeTable() {
@@ -437,6 +465,23 @@ public class UserMenuController extends BaseController {
                 isFilteredView = true;
             }
         }
+    }
+
+    public void registerForStudentDetails(Stage stage) {
+        updateUserInfo(userView.getUser());
+    }
+
+    public void updateUserInfo(User user) {
+        if (user == null) {
+            return;
+        }
+        userView.getUsernameLabel().setText(user.getUsername());
+        userView.getNameLabel().setText("Name: " + user.getName());
+        userView.getEmailLabel().setText("Email: " + user.getEmail());
+        userView.getPhoneNumberLabel().setText("Phone number: " + user.getPhoneNumber());
+        userView.getCartIDLabel().setText("ID: " + String.valueOf(user.getCart_ID()));
+        userView.getBorrowedBooksLabel().setText("Borrowed books: " + String.valueOf(user.getBorrowedBooks()));
+        userView.getMembershipTypeLabel().setText(user.getMembershipType());
     }
 
 }
