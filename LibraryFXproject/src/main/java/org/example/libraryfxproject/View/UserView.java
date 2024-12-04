@@ -150,6 +150,9 @@ public class UserView {
     @FXML
     private ToggleButton searchToggle;
 
+    @FXML
+    private Button searchBookButton;
+
     private AlertDisplayer alertDisplayer;
 
     private boolean isSelecting = false;
@@ -204,6 +207,10 @@ public class UserView {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Button getSearchBookButton() {
+        return searchBookButton;
     }
 
     public MenuButton getProfileButton() {

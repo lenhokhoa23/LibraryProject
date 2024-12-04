@@ -19,6 +19,7 @@ import javafx.util.Callback;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
 
@@ -191,6 +192,13 @@ public class UserMenuController extends BaseController {
         initializeTable();
         initializePagination();
         initializeDueTable();
+
+        userView.getSearchBookButton().setOnAction(e -> {
+            Book book = bookService.getBookByTitle(userView.getSearchField().getText());
+            new BookDetailsView(book);
+        });
+
+
     }
 
     public void initializeTable() {
