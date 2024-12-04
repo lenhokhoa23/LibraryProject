@@ -80,7 +80,6 @@ public class MainMenuController extends BaseController {
     }
   
     public void registerEvent() {
-
         mainMenuView.getSearchBookButton().setOnAction(e -> {
             performSearch(mainMenuView.getSearchField().getText());
         });

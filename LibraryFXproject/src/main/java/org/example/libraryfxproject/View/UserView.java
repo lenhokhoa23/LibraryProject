@@ -150,6 +150,9 @@ public class UserView {
     @FXML
     private ToggleButton searchToggle;
 
+    @FXML
+    private Label welcomeMessage;
+
     private AlertDisplayer alertDisplayer;
 
     private boolean isSelecting = false;
@@ -533,6 +536,14 @@ public class UserView {
 
     public void setSelecting2(boolean selecting2) {
         isSelecting2 = selecting2;
+    }
+
+    public Label getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(Label welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
     }
 
     public void initializeUserView() {
