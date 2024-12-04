@@ -39,6 +39,7 @@ public class UserService {
     public void deleteUser(String usernameToDelete) {
         userDAO.deleteUserForNextRun(usernameToDelete);
     }
+
     public boolean hasIDInUser(int ID) {
         String username = userDAO.getUsernameByCartId(ID);
         return username != null;

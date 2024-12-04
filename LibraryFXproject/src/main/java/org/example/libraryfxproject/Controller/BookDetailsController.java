@@ -1,5 +1,7 @@
 package org.example.libraryfxproject.Controller;
 
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Service.QRCodeService;
@@ -40,6 +42,7 @@ public class BookDetailsController extends BaseController {
                 exception.printStackTrace();
             }
         });
+        bookDetailsView.getBookImage().setImage(new Image(getClass().getResource("/org/example/libraryfxproject/images/image_book2.png").toString(), true));
         try {
             bookDetailsView.getQrCodeImageView().setImage(qrCodeService.generateQRCode(book, 200, 200));
         } catch (Exception e) {
@@ -48,6 +51,17 @@ public class BookDetailsController extends BaseController {
         bookDetailsView.getSaveQrCodeButton().setOnAction(e -> {
             handleSaveQrCode(book);
         });
+        bookDetailsView.getNewCommentArea().setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSubmitComment();
+            }
+        });
+        bookDetailsView.getSubmitButton().setOnAction(e -> {
+            handleSubmitComment();
+        });
+    }
+    private void handleSubmitComment() {
+
     }
     private void handleSaveQrCode(Book book) {
         FileChooser fileChooser = new FileChooser();
