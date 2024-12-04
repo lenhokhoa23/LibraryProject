@@ -151,6 +151,9 @@ public class UserView {
     private ToggleButton searchToggle;
 
     @FXML
+    private Button searchBookButton;
+  
+    @FXML
     private Label welcomeMessage;
 
     private AlertDisplayer alertDisplayer;
@@ -207,6 +210,10 @@ public class UserView {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Button getSearchBookButton() {
+        return searchBookButton;
     }
 
     public MenuButton getProfileButton() {

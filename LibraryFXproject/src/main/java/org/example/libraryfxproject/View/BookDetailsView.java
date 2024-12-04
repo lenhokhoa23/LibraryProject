@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -17,6 +14,7 @@ import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.example.libraryfxproject.Controller.BookDetailsController;
 import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
@@ -59,6 +57,12 @@ public class BookDetailsView {
     TextArea newCommentArea;
     @FXML
     Button submitButton;
+    @FXML
+    ListView<Comment> commentsListView;
+
+    public ListView<Comment> getCommentsListView() {
+        return commentsListView;
+    }
 
     public Button getSubmitButton() {
         return submitButton;
@@ -178,6 +182,7 @@ public class BookDetailsView {
     }
 
     public BookDetailsView(Book book) {
+        commentsListView = new ListView<>();
         initializeBookDetailsView(book);
     }
 

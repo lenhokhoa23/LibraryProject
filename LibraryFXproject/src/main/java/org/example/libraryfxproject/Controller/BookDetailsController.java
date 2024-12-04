@@ -1,24 +1,30 @@
 package org.example.libraryfxproject.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Service.QRCodeService;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.DateTimeUtils;
 import org.example.libraryfxproject.View.BookDetailsView;
+import org.example.libraryfxproject.View.CommentListCell;
 
 import java.io.File;
 
 public class BookDetailsController extends BaseController {
     BookDetailsView bookDetailsView;
     QRCodeService qrCodeService;
+    private ObservableList<Comment> comments;
 
     public BookDetailsController(BookDetailsView bookDetailsView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
         this.bookDetailsView = bookDetailsView;
         qrCodeService = QRCodeService.getInstance();
+        comments = FXCollections.observableArrayList();
     }
 
     public void registerEvent(Book book) {
@@ -59,9 +65,18 @@ public class BookDetailsController extends BaseController {
         bookDetailsView.getSubmitButton().setOnAction(e -> {
             handleSubmitComment();
         });
+        bookDetailsView.getCommentsListView().setItems(comments);
+        bookDetailsView.getCommentsListView().setCellFactory(commentListView -> new CommentListCell());
     }
     private void handleSubmitComment() {
+        String content = bookDetailsView.getNewCommentArea().getText();
+        String author = "test";
 
+        if (!content.isEmpty()) {
+            Comment comment = new Comment(author, content);
+            comments.add(comment);
+            bookDetailsView.getNewCommentArea().clear();
+        }
     }
     private void handleSaveQrCode(Book book) {
         FileChooser fileChooser = new FileChooser();
