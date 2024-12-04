@@ -35,6 +35,7 @@ public class LoginService {
 
     public void setAccountDAO(AccountDAO accountDAO) {
         this.accountDAO = accountDAO;
+
     }
 
     public int authenticate(String username, String password) {

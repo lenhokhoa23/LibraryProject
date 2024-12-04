@@ -675,6 +675,7 @@ public class UserView {
             e.printStackTrace();
         }
     }
+
     public void initializeStudentDetailsView(UserMenuController userMenuController) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
         loader.setController(this);
