@@ -21,6 +21,8 @@ public class LoginService {
 
     private LoginService() {
         LoadService.loadData(accountDAO);
+        LoadService.loadData(librarianDAO);
+        LoadService.loadData(userDAO);
     }
 
     public int authenticate(String username, String password) {
