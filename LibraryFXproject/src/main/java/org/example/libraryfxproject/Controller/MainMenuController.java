@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -14,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -22,17 +20,14 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.example.libraryfxproject.Export.ExporterFactory;
 import org.example.libraryfxproject.Model.Book;
-import org.example.libraryfxproject.Model.Cart;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
-import org.example.libraryfxproject.Util.Exception.ExportException;
 import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
 import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
@@ -41,7 +36,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+
 
 public class MainMenuController extends BaseController {
     private final MainMenuView mainMenuView;
@@ -59,6 +54,7 @@ public class MainMenuController extends BaseController {
     private final int ROWS_PER_PAGE = 15;
     private boolean isFilteredView = false;
     private GoogleBooksService googleBooksService;
+    private ContextMenuController contextMenuController;
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
@@ -72,6 +68,7 @@ public class MainMenuController extends BaseController {
         bookList = FXCollections.observableArrayList();
         scheduler = Executors.newSingleThreadScheduledExecutor();
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
+        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer, mainMenuView.getUsername());
         try {
             this.googleBooksService = new GoogleBooksService();
         } catch (Exception e) {
@@ -141,6 +138,7 @@ public class MainMenuController extends BaseController {
             ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText().trim());
             updateUserTableView(filteredUser);
         });
+
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
             loadTableData();
             initializePagination();
