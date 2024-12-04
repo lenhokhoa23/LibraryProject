@@ -195,7 +195,7 @@ public class UserMenuController extends BaseController {
 
         userView.getSearchBookButton().setOnAction(e -> {
             Book book = bookService.getBookByTitle(userView.getSearchField().getText());
-            new BookDetailsView(book);
+            new BookDetailsView(book, userView.getUsername());
         });
 
 

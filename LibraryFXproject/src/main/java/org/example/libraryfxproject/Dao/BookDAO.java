@@ -6,11 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Model.Trie;
 import org.example.libraryfxproject.Model.TrieNode;
 import org.example.libraryfxproject.Service.LoadService;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
@@ -486,5 +488,41 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+//    author	content	timemark	ISBN
+
+    public void addNewComment(Book book, Comment comment) throws RuntimeException {
+        String author = comment.getAuthor();
+        String content = comment.getContent();
+        String ISBN = book.getISBN();
+        LocalDateTime timemark = comment.getTimestamp();
+
+        String sql = "INSERT INTO comment (author, content, timemark, ISBN) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, author);
+            preparedStatement.setString(2, content);
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(timemark));
+            preparedStatement.setString(4, ISBN);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Comment> getBookComment(String ISBN) {
+        List<Comment> commentList = new ArrayList<>();
+        String sql = "SELECT * FROM comment WHERE ISBN = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, ISBN);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Comment comment = new Comment(resultSet.getString("author"), resultSet.getString("content"),
+                        resultSet.getTimestamp("timemark").toLocalDateTime());
+                commentList.add(comment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commentList;
+    }
 }
 

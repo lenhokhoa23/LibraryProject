@@ -13,22 +13,22 @@ public class ContextMenuController extends BaseController {
     private final TableView<Book> catalogTableView;
     private final CartDAO cartDAO;
     private final BookService bookService;
-    public ContextMenuController(TableView<Book> catalogTableView, AlertDisplayer alertDisplayer) {
+    public ContextMenuController(TableView<Book> catalogTableView, AlertDisplayer alertDisplayer, String username) {
         super(alertDisplayer);
         this.catalogTableView = catalogTableView;
         this.cartDAO = new CartDAO();
         this.bookService = BookService.getInstance();
-        setupContextMenu();
+        setupContextMenu(username);
     }
 
-    private void setupContextMenu() {
+    private void setupContextMenu(String username) {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem deleteItem = new MenuItem("Delete");
         deleteItem.setOnAction(event -> handleDeleteAction());
 
         MenuItem detailsItem = new MenuItem("Book Details");
-        detailsItem.setOnAction(event -> handleDetailsAction());
+        detailsItem.setOnAction(event -> handleDetailsAction(username));
         contextMenu.getItems().addAll(deleteItem, detailsItem);
 
         catalogTableView.setOnMouseClicked(event -> {
@@ -63,10 +63,10 @@ public class ContextMenuController extends BaseController {
         });
     }
 
-    private void handleDetailsAction() {
+    private void handleDetailsAction(String username) {
         Book selectedBook = catalogTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
-            new BookDetailsView(selectedBook);
+            new BookDetailsView(selectedBook, username);
         }
     }
 
