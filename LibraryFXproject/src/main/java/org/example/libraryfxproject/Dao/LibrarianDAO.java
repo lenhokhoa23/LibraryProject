@@ -58,7 +58,7 @@ public class LibrarianDAO extends GeneralDAO<String, Librarian> {
                         resultSet.getString("name"),
                         resultSet.getString("email"),
                         resultSet.getString("phoneNumber"),
-                        resultSet.getInt("id"),
+                        resultSet.getInt("Librarian_ID"),
                         resultSet.getString("workShift"));
             } else {
                 System.out.println("Không tìm thấy thủ thư" + type);

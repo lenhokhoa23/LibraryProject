@@ -25,6 +25,8 @@ public class BookDetailsView {
 
     private AlertDisplayer alertDisplayer;
 
+    private String username;
+
     @FXML
     Label titleLabel;
     @FXML
@@ -59,6 +61,11 @@ public class BookDetailsView {
     Button submitButton;
     @FXML
     ListView<Comment> commentsListView;
+
+
+    public String getUsername() {
+        return username;
+    }
 
     public ListView<Comment> getCommentsListView() {
         return commentsListView;
@@ -181,9 +188,11 @@ public class BookDetailsView {
         this.quantityLabel = quantityLabel;
     }
 
-    public BookDetailsView(Book book) {
+    public BookDetailsView(Book book, String username) {
         commentsListView = new ListView<>();
+        this.username = username;
         initializeBookDetailsView(book);
+
     }
 
     public void initializeBookDetailsView(Book book) {
@@ -196,7 +205,7 @@ public class BookDetailsView {
             Scene scene = new Scene(bookDetailsParent);
             stage.setScene(scene);
             stage.show();
-            BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer);
+            BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer, username);
             bookDetailsController.registerEvent(book);
         } catch (IOException e) {
             e.printStackTrace();

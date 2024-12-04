@@ -78,7 +78,7 @@ public class MainMenuController extends BaseController {
         }
         loadTableData();
         initializePagination();
-        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer);
+        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer, mainMenuView.getUsername());
     }
   
     public void registerEvent() {
@@ -526,7 +526,7 @@ public class MainMenuController extends BaseController {
 
     private void performSearch(String selectedItem) {
         Book book = bookService.getBookByTitle(selectedItem);
-        new BookDetailsView(book);
+        new BookDetailsView(book, mainMenuView.getUsername());
         hideSuggestions(mainMenuView.getSuggestions());
     }
 
