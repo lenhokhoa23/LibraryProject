@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="280.0" prefWidth="275.0" spacing="20" styleClass="user-view" stylesheets="@studentDetailsStyle.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
+    <!-- Avatar and Username Section -->
+    <HBox alignment="CENTER" spacing="20">
+        <!-- Avatar -->
+        <ImageView fx:id="userAvatar" fitHeight="80" fitWidth="80" styleClass="user-avatar">
+            <image>
+                <Image url="@images/student.png" />
+            </image>
+        </ImageView>
+
+        <!-- Username and Membership Type -->
+        <VBox alignment="CENTER_LEFT">
+            <Label fx:id="usernameLabel" styleClass="username-label" text="Username" />
+            <Label fx:id="membershipTypeLabel" styleClass="profile-label" text="Membership" />
+        </VBox>
+    </HBox>
+
+    <!-- Profile Details Section -->
+    <VBox alignment="CENTER_LEFT" spacing="10">
+        <Label fx:id="nameLabel" styleClass="profile-label" text="Name: " />
+        <Label fx:id="emailLabel" styleClass="profile-label" text="Email: " />
+        <Label fx:id="phoneNumberLabel" styleClass="profile-label" text="Phone Number:" />
+        <Label fx:id="cartIDLabel" styleClass="profile-label" text="Cart ID: " />
+        <Label fx:id="borrowedBooksLabel" styleClass="profile-label" text="Borrowed Books:" />
+    </VBox>
+
+</VBox>
