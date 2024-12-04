@@ -1025,7 +1025,7 @@ public class MainMenuView {
     }
 
     public void initializeMainMenuView() {
-        alertDisplayer = new JavaFXAlertDisplayer();
+        alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
         fxmlLoader.setController(this);
         try {

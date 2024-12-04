@@ -3,10 +3,6 @@ package org.example.libraryfxproject.Dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.example.libraryfxproject.Model.Cart;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -72,25 +68,6 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
             }
         }
         return cart; // Return the Cart object or null if not found
-    }
-
-    public String fetchFromCart(String username, String attribute) {
-        // Check which attribute to fetch from the Cart object
-        Cart cart = fetchCartByUsername(username);
-        switch (attribute) {
-            case "ISBN":
-                return cart.getISBN();
-            case "title":
-                return cart.getTitle();
-            case "startDate":
-                return cart.getStartDate();
-            case "endDate":
-                return cart.getEndDate();
-            case "Cart_ID":
-                return String.valueOf(cart.getCart_ID());
-            default:
-                return "Invalid attribute"; // Handle case for an invalid attribute
-        }
     }
 
     public static List<Cart> getBooksStatus(String bookTitle) {

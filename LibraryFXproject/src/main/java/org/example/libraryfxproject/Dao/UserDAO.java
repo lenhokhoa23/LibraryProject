@@ -141,29 +141,19 @@ public class UserDAO extends GeneralDAO<String, User> {
         String deleteSQLUser = "DELETE FROM user WHERE username = ?";
         String deleteSQLAccount = "DELETE FROM accounts WHERE username = ?";
 
-        try {
-            connection.setAutoCommit(false); // Begin transaction
-            try (PreparedStatement stmtAccount = connection.prepareStatement(deleteSQLAccount)) {
-                stmtAccount.setString(1, usernameToDelete);
-                stmtAccount.executeUpdate(); // No exception if no rows affected
-            }
-            connection.commit();
+        try (PreparedStatement stmtAccount = connection.prepareStatement(deleteSQLAccount);
+             PreparedStatement stmtUser = connection.prepareStatement(deleteSQLUser)) {
+
+            stmtAccount.setString(1, usernameToDelete);
+            stmtAccount.executeUpdate();
+
+            stmtUser.setString(1, usernameToDelete);
+            stmtUser.executeUpdate();
             System.out.println("User and associated account deleted successfully.");
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete user and account: " + e.getMessage());
-        } finally {
-            try {
-                connection.setAutoCommit(true); // Reset auto-commit
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            throw new RuntimeException("Failed to delete user and account: " + e.getMessage(), e);
         }
     }
+
 
 }

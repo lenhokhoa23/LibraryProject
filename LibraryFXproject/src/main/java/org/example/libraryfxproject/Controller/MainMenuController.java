@@ -99,7 +99,6 @@ public class MainMenuController extends BaseController {
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             mainMenuView.getSearchToggle().setSelected(false);
-
             mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected");
             if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
                 mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
@@ -133,6 +132,7 @@ public class MainMenuController extends BaseController {
         });
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
             loadTableData();
+            initializePagination();
         });
 
         initializeLabel();
@@ -344,15 +344,6 @@ public class MainMenuController extends BaseController {
         mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
-        // Add a click listener to the root pane to hide suggestions when clicking outside
-
-
-        mainMenuView.getCatalogPagination().setMinHeight(450); // Adjust as needed
-        mainMenuView.getCatalogPagination().setPrefHeight(Region.USE_COMPUTED_SIZE);
-
-
-        // Make sure pagination control uses available space
-        VBox.setVgrow(mainMenuView.getCatalogPagination(), Priority.ALWAYS);
     }
 
     public void initializeLabel() {
@@ -622,7 +613,6 @@ public class MainMenuController extends BaseController {
                 String title = mainMenuView.getTitle().getText();
                 String author = mainMenuView.getAuthor().getText();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
-
                 // Xử lý ngày tháng
                 LocalDate pubdateLocal = mainMenuView.getPubdate().getValue();
                 String pubdate = pubdateLocal != null ? pubdateLocal.format(formatter) : null;
