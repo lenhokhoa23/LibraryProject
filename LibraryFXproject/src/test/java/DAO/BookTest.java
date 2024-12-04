@@ -1,12 +1,9 @@
 package DAO;
-
 import org.example.libraryfxproject.Dao.BookDAO;
 import org.example.libraryfxproject.Model.Book;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,27 +16,36 @@ public class BookTest {
     // Set up an in-memory database before running tests
     @BeforeAll
     public static void setupDatabase() throws SQLException {
-        connection = DatabaseInit.getConnection(); // Get the connection to the in-memory database
+        connection = DatabaseInit.getConnection(); // Get connection
     }
 
     @Test
     @Order(0)
     public void testDeleteBookFromDatabase() {
+        boolean bookExist = false;
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM books WHERE title = 'Effective Java'")) {
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                bookDAO.deleteBookFromDatabase("Effective Java");
-            }
+            bookExist = rs.next();
         } catch (SQLException e) {
             fail("Error querying the database: " + e.getMessage());
         }
+        try {
+            bookDAO.deleteBookFromDatabase("Effective Java");
+        } catch (Exception e) {
+            fail("Error deleting the book: " + e.getMessage());
+        }
+
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM books WHERE title = 'Effective Java'")) {
             ResultSet rs = stmt.executeQuery();
-            assertFalse(rs.next(), "Book should be deleted from the database");
+            assertFalse(rs.next(), "Book should be deleted from the database or not exist initially");
         } catch (SQLException e) {
             fail("Error querying the database: " + e.getMessage());
+        }
+        if (!bookExist) {
+            System.out.println("The book did not exist in the database, deletion is handled gracefully.");
         }
     }
+
 
     @Test
     @Order(1)
@@ -56,10 +62,8 @@ public class BookTest {
         String bookType = "Hardcover";
         String quantity = "5";
 
-        // Insert the book using BookDAO
         bookDAO.insertBookToDatabase(title, author, pubdateStr, releaseDateStr, ISBN, price, subject, category, URL, bookType, quantity);
 
-        // Query the database to check if the book was inserted correctly
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM books WHERE ISBN = ?")) {
             stmt.setString(1, ISBN);
             ResultSet rs = stmt.executeQuery();
@@ -169,7 +173,6 @@ public class BookTest {
         // Call the method to modify book attribute with a non-existent ISBN
         bookDAO.modifyBookAttribute(ISBN, attribute, newValue);
 
-        // Check that no book with this ISBN exists
         String nonExistentBookPrice = bookDAO.fetchPriceFromBooks(ISBN, 3);
         assertNull(nonExistentBookPrice, "Price should not be updated for a non-existent book");
     }
@@ -192,7 +195,6 @@ public class BookTest {
         }
 
     }
-
 
     // Clean up the database after all tests are complete
     @AfterAll

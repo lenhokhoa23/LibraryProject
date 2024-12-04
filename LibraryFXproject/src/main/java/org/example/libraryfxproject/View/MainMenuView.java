@@ -17,6 +17,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Model.Book;
+import org.example.libraryfxproject.Model.Librarian;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
@@ -27,28 +28,40 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MainMenuView {
     @FXML
     private TextField title;
+
     @FXML
     private TextField author;
+
     @FXML
     private DatePicker pubdate;
+
     @FXML
     private DatePicker releaseDate;
+
     @FXML
     private TextField ISBN;
+
     @FXML
     private TextField price;
+
     @FXML
     private TextField subject;
+
     @FXML
     private TextField category;
+
     @FXML
-    private TextField URL; // For the book URL or link
+    private TextField URL;
+
     @FXML
     private TextField bookType;
+
     @FXML
     private TextField quantity;
+
     @FXML
     private Button addBookButton;
+
     @FXML
     private Button backButton;
 

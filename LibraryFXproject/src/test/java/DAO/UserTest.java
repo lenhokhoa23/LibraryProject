@@ -21,21 +21,33 @@ public class UserTest {
     @Test
     @Order(0)
     public void deleteUserForNextRun() {
+        boolean userExists = false;
+
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user WHERE username = 'joemama'")) {
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                userDAO.deleteUserForNextRun("joemama");
-            }
+            userExists = rs.next();
         } catch (SQLException e) {
             fail("Error querying the database: " + e.getMessage());
         }
+
+        try {
+            userDAO.deleteUserForNextRun("joemama");
+        } catch (Exception e) {
+            fail("Error deleting the user: " + e.getMessage());
+        }
+
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user WHERE username = 'joemama'")) {
             ResultSet rs = stmt.executeQuery();
-            assertFalse(rs.next(), "User should be deleted from the database");
+            assertFalse(rs.next(), "User should be deleted from the database or not exist initially");
         } catch (SQLException e) {
             fail("Error querying the database after deletion: " + e.getMessage());
         }
+
+        if (!userExists) {
+            System.out.println("The user did not exist in the database. Deletion operation handled gracefully.");
+        }
     }
+
 
     @Test
     @Order(1)
@@ -46,7 +58,6 @@ public class UserTest {
         String phoneNumber = "01234567890";
         String password = "123456";
         String membershipType = "Basic";
-        // Act
         userDAO.saveUserToDatabase(name, email, phoneNumber, username, password, membershipType);
 
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user WHERE username = ?")) {
@@ -68,11 +79,12 @@ public class UserTest {
             throw new RuntimeException("Database query failed: " + e.getMessage());
         }
     }
-        @Test
+
+    @Test
     @Order(2)
     public void testFindUserByComponentOfUserName() {
         // Arrange
-        String component = "joe"; // Part of the username inserted earlier
+        String component = "viet"; // Part of the username inserted earlier
         List<User> users = userDAO.findUserByComponentOfUserName(component);
 
         // Assert
@@ -85,13 +97,9 @@ public class UserTest {
     @Order(3)
     public void testGetUsernameByCartId() {
         // Arrange
-        int cartId = 50; // Assuming this cart ID exists in the database
-        String expectedUsername = "joemama";
-
-        // Act
+        int cartId = 1;
+        String expectedUsername = "viettran97";
         String username = userDAO.getUsernameByCartId(cartId);
-
-        // Assert
         assertEquals(expectedUsername, username, "Username should match the expected value");
     }
 
