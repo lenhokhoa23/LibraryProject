@@ -142,6 +142,7 @@ public class MainMenuController extends BaseController {
             updateUserTableView(filteredUser);
         });
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
+            mainMenuView.getStudentSearch().setText("");
             loadTableData();
             initializePagination();
         });
@@ -279,6 +280,7 @@ public class MainMenuController extends BaseController {
                         mainMenuView.getUsernameField().getText(),
                         mainMenuView.getPasswordField().getText(),
                         mainMenuView.getMembershipTypeComboBox().getValue());
+                studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
                 showSuccessMessage("Add user successfully!!");
                 addStudentStage.close();
             }
@@ -641,7 +643,6 @@ public class MainMenuController extends BaseController {
                 String URL = mainMenuView.getURL().getText();
                 String bookType = mainMenuView.getBookType().getText();
                 String quantity = mainMenuView.getQuantity().getText();
-
                 // Kiểm tra dữ liệu đầu vào bằng validateAddBookInput
                 int validate = bookService.validateAddBookInput(title, author, pubdate, releaseDate,
                         ISBN, price, subject, category, URL, bookType, quantity);
@@ -659,6 +660,7 @@ public class MainMenuController extends BaseController {
                     default -> {
                         // Nếu tất cả đều hợp lệ, thêm sách vào database
                         bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
+                        bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
                         alertDisplayer.showInformationAlert("Successful message!", "Add book successfully!");
                         addBookStage.close();
                     }
