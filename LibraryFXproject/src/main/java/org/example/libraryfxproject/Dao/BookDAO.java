@@ -33,6 +33,8 @@ public class BookDAO extends GeneralDAO<String, Book> {
     private Trie trie = new Trie();
     private TrieNode trieNode = new TrieNode();
     public static int totalQuantity = 0;
+    private static BookDAO bookDAO;
+
 
     public Trie getTrie() {
         return trie;
@@ -50,9 +52,17 @@ public class BookDAO extends GeneralDAO<String, Book> {
         this.trieNode = trieNode;
     }
 
-    public BookDAO() {
+    private BookDAO() {
         LoadService.loadData(this);
     }
+
+    public static synchronized BookDAO getInstance() {
+        if (bookDAO == null) {
+            bookDAO = new BookDAO();
+        }
+        return bookDAO;
+    }
+
 
     public void insert(String word) {
         TrieNode current = trie.getRoot();

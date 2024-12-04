@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
@@ -52,10 +53,7 @@ public class UserView {
 
     @FXML
     private Button returnBook;
-    @FXML
-    private MenuItem logoutItem;
-    @FXML
-    private MenuButton profileButton;
+
     @FXML
     private ListView<String> suggestions;
     @FXML
@@ -681,7 +679,7 @@ public class UserView {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
         loader.setController(this);
         try {
-            Parent studentDetails = loader.load();S
+            Parent studentDetails = loader.load();
             Scene studentDetailsScene = new Scene(studentDetails);
             Stage details = new Stage();
             details.setScene(studentDetailsScene);

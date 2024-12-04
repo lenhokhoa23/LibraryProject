@@ -8,12 +8,15 @@ import org.example.libraryfxproject.Model.Cart;
 import java.time.LocalDate;
 
 public class CartService {
-    private final CartDAO cartDAO = new CartDAO();
-    private final BookDAO bookDAO = new BookDAO();
-    private final UserDAO userDAO = new UserDAO();
+    private final CartDAO cartDAO;
+    private final BookDAO bookDAO;
+    private final UserDAO userDAO;
     private static CartService cartService;
 
     private CartService() {
+        userDAO = UserDAO.getInstance();
+        bookDAO = BookDAO.getInstance();
+        cartDAO = CartDAO.getInstance();
         LoadService.loadData(cartDAO);
     }
 
