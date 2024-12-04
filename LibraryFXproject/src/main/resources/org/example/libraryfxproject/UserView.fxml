@@ -90,7 +90,7 @@
                                    </ImageView>
                                </graphic>
                                <items>
-                                   <MenuItem text="View Profile" />
+                                   <MenuItem fx:id="studentProfileDetails" text="View Profile" />
                                    <MenuItem text="Settings" />
                                    <SeparatorMenuItem />
                                    <MenuItem fx:id="logoutItem" text="Logout" />
@@ -102,7 +102,7 @@
             </StackPane>
 
               <!-- Main Content -->
-              <TabPane styleClass="main-tabs" VBox.vgrow="ALWAYS">
+              <TabPane fx:id="tabPane" styleClass="main-tabs" VBox.vgrow="ALWAYS">
          <tabs>
                      <!-- Home Tab -->
                      <Tab closable="false" text="Home">
@@ -140,8 +140,8 @@
                                           <!-- Quick Actions -->
                                           <HBox spacing="15" styleClass="quick-actions">
                      <children>
-                                                 <Button styleClass="action-button" text="Borrow a Book" />
-                                                 <Button styleClass="action-button" text="Return a Book" />
+                                                 <Button fx:id="borrowBook" styleClass="action-button" text="Borrow a Book" />
+                                                 <Button fx:id="returnBook" styleClass="action-button" text="Return a Book" />
                                                  <Button styleClass="action-button" text="Renew Loan" />
                                                  <Button styleClass="action-button" text="Book a Study Room" />
                      </children>
@@ -628,6 +628,8 @@
                             </ScrollPane>
             </content>
                      </Tab>
+
+
                   <Tab closable="false" text="Service">
                      <content>
                         <VBox spacing="20" styleClass="content-container">

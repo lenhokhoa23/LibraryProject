@@ -6,8 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
@@ -24,9 +23,27 @@ public class UserView {
     private final Stage stage;
 
     @FXML
+    private TabPane tabPane;
+    @FXML
     private MenuItem logoutItem;
     @FXML
     private MenuButton profileButton;
+    @FXML
+    private MenuItem studentProfileDetails;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Label phoneNumberLabel;
+    @FXML
+    private Label cartIDLabel;
+    @FXML
+    private Label borrowedBooksLabel;
+    @FXML
+    private Label membershipTypeLabel;
     @FXML
     private ListView<String> suggestions;
     @FXML
@@ -149,6 +166,12 @@ public class UserView {
 
     @FXML
     private ToggleButton searchToggle;
+
+    @FXML
+    private Button borrowBook;
+
+    @FXML
+    private Button returnBook;
 
     private AlertDisplayer alertDisplayer;
 
@@ -535,6 +558,82 @@ public class UserView {
         isSelecting2 = selecting2;
     }
 
+    public Button getReturnBook() {
+        return returnBook;
+    }
+
+    public Button getBorrowBook() {
+        return borrowBook;
+    }
+
+    public TabPane getTabPane() {
+        return tabPane;
+    }
+
+    public MenuItem getStudentProfileDetails() {
+        return studentProfileDetails;
+    }
+
+    public void setStudentProfileDetails(MenuItem studentProfileDetails) {
+        this.studentProfileDetails = studentProfileDetails;
+    }
+
+    public Label getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public void setUsernameLabel(Label usernameLabel) {
+        this.usernameLabel = usernameLabel;
+    }
+
+    public Label getNameLabel() {
+        return nameLabel;
+    }
+
+    public void setNameLabel(Label nameLabel) {
+        this.nameLabel = nameLabel;
+    }
+
+    public Label getEmailLabel() {
+        return emailLabel;
+    }
+
+    public void setEmailLabel(Label emailLabel) {
+        this.emailLabel = emailLabel;
+    }
+
+    public Label getPhoneNumberLabel() {
+        return phoneNumberLabel;
+    }
+
+    public void setPhoneNumberLabel(Label phoneNumberLabel) {
+        this.phoneNumberLabel = phoneNumberLabel;
+    }
+
+    public Label getCartIDLabel() {
+        return cartIDLabel;
+    }
+
+    public void setCartIDLabel(Label cartIDLabel) {
+        this.cartIDLabel = cartIDLabel;
+    }
+
+    public Label getBorrowedBooksLabel() {
+        return borrowedBooksLabel;
+    }
+
+    public void setBorrowedBooksLabel(Label borrowedBooksLabel) {
+        this.borrowedBooksLabel = borrowedBooksLabel;
+    }
+
+    public Label getMembershipTypeLabel() {
+        return membershipTypeLabel;
+    }
+
+    public void setMembershipTypeLabel(Label membershipTypeLabel) {
+        this.membershipTypeLabel = membershipTypeLabel;
+    }
+
     public void initializeUserView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
@@ -552,6 +651,23 @@ public class UserView {
             userMenuController.registerEvent();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void initializeStudentDetailsView(UserMenuController userMenuController) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
+        loader.setController(this);
+        try {
+            Parent studentDetails = loader.load();
+            Scene studentDetailsScene = new Scene(studentDetails);
+            Stage details = new Stage();
+            details.setScene(studentDetailsScene);
+            details.initModality(Modality.APPLICATION_MODAL);
+            details.initOwner(stage);
+            details.show();
+            userMenuController.registerForStudentDetails(details);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
