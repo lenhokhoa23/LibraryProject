@@ -192,12 +192,12 @@ public class UserMenuController extends BaseController {
 
         userView.getBorrowBook().setOnAction(event -> {
             TabPane tabPane = userView.getTabPane();
-            tabPane.getSelectionModel().select(5);
+            tabPane.getSelectionModel().select(4);
         });
 
         userView.getReturnBook().setOnAction(event -> {
             TabPane tabPane = userView.getTabPane();
-            tabPane.getSelectionModel().select(5);
+            tabPane.getSelectionModel().select(4);
         });
 
         userView.getStudentProfileDetails().setOnAction(event -> {
