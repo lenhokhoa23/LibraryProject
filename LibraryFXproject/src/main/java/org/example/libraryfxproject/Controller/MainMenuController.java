@@ -1,5 +1,6 @@
 package org.example.libraryfxproject.Controller;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.example.libraryfxproject.Export.ExporterFactory;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.Cart;
@@ -27,6 +29,7 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.Exception.ExportException;
 import javafx.scene.input.KeyCode;
 import org.example.libraryfxproject.Service.SearchService;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.MainMenuView;
 import java.io.IOException;
@@ -77,20 +80,9 @@ public class MainMenuController extends BaseController {
     }
   
     public void registerEvent() {
-        hideSuggestions(mainMenuView.getSuggestions());
-        hideSuggestions(mainMenuView.getSuggestions1());
-        hideSuggestions(mainMenuView.getSuggestions2());
-
-        mainMenuView.getLogoutItem().setOnAction(event -> {
-            Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
-            stage.close();
-            LoginView.openLoginView(new Stage());
+        mainMenuView.getSearchBookButton().setOnAction(e -> {
+            performSearch(mainMenuView.getSearchField().getText());
         });
-
-        handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
-        handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
-        handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
-
 
         mainMenuView.getModifyButton().setOnAction(event -> {
             mainMenuView.initializeModifyBookView(this);
@@ -108,6 +100,19 @@ public class MainMenuController extends BaseController {
             initializePagination();
         });
 
+        mainMenuView.getLogoutItem().setOnAction(event -> {
+            Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
+            stage.close();
+            LoginView.openLoginView(new Stage());
+        });
+
+        hideSuggestions(mainMenuView.getSuggestions());
+        hideSuggestions(mainMenuView.getSuggestions1());
+        hideSuggestions(mainMenuView.getSuggestions2());
+        handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
+        handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
+        handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
+
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
@@ -120,6 +125,8 @@ public class MainMenuController extends BaseController {
 
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
+            loadTableData();
+            initializePagination();
         });
 
         mainMenuView.getAddItemButton().setOnAction(event -> {
@@ -206,7 +213,7 @@ public class MainMenuController extends BaseController {
     private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
         textField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                performSearch(listView);
+                hideSuggestions(listView);
             } else {
                 scheduleSearch(textField, listView);
             }
@@ -224,8 +231,15 @@ public class MainMenuController extends BaseController {
                 String selectedItem = listView.getSelectionModel().getSelectedItem();
                 if (selectedItem != null) {
                     textField.setText(selectedItem);
-                    hideSuggestions(listView);
-                    performSearch(listView);
+                    Platform.runLater(() -> {
+                        textField.requestFocus();
+                        textField.positionCaret(textField.getText().length());
+
+                        // Delay ẩn suggestions :D
+                        PauseTransition pause = new PauseTransition(Duration.millis(100));
+                        pause.setOnFinished(e -> hideSuggestions(listView));
+                        pause.play();
+                    });
                 }
             }
         });
@@ -248,13 +262,6 @@ public class MainMenuController extends BaseController {
             }
         });
 
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                hideSuggestions(listView);
-            } else {
-                scheduleSearch(textField, listView);
-            }
-        });
     }
 
     public void registerForAddStudent(Stage addStudentStage) {
@@ -512,8 +519,10 @@ public class MainMenuController extends BaseController {
         listView.setVisible(false);
     }
 
-    private void performSearch(ListView<String> listView) {
-        hideSuggestions(listView);
+    private void performSearch(String selectedItem) {
+        Book book = bookService.getBookByTitle(selectedItem);
+        new BookDetailsView(book);
+        hideSuggestions(mainMenuView.getSuggestions());
     }
 
     public void shutdown() {

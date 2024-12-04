@@ -118,7 +118,7 @@
                                              <children>
                                                  <VBox>
                                                     <children>
-                                                        <Label fx:id="welcomeMessage" styleClass="welcome-title" text="Welcome back, Alex!" />
+                                                        <Label fx:id="welcomeMessage" styleClass="welcome-title" text="Welcome back, !" />
                                                         <Label styleClass="welcome-subtitle" text="Ready to embark on a new literary journey?" />
                                                     </children>
                                                  </VBox>

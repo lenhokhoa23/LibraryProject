@@ -65,7 +65,7 @@ public class UserMenuController extends BaseController {
 
     public void registerEvent() {
         userView.setUser(userService.findUserByUsername(userView.getUsername()));
-
+        userView.getWelcomeMessage().setText("Welcome back, " + userView.getUser().getName() + "!");
         hideSuggestions(userView.getSuggestions());
         hideSuggestions(userView.getSuggestions1());
         hideSuggestions(userView.getSuggestions2());
