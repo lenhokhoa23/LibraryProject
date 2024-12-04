@@ -10,6 +10,17 @@ import java.util.List;
 
 public class CartDAO extends GeneralDAO<Integer, Cart> {
 
+    private static CartDAO cartDAO;
+    private CartDAO() {
+
+    }
+
+    public static synchronized CartDAO getInstance() {
+        if (cartDAO == null) {
+            cartDAO = new CartDAO();
+        }
+        return cartDAO;
+    }
     @Override
     public void loadData() {
         String sql = "SELECT * FROM cart";

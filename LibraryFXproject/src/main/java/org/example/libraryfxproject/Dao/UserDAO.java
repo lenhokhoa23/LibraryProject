@@ -10,6 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends GeneralDAO<String, User> {
+    private static UserDAO userDAO;
+    private UserDAO() {
+
+    }
+
+    public static synchronized UserDAO getInstance() {
+        if (userDAO == null) {
+            userDAO = new UserDAO();
+        }
+        return userDAO;
+    }
+
     /** Load userdata into memory. */
     @Override
     public void loadData() {

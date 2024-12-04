@@ -9,13 +9,16 @@ import org.example.libraryfxproject.Model.User;
 import java.lang.reflect.AccessFlag;
 
 public class UserService {
-    private final UserDAO userDAO = new UserDAO();
-    private final AccountDAO accountDAO = new AccountDAO();
+    private final UserDAO userDAO;
+    private final AccountDAO accountDAO;
     private static UserService userService;
 
     private UserService() {
+        userDAO = UserDAO.getInstance();
+        accountDAO = AccountDAO.getInstance();
         LoadService.loadData(userDAO);
         LoadService.loadData(accountDAO);
+
     }
 
     public static synchronized UserService getInstance() {

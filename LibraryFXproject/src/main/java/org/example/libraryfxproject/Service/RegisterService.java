@@ -9,10 +9,11 @@ import java.util.regex.Pattern;
 import static org.example.libraryfxproject.Util.ValidationUtils.*;
 
 public class RegisterService {
-    AccountDAO accountDAO = new AccountDAO();
+    AccountDAO accountDAO;
     private static RegisterService registerService;
 
     private RegisterService() {
+        accountDAO = AccountDAO.getInstance();
         LoadService.loadData(accountDAO);
     }
 
@@ -21,6 +22,14 @@ public class RegisterService {
             registerService = new RegisterService();
         }
         return registerService;
+    }
+
+    public AccountDAO getAccountDAO() {
+        return accountDAO;
+    }
+
+    public void refreshAccountDAO() {
+        LoadService.loadData(accountDAO);
     }
 
     public int validateInput(String username, String phoneNumber, String email) {

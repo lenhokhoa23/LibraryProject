@@ -11,6 +11,17 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class AccountDAO extends GeneralDAO<String, Account> {
+    private static AccountDAO accountDAO;
+    private AccountDAO() {
+
+    }
+
+    public static synchronized AccountDAO getInstance() {
+        if (accountDAO == null) {
+            accountDAO = new AccountDAO();
+        }
+        return accountDAO;
+    }
 
     @Override
     public void loadData() {

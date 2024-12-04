@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public class BookService {
-    private final BookDAO bookDAO = new BookDAO();
+    private final BookDAO bookDAO = BookDAO.getInstance();
     private static BookService bookService;
 
     public static synchronized BookService getInstance() {
@@ -87,10 +87,12 @@ public class BookService {
         bookDAO.insertBookToDatabase(title, author, pubdateStr, releaseDateStr,
                 ISBN, price, subject, category, URL,
                 bookType, quantity);
+        UpdateService.getInstance().updateBookDAO();
     }
 
     public void deleteBookFromDatabase(String title) {
         bookDAO.deleteBookFromDatabase(title);
+        UpdateService.getInstance().updateBookDAO();
     }
 
     public void modifyBook(String ISBN, String attribute, String newValue) {

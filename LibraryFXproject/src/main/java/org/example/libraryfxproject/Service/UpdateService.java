@@ -20,12 +20,16 @@ import org.example.libraryfxproject.Model.Cart;
 import java.util.List;
 
 public class UpdateService {
-    private final BookDAO bookDAO = new BookDAO();
-    private final CartDAO cartDAO = new CartDAO();
-    private final UserDAO userDAO = new UserDAO();
-
+    private BookDAO bookDAO;
+    private CartDAO cartDAO;
+    private UserDAO userDAO;
+    private AccountDAO accountDAO = AccountDAO.getInstance();
     private static UpdateService updateService;
-    private UpdateService() {}
+    private UpdateService() {
+        bookDAO = BookDAO.getInstance();
+        cartDAO = CartDAO.getInstance();
+        userDAO = UserDAO.getInstance();
+    }
     public static synchronized UpdateService getInstance() {
         if (updateService == null) {
             updateService = new UpdateService();
@@ -123,4 +127,19 @@ public class UpdateService {
         tableView.setItems(cartDAO.getActivitiesByCartId(cartId));
     }
 
+    public void updateAccountDAO() {
+        LoadService.loadData(accountDAO);
+    }
+
+    public void updateBookDAO() {
+        LoadService.loadData(bookDAO);
+    }
+
+    public void updateCartDAO() {
+        LoadService.loadData(cartDAO);
+    }
+
+    public void updateUserDAO() {
+        LoadService.loadData(userDAO);
+    }
 }

@@ -7,7 +7,6 @@ import org.example.libraryfxproject.Dao.GeneralDAO;
 import org.example.libraryfxproject.Model.Account;
 
 public class LoadService {
-    private final BookDAO bookDAO = new BookDAO();
     private static LoadService loadService;
     private LoadService() {
     }

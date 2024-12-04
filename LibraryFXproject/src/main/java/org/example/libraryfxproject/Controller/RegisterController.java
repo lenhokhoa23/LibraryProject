@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 import org.example.libraryfxproject.Dao.AccountDAO;
 import org.example.libraryfxproject.Dao.DatabaseConnection;
 import org.example.libraryfxproject.Dao.UserDAO;
+import org.example.libraryfxproject.Service.LoginService;
 import org.example.libraryfxproject.Service.RegisterService;
+import org.example.libraryfxproject.Service.UpdateService;
 import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.RegisterView;
@@ -20,11 +22,15 @@ import java.sql.SQLException;
 
 public class RegisterController extends BaseController {
     private final RegisterView registerView;
-    private final RegisterService registerService = RegisterService.getInstance();
-    private final UserDAO userDAO = new UserDAO();
+    private final RegisterService registerService;
+    private final UserDAO userDAO;
+    private final UpdateService updateService;
 
     public RegisterController(RegisterView registerView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
+        updateService = UpdateService.getInstance();
+        registerService = RegisterService.getInstance();
+        userDAO = UserDAO.getInstance();
         this.registerView = registerView;
     }
 
@@ -44,6 +50,8 @@ public class RegisterController extends BaseController {
                 if (registerService.validateInput(username, phoneNumber, email) == 0) {
                     showSuccessMessage("Đăng kí tài khoản thành công!");
                     userDAO.saveUserToDatabase(name, email, phoneNumber, username, password, "Basic");
+                    updateService.updateAccountDAO();
+                    updateService.updateUserDAO();
                     openLoginView((Stage) ((Node) event.getSource()).getScene().getWindow());
                 } else if (registerService.validateInput(username, phoneNumber, email) == 1) {
                     showErrorMessage("Username must not contain spaces, must be 8-20 characters long, including letters and numbers!");
