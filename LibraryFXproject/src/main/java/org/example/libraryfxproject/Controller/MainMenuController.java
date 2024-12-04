@@ -50,6 +50,7 @@ public class MainMenuController extends BaseController {
     private final UpdateService updateService;
     private final UserService userService;
     private final CartService cartService;
+    private final LoginService loginService;
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
     private final ExportService exportService;
     private ObservableList<User> studentList = FXCollections.observableArrayList();
@@ -68,6 +69,7 @@ public class MainMenuController extends BaseController {
         this.bookService = BookService.getInstance();
         this.userService = UserService.getInstance();
         this.cartService = CartService.getInstance();
+        this.loginService = LoginService.getInstance();
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         try {
             this.googleBooksService = new GoogleBooksService();
@@ -80,6 +82,8 @@ public class MainMenuController extends BaseController {
     }
   
     public void registerEvent() {
+        mainMenuView.setLibrarian(loginService.findLibrarianByUsername(mainMenuView.getUsername()));
+
         mainMenuView.getSearchBookButton().setOnAction(e -> {
             performSearch(mainMenuView.getSearchField().getText());
         });
@@ -469,6 +473,7 @@ public class MainMenuController extends BaseController {
         } catch (Exception e) {
             showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
+        initializeLabel();
     }
 
     public void handleReturnService(Event event) {

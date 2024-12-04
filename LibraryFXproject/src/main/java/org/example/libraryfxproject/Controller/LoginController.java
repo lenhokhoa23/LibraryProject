@@ -39,7 +39,7 @@ public class LoginController extends BaseController {
             } else if (loginService.authenticate(username, password) > -1) {
                 showSuccessMessage("Successfully login!");
                 if (loginService.authenticate(username, password) == 0) {
-                    openLibrarianView((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    openLibrarianView((Stage) ((Node) event.getSource()).getScene().getWindow(), username);
                 } else {
                     openUserView((Stage) ((Node)event.getSource()).getScene().getWindow(), username);
                 }
@@ -52,8 +52,8 @@ public class LoginController extends BaseController {
         });
     }
 
-    private void openLibrarianView(Stage stage) {
-        MainMenuView menuView = new MainMenuView(stage);
+    private void openLibrarianView(Stage stage, String username) {
+        MainMenuView menuView = new MainMenuView(stage, username);
     }
 
     private void openRegisterView(Stage stage) {
