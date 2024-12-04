@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserTest {
     private static Connection connection;
-    private UserDAO userDAO = new UserDAO();
+    private UserDAO userDAO = UserDAO.getInstance();
 
     @BeforeAll
     public static void setupDatabase() throws SQLException {

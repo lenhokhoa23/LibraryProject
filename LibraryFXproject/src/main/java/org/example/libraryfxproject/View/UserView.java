@@ -53,6 +53,7 @@ public class UserView {
 
     @FXML
     private Button returnBook;
+
     @FXML
     private ListView<String> suggestions;
     @FXML

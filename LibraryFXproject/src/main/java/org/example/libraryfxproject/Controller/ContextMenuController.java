@@ -16,7 +16,7 @@ public class ContextMenuController extends BaseController {
     public ContextMenuController(TableView<Book> catalogTableView, AlertDisplayer alertDisplayer, String username) {
         super(alertDisplayer);
         this.catalogTableView = catalogTableView;
-        this.cartDAO = new CartDAO();
+        this.cartDAO = CartDAO.getInstance();
         this.bookService = BookService.getInstance();
         setupContextMenu(username);
     }

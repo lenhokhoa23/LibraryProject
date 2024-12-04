@@ -51,14 +51,13 @@ public class MainMenuController extends BaseController {
     private final UserService userService;
     private final CartService cartService;
     private final LoginService loginService;
-    private ObservableList<Book> bookList = FXCollections.observableArrayList();
+    private ObservableList<Book> bookList;
     private final ExportService exportService;
-    private ObservableList<User> studentList = FXCollections.observableArrayList();
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private ObservableList<User> studentList;
+    private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> searchTask;
     private final int ROWS_PER_PAGE = 15;
     private boolean isFilteredView = false;
-    private final ContextMenuController contextMenuController;
     private GoogleBooksService googleBooksService;
 
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
@@ -70,6 +69,8 @@ public class MainMenuController extends BaseController {
         this.userService = UserService.getInstance();
         this.cartService = CartService.getInstance();
         this.loginService = LoginService.getInstance();
+        bookList = FXCollections.observableArrayList();
+        scheduler = Executors.newSingleThreadScheduledExecutor();
         this.exportService = new ExportService(ExporterFactory.ExportType.EXCEL);
         try {
             this.googleBooksService = new GoogleBooksService();
@@ -78,7 +79,6 @@ public class MainMenuController extends BaseController {
         }
         loadTableData();
         initializePagination();
-        contextMenuController = new ContextMenuController(mainMenuView.getCatalogTableView(), alertDisplayer, mainMenuView.getUsername());
     }
   
     public void registerEvent() {

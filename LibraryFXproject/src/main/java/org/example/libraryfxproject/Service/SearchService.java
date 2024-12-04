@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchService {
-    private final BookDAO bookDAO = new BookDAO();
-    private final UserDAO userDAO = new UserDAO();
+    private final BookDAO bookDAO;
+    private final UserDAO userDAO;
     private static SearchService searchService;
-    private SearchService() {}
+    private SearchService() {
+        userDAO = UserDAO.getInstance();
+        bookDAO = BookDAO.getInstance();
+    }
     // synchronized giup ho tro da luong khong tao ra nhieu thuc the
     public static synchronized SearchService getInstance() {
         if (searchService == null) {

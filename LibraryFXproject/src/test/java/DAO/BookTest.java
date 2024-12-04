@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookTest {
     private static Connection connection;
-    private BookDAO bookDAO = new BookDAO();
+    private BookDAO bookDAO = BookDAO.getInstance();
 
     // Set up an in-memory database before running tests
     @BeforeAll

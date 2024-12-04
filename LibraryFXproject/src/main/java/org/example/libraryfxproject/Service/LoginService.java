@@ -7,10 +7,12 @@ import org.example.libraryfxproject.Model.Account;
 import org.example.libraryfxproject.Model.Librarian;
 import org.example.libraryfxproject.Model.User;
 
+import java.security.Key;
+
 public class LoginService {
-    private final AccountDAO accountDAO = new AccountDAO();
-    private final LibrarianDAO librarianDAO = new LibrarianDAO();
-    private final UserDAO userDAO = new UserDAO();
+    private AccountDAO accountDAO;
+    private LibrarianDAO librarianDAO;
+    private UserDAO userDAO;
     private static LoginService loginService;
     public static synchronized LoginService getInstance() {
         if (loginService == null) {
@@ -20,9 +22,20 @@ public class LoginService {
     }
 
     private LoginService() {
+        accountDAO = AccountDAO.getInstance();
+        librarianDAO = LibrarianDAO.getInstance();
+        userDAO = UserDAO.getInstance();
         LoadService.loadData(accountDAO);
+        for (String key : accountDAO.getDataMap().keySet()) {
+            System.out.println(key);
+        }
         LoadService.loadData(librarianDAO);
         LoadService.loadData(userDAO);
+    }
+
+    public void setAccountDAO(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+
     }
 
     public int authenticate(String username, String password) {

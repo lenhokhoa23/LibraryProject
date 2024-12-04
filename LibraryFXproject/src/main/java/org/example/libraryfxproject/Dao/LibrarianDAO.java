@@ -10,6 +10,18 @@ import java.sql.SQLException;
 
 
 public class LibrarianDAO extends GeneralDAO<String, Librarian> {
+    private static LibrarianDAO librarianDAO;
+    private LibrarianDAO() {
+
+    }
+
+    public static synchronized LibrarianDAO getInstance() {
+        if (librarianDAO == null) {
+            librarianDAO = new LibrarianDAO();
+        }
+        return librarianDAO;
+    }
+
     @Override
     public void loadData() {
         String sql = "SELECT * FROM Librarian";
