@@ -31,6 +31,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -39,7 +40,7 @@
 
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
-        <URL value="@userviewStyle.css" />
+        <URL value="@../styles/userviewStyle.css" />
     </stylesheets>
    <children>
        <!-- Overlay for notifications -->
@@ -49,19 +50,19 @@
             <StackPane>
                <children>
                     <!-- Header -->
-                    <HBox fillHeight="false" prefHeight="120.0" prefWidth="934.0" styleClass="header">
+                    <HBox fillHeight="false" prefHeight="58.0" prefWidth="1520.0" styleClass="header">
                        <children>
                            <StackPane styleClass="logo-container">
                               <children>
                                   <Circle radius="30" styleClass="logo-background" />
                                   <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
                                      <image>
-                                         <Image url="@images/book-stack.png" />
+                                         <Image url="@../images/book-stack.png" />
                                      </image>
                                   </ImageView>
                               </children>
                            </StackPane>
-                           <VBox alignment="CENTER_LEFT" prefHeight="92.0" prefWidth="304.0" HBox.hgrow="ALWAYS">
+                           <VBox alignment="CENTER_LEFT" prefHeight="92.0" prefWidth="1197.0" HBox.hgrow="ALWAYS">
                               <children>
                                   <Label styleClass="app-title" text="MyLibrary" />
                                   <Label styleClass="app-subtitle" text="Your Gateway to Knowledge" />
@@ -73,7 +74,7 @@
                                       <children>
                                           <ImageView fitHeight="40.0" fitWidth="40.0">
                                              <image>
-                                                 <Image url="@images/notification.png" />
+                                                 <Image url="@../images/notification.png" />
                                              </image>
                                           </ImageView>
                                           <Circle fx:id="notificationBadge" radius="5" styleClass="notification-badge" StackPane.alignment="TOP_RIGHT" />
@@ -85,7 +86,7 @@
                                <graphic>
                                    <ImageView fitHeight="40" fitWidth="40">
                                       <image>
-                                          <Image url="@images/student.png" />
+                                          <Image url="@../images/student.png" />
                                       </image>
                                    </ImageView>
                                </graphic>
@@ -102,7 +103,7 @@
             </StackPane>
 
               <!-- Main Content -->
-              <TabPane styleClass="main-tabs" VBox.vgrow="ALWAYS">
+              <TabPane prefWidth="1520.0" styleClass="main-tabs" VBox.vgrow="ALWAYS">
          <tabs>
                      <!-- Home Tab -->
                      <Tab closable="false" text="Home">
@@ -111,19 +112,11 @@
                                <content>
                                    <VBox prefHeight="1913.0" prefWidth="1520.0" spacing="30" styleClass="content-container">
                                       <children>
-                                        <TextField fx:id="searchField" prefHeight="40.0" prefWidth="590.0" promptText="Search books, authors, genres..." />
-                                    <ListView fx:id="suggestions" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="159.0" prefWidth="619.0" />
-                                          <!-- Welcome Message -->
-                                          <HBox prefHeight="123.0" prefWidth="880.0" styleClass="welcome-banner">
-                                             <children>
-                                                 <VBox>
-                                                    <children>
-                                                        <Label fx:id="welcomeMessage" styleClass="welcome-title" text="Welcome back, !" />
-                                                        <Label styleClass="welcome-subtitle" text="Ready to embark on a new literary journey?" />
-                                                    </children>
-                                                 </VBox>
-                                                 <Region HBox.hgrow="ALWAYS" />
-                                          <TableView fx:id="activityDueTable" maxHeight="100.0" maxWidth="521.0" minHeight="100.0" minWidth="442.0" prefHeight="100.0" prefWidth="521.0" visible="false">
+                                    <Pane prefHeight="240.0" prefWidth="1459.0">
+                                       <children>
+                                          <ListView fx:id="suggestions" layoutX="7.0" layoutY="46.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="106.0" prefWidth="885.0" />
+                                              <TextField fx:id="searchField" layoutX="7.0" layoutY="6.0" prefHeight="40.0" prefWidth="885.0" promptText="Search books, authors, genres..." />
+                                          <TableView fx:id="activityDueTable" layoutX="963.0" layoutY="-27.0" maxHeight="147.0" maxWidth="550.0" minHeight="100.0" minWidth="442.0" prefHeight="147.0" prefWidth="496.0" visible="false">
                                              <columns>
                                                 <TableColumn fx:id="timeDueColumn" text="Thời gian" />
                                                 <TableColumn fx:id="userIdDueColumn" text="Mã người dùng" />
@@ -134,6 +127,18 @@
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                              </columnResizePolicy>
                                           </TableView>
+                                       </children>
+                                    </Pane>
+                                          <!-- Welcome Message -->
+                                          <HBox prefHeight="123.0" prefWidth="880.0" styleClass="welcome-banner">
+                                             <children>
+                                                 <VBox>
+                                                    <children>
+                                                        <Label fx:id="welcomeMessage" styleClass="welcome-title" text="Welcome back, !" />
+                                                        <Label styleClass="welcome-subtitle" text="Ready to embark on a new literary journey?" />
+                                                    </children>
+                                                 </VBox>
+                                                 <Region HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
                   
@@ -163,7 +168,7 @@
                                      <StackPane styleClass="image-container">
                                          <Rectangle height="250" styleClass="image-clip" width="200" />
                                          <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
+                                             <Image url="@../images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
@@ -180,7 +185,7 @@
                                      <StackPane styleClass="image-container">
                                          <Rectangle height="250" styleClass="image-clip" width="200" />
                                          <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
+                                             <Image url="@../images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
@@ -197,7 +202,7 @@
                                      <StackPane styleClass="image-container">
                                          <Rectangle height="250" styleClass="image-clip" width="200" />
                                          <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
+                                             <Image url="@../images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
@@ -214,7 +219,7 @@
                                      <StackPane styleClass="image-container">
                                          <Rectangle height="250" styleClass="image-clip" width="200" />
                                          <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
+                                             <Image url="@../images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
@@ -231,7 +236,7 @@
                                      <StackPane styleClass="image-container">
                                          <Rectangle height="250" styleClass="image-clip" width="200" />
                                          <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
+                                             <Image url="@../images/uetbookclub.png" />
                                          </ImageView>
                                      </StackPane>
                                      <VBox styleClass="book-info">
@@ -384,7 +389,7 @@
                                          <graphic>
                                              <ImageView fitHeight="15" fitWidth="15">
                                                  <image>
-                                                     <Image url="@images/search.png" />
+                                                     <Image url="@../images/search.png" />
                                                  </image>
                                              </ImageView>
                                          </graphic>
@@ -394,7 +399,7 @@
                                          <graphic>
                                              <ImageView fitHeight="20" fitWidth="20">
                                                  <image>
-                                                     <Image url="@images/refresh.png" />
+                                                     <Image url="@../images/refresh.png" />
                                                  </image>
                                              </ImageView>
                                          </graphic>
@@ -524,7 +529,7 @@
       <children>
                                                                <ImageView fitHeight="123.0" fitWidth="135.0" preserveRatio="true">
                                                                   <image>
-                                                                      <Image url="@images/e26d84db-c461-4d70-8743-67374cb9300e.png" />
+                                                                      <Image url="@../images/e26d84db-c461-4d70-8743-67374cb9300e.png" />
                                                                   </image>
                                                                </ImageView>
                                                                <Label styleClass="club-name" text="OBook Classic Literature" />
@@ -537,7 +542,7 @@
       <children>
                                                                <ImageView fitHeight="120.0" fitWidth="200.0" preserveRatio="true">
                                                                   <image>
-                                                                      <Image url="@images/uetbookclub.png" />
+                                                                      <Image url="@../images/uetbookclub.png" />
                                                                   </image>
                                                                </ImageView>
                                                                <Label styleClass="club-name" text="UET Book Club" />
@@ -550,7 +555,7 @@
       <children>
                                                                <ImageView fitHeight="120.0" fitWidth="200.0" preserveRatio="true">
                                                                   <image>
-                                                                      <Image url="@images/englishbookclub.png" />
+                                                                      <Image url="@../images/englishbookclub.png" />
                                                                   </image>
                                                                </ImageView>
                                                                <Label styleClass="club-name" text="English Book Club" />
@@ -563,7 +568,7 @@
       <children>
                                                                <ImageView fitHeight="120.0" fitWidth="200.0" preserveRatio="true">
                                                                   <image>
-                                                                      <Image url="@images/abcbookclub.png" />
+                                                                      <Image url="@../images/abcbookclub.png" />
                                                                   </image>
                                                                </ImageView>
                                                                <Label styleClass="club-name" text="ABC Book Club" />
@@ -576,7 +581,7 @@
       <children>
                                                                <ImageView fitHeight="120" fitWidth="200" preserveRatio="true">
                                                                   <image>
-                                                                      <Image url="@images/teenbookclub.png" />
+                                                                      <Image url="@../images/teenbookclub.png" />
                                                                   </image>
                                                                </ImageView>
                                                                <Label styleClass="club-name" text="Teen Book Club" />

@@ -12,6 +12,7 @@ public class LoginService {
     private final LibrarianDAO librarianDAO = new LibrarianDAO();
     private final UserDAO userDAO = new UserDAO();
     private static LoginService loginService;
+
     public static synchronized LoginService getInstance() {
         if (loginService == null) {
             loginService = new LoginService();
@@ -21,6 +22,8 @@ public class LoginService {
 
     private LoginService() {
         LoadService.loadData(accountDAO);
+        LoadService.loadData(librarianDAO);
+        LoadService.loadData(userDAO);
     }
 
     public int authenticate(String username, String password) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,6 +15,7 @@
                     <TextField fx:id="isbnField" prefHeight="26.0" prefWidth="330.0" promptText="ISBN" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <ComboBox fx:id="attributeBookComboBox" prefWidth="150.0" promptText="Attribute" />
                     <TextField fx:id="attributeField" prefHeight="26.0" prefWidth="330.0" promptText="Attribute" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">

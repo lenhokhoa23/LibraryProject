@@ -134,6 +134,12 @@ public class MainMenuController extends BaseController {
             initializePagination();
         });
 
+        mainMenuView.getModifyStudentButton().setOnAction(event -> {
+            mainMenuView.initializeModifyStudentView(this);
+            loadTableData();
+            initializePagination();
+        });
+
         mainMenuView.getAddItemButton().setOnAction(event -> {
             mainMenuView.initializeAddBookView(this);
         });
@@ -285,27 +291,104 @@ public class MainMenuController extends BaseController {
         });
     }
 
-    public void registerForModifyBook(Stage stage) {
-        mainMenuView.getUpdateButton().setOnAction(event -> {
+    public void registerForModifyStudent(Stage stage) {
+        mainMenuView.getAttributeStudentComboBox().getItems().addAll("username", "name", "email",
+                "phoneNumber", "borrowedBooks");
+        mainMenuView.getUpdateButton1().setOnAction(event -> {
             try {
-                String ISBN = mainMenuView.getIsbnField().getText();
-                String attribute = mainMenuView.getAttributeField().getText();
-                String newValue = mainMenuView.getNewValueField().getText();
-                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    showErrorMessage("Please fill in all fields!");
+                String Student_ID = mainMenuView.getStudentIdField1().getText();
+                String attribute = mainMenuView.getAttributeStudentComboBox().getValue();
+                String newValue = mainMenuView.getNewValueField1().getText();
+                if (Student_ID.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    showErrorMessage("Vui lòng nhập đầy đủ thông tin");
                 } else {
-                    bookService.modifyBook(ISBN, attribute, newValue);
-                    showSuccessMessage("Book updated successfully!");
+                    userService.modifyStudent(Student_ID, attribute, newValue);
+                    showSuccessMessage("Student updated successfully!");
                     stage.close();
                 }
             } catch (Exception e) {
                 showErrorMessage("An error occurred. Please check the input values.");
             }
         });
-        mainMenuView.getBackButton().setOnAction(event -> stage.close());mainMenuView.getUpdateButton().setOnAction(event -> {
+        mainMenuView.getBackButton1().setOnAction(event -> stage.close());
+    }
+
+    public void registerForAddBook (Stage addBookStage){
+        mainMenuView.getAddBookButton().setOnAction(event -> {
+            try {
+                String title = mainMenuView.getTitle().getText();
+                String author = mainMenuView.getAuthor().getText();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
+
+                LocalDate pubdateLocal = mainMenuView.getPubdate().getValue();
+                String pubdate = pubdateLocal != null ? pubdateLocal.format(formatter) : null;
+
+                LocalDate releaseDateLocal = mainMenuView.getReleaseDate().getValue();
+                String releaseDate = releaseDateLocal != null ? releaseDateLocal.format(formatter) : null;
+
+                String ISBN = mainMenuView.getISBN().getText();
+                String price = mainMenuView.getPrice().getText();
+                String subject = mainMenuView.getSubject().getText();
+                String category = mainMenuView.getCategory().getText();
+                String URL = mainMenuView.getURL().getText();
+                String bookType = mainMenuView.getBookType().getText();
+                String quantity = mainMenuView.getQuantity().getText();
+
+                int validate = bookService.validateAddBookInput(title, author, pubdate, releaseDate,
+                        ISBN, price, subject, category, URL, bookType, quantity);
+
+                switch (validate) {
+                    case 1 -> alertDisplayer.showErrorAlert("Error", "Invalid ISBN. It must be exactly 13 digits.");
+                    case 2 -> alertDisplayer.showErrorAlert("Error", "Invalid title. Special characters are not allowed.");
+                    case 3 -> alertDisplayer.showErrorAlert("Error", "Invalid price or quantity. Both must be positive numbers.");
+                    case 4 -> alertDisplayer.showErrorAlert("Error", "Invalid subject. Numbers are not allowed.");
+                    case 5 -> alertDisplayer.showErrorAlert("Error", "Invalid category. Numbers are not allowed.");
+                    case 6 -> alertDisplayer.showErrorAlert("Error", "Invalid URL. It must follow the format http:// or https://.");
+                    case 7 -> alertDisplayer.showErrorAlert("Error", "Invalid book type. Special characters are not allowed.");
+                    case 8 -> alertDisplayer.showErrorAlert("Error", "Invalid quantity. It must be a positive integer.");
+                    case 9 -> alertDisplayer.showErrorAlert("Error", "Invalid author. Special characters are not allowed.");
+                    default -> {
+                        bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
+                        alertDisplayer.showInformationAlert("Successful message!", "Add book successfully!");
+                        addBookStage.close();
+                    }
+                }
+            } catch (Exception e) {
+                alertDisplayer.showErrorAlert( "Error", "An error occured when adding book!");
+            }
+        });
+        mainMenuView.getBackButton().setOnAction(event -> {
+            addBookStage.close();
+        });
+
+        mainMenuView.getQuickAddBookButton().setOnAction(event -> {
+            Book book = null;
+            try {
+                book = googleBooksService.getBookByISBN(mainMenuView.getISBN().getText());
+            } catch (Exception e) {
+                showErrorMessage("An error occur when getting book by ISBN: " + e.getMessage());
+            }
+            if (book == null) {
+                showErrorMessage("No book found for this ISBN");
+            } else {
+                mainMenuView.getTitle().setText(book.getTitle());
+                mainMenuView.getAuthor().setText(book.getAuthor());
+                mainMenuView.getPrice().setText(book.getPrice());
+                mainMenuView.getSubject().setText(book.getSubject());
+                mainMenuView.getCategory().setText(book.getCategory());
+                mainMenuView.getURL().setText(book.getURL());
+                mainMenuView.getBookType().setText(book.getBookType());
+            }
+        });
+    }
+
+    public void registerForModifyBook(Stage stage) {
+        mainMenuView.getAttributeBookComboBox().getItems().addAll("no", "title", "author" , "pubdate",
+                "releaseDate", "ISBN", "price", "subject", "category", "URL", "bookType", "quantity");
+        mainMenuView.getUpdateButton().setOnAction(event -> {
             try {
                 String ISBN = mainMenuView.getIsbnField().getText();
-                String attribute = mainMenuView.getAttributeField().getText();
+                String attribute = mainMenuView.getAttributeBookComboBox().getValue();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
                     showErrorMessage("Please fill in all fields!");
@@ -474,6 +557,9 @@ public class MainMenuController extends BaseController {
             showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
         initializeLabel();
+        initializeBarChart();
+        initializePieChart();
+        initializeTable();
     }
 
     public void handleReturnService(Event event) {
@@ -500,6 +586,10 @@ public class MainMenuController extends BaseController {
         } catch (Exception e) {
             showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
+        initializeLabel();
+        initializeBarChart();
+        initializePieChart();
+        initializeTable();
     }
 
     private void scheduleSearch(TextField textField, ListView<String> listView) {
@@ -626,81 +716,6 @@ public class MainMenuController extends BaseController {
         } catch (RuntimeException e) {
             alertDisplayer.showErrorAlert("Exceed Number", "Page not found!");
         }
-    }
-
-    public void registerForAddBook (Stage addBookStage){
-        // Handle Add Book button click
-        mainMenuView.getAddBookButton().setOnAction(event -> {
-            try {
-                // Extract input values
-                String title = mainMenuView.getTitle().getText();
-                String author = mainMenuView.getAuthor().getText();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
-
-                // Xử lý ngày tháng
-                LocalDate pubdateLocal = mainMenuView.getPubdate().getValue();
-                String pubdate = pubdateLocal != null ? pubdateLocal.format(formatter) : null;
-
-                LocalDate releaseDateLocal = mainMenuView.getReleaseDate().getValue();
-                String releaseDate = releaseDateLocal != null ? releaseDateLocal.format(formatter) : null;
-
-                String ISBN = mainMenuView.getISBN().getText();
-                String price = mainMenuView.getPrice().getText();
-                String subject = mainMenuView.getSubject().getText();
-                String category = mainMenuView.getCategory().getText();
-                String URL = mainMenuView.getURL().getText();
-                String bookType = mainMenuView.getBookType().getText();
-                String quantity = mainMenuView.getQuantity().getText();
-
-                // Kiểm tra dữ liệu đầu vào bằng validateAddBookInput
-                int validate = bookService.validateAddBookInput(title, author, pubdate, releaseDate,
-                        ISBN, price, subject, category, URL, bookType, quantity);
-
-                switch (validate) {
-                    case 1 -> alertDisplayer.showErrorAlert("Error", "Invalid ISBN. It must be exactly 13 digits.");
-                    case 2 -> alertDisplayer.showErrorAlert("Error", "Invalid title. Special characters are not allowed.");
-                    case 3 -> alertDisplayer.showErrorAlert("Error", "Invalid price or quantity. Both must be positive numbers.");
-                    case 4 -> alertDisplayer.showErrorAlert("Error", "Invalid subject. Numbers are not allowed.");
-                    case 5 -> alertDisplayer.showErrorAlert("Error", "Invalid category. Numbers are not allowed.");
-                    case 6 -> alertDisplayer.showErrorAlert("Error", "Invalid URL. It must follow the format http:// or https://.");
-                    case 7 -> alertDisplayer.showErrorAlert("Error", "Invalid book type. Special characters are not allowed.");
-                    case 8 -> alertDisplayer.showErrorAlert("Error", "Invalid quantity. It must be a positive integer.");
-                    case 9 -> alertDisplayer.showErrorAlert("Error", "Invalid author. Special characters are not allowed.");
-                    default -> {
-                        // Nếu tất cả đều hợp lệ, thêm sách vào database
-                        bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
-                        alertDisplayer.showInformationAlert("Successful message!", "Add book successfully!");
-                        addBookStage.close();
-                    }
-                }
-            } catch (Exception e) {
-                alertDisplayer.showErrorAlert( "Error", "An error occured when adding book!");
-            }
-        });
-        // Handle Back button click
-        mainMenuView.getBackButton().setOnAction(event -> {
-            addBookStage.close();
-        });
-
-        mainMenuView.getQuickAddBookButton().setOnAction(event -> {
-            Book book = null;
-            try {
-                book = googleBooksService.getBookByISBN(mainMenuView.getISBN().getText());
-            } catch (Exception e) {
-                showErrorMessage("An error occur when getting book by ISBN: " + e.getMessage());
-            }
-            if (book == null) {
-                showErrorMessage("No book found for this ISBN");
-            } else {
-                mainMenuView.getTitle().setText(book.getTitle());
-                mainMenuView.getAuthor().setText(book.getAuthor());
-                mainMenuView.getPrice().setText(book.getPrice());
-                mainMenuView.getSubject().setText(book.getSubject());
-                mainMenuView.getCategory().setText(book.getCategory());
-                mainMenuView.getURL().setText(book.getURL());
-                mainMenuView.getBookType().setText(book.getBookType());
-            }
-        });
     }
 
     private void setupContextMenuForStudent() {

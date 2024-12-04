@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
@@ -548,7 +546,7 @@ public class UserView {
 
     public void initializeUserView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/UserView.fxml"));
         fxmlLoader.setController(this);
         try {
             Parent userParent = fxmlLoader.load();

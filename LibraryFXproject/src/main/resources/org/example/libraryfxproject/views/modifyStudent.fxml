@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="215.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox layoutX="20.0" layoutY="20.0" prefHeight="150.0" prefWidth="360.0" spacing="15.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <TextField fx:id="studentIdField1" prefHeight="26.0" prefWidth="330.0" promptText="Student_ID" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <ComboBox fx:id="attributeStudentComboBox" prefHeight="26.0" prefWidth="330.0" promptText="Attribute" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <TextField fx:id="newValueField1" prefHeight="26.0" prefWidth="330.0" promptText="New value" />
+                </HBox>
+            </children>
+        </VBox>
+        <Button fx:id="updateButton1" layoutX="106.0" layoutY="170.0" text="Update" />
+        <Button fx:id="backButton1" layoutX="218.0" layoutY="170.0" text="Back" />
+    </children>
+</AnchorPane>
