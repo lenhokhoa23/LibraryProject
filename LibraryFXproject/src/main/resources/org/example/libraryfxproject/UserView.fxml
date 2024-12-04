@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
@@ -37,7 +46,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@userviewStyle.css" />
     </stylesheets>
@@ -111,7 +120,12 @@
                                <content>
                                    <VBox prefHeight="1913.0" prefWidth="1520.0" spacing="30" styleClass="content-container">
                                       <children>
-                                        <TextField fx:id="searchField" prefHeight="40.0" prefWidth="590.0" promptText="Search books, authors, genres..." />
+                                    <HBox>
+                                       <children>
+                                              <TextField fx:id="searchField" prefHeight="42.0" prefWidth="1089.0" promptText="Search books, authors, genres..." />
+                                          <Button fx:id="searchBookButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="77.0" text="Search" />
+                                       </children>
+                                    </HBox>
                                     <ListView fx:id="suggestions" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="159.0" prefWidth="619.0" />
                                           <!-- Welcome Message -->
                                           <HBox prefHeight="123.0" prefWidth="880.0" styleClass="welcome-banner">
@@ -158,92 +172,146 @@
                                                     </children>
                                                  </HBox>
                          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="book-scroll-pane" vbarPolicy="NEVER">
-                             <HBox spacing="20" styleClass="books-row">
-                                 <VBox fx:id="bookCard1" styleClass="book-card">
-                                     <StackPane styleClass="image-container">
-                                         <Rectangle height="250" styleClass="image-clip" width="200" />
-                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
-                                         </ImageView>
-                                     </StackPane>
-                                     <VBox styleClass="book-info">
-                                         <Label styleClass="book-title" text="The Great Gatsby" />
-                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
-                                         <HBox spacing="10" styleClass="button-container">
-                                             <Button styleClass="view-button" text="View" />
-                                             <Button styleClass="borrow-button" text="Borrow" />
-                                         </HBox>
-                                     </VBox>
-                                 </VBox>
-
-                                 <VBox fx:id="bookCard2" styleClass="book-card">
-                                     <StackPane styleClass="image-container">
-                                         <Rectangle height="250" styleClass="image-clip" width="200" />
-                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
-                                         </ImageView>
-                                     </StackPane>
-                                     <VBox styleClass="book-info">
-                                         <Label styleClass="book-title" text="The Great Gatsby" />
-                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
-                                         <HBox spacing="10" styleClass="button-container">
-                                             <Button styleClass="view-button" text="View" />
-                                             <Button styleClass="borrow-button" text="Borrow" />
-                                         </HBox>
-                                     </VBox>
-                                 </VBox>
-
-                                 <VBox fx:id="bookCard3" styleClass="book-card">
-                                     <StackPane styleClass="image-container">
-                                         <Rectangle height="250" styleClass="image-clip" width="200" />
-                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
-                                         </ImageView>
-                                     </StackPane>
-                                     <VBox styleClass="book-info">
-                                         <Label styleClass="book-title" text="The Great Gatsby" />
-                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
-                                         <HBox spacing="10" styleClass="button-container">
-                                             <Button styleClass="view-button" text="View" />
-                                             <Button styleClass="borrow-button" text="Borrow" />
-                                         </HBox>
-                                     </VBox>
-                                 </VBox>
-
-                                 <VBox fx:id="bookCard4" styleClass="book-card">
-                                     <StackPane styleClass="image-container">
-                                         <Rectangle height="250" styleClass="image-clip" width="200" />
-                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
-                                         </ImageView>
-                                     </StackPane>
-                                     <VBox styleClass="book-info">
-                                         <Label styleClass="book-title" text="The Great Gatsby" />
-                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
-                                         <HBox spacing="10" styleClass="button-container">
-                                             <Button styleClass="view-button" text="View" />
-                                             <Button styleClass="borrow-button" text="Borrow" />
-                                         </HBox>
-                                     </VBox>
-                                 </VBox>
-
-                                 <VBox fx:id="bookCard5" styleClass="book-card">
-                                     <StackPane styleClass="image-container">
-                                         <Rectangle height="250" styleClass="image-clip" width="200" />
-                                         <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
-                                             <Image url="@images/uetbookclub.png" />
-                                         </ImageView>
-                                     </StackPane>
-                                     <VBox styleClass="book-info">
-                                         <Label styleClass="book-title" text="The Great Gatsby" />
-                                         <Label styleClass="book-author" text="F. Scott Fitzgerald" />
-                                         <HBox spacing="10" styleClass="button-container">
-                                             <Button styleClass="view-button" text="View" />
-                                             <Button styleClass="borrow-button" text="Borrow" />
-                                         </HBox>
-                                     </VBox>
-                                 </VBox>
-                             </HBox>
+                            <content>
+                                <HBox spacing="20" styleClass="books-row">
+                                   <children>
+                                       <VBox fx:id="bookCard1" styleClass="book-card">
+                                          <children>
+                                              <StackPane styleClass="image-container">
+                                                 <children>
+                                                     <Rectangle height="250" styleClass="image-clip" width="200" />
+                                                     <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/uetbookclub.png" />
+                                                        </image>
+                                                     </ImageView>
+                                                 </children>
+                                              </StackPane>
+                                              <VBox styleClass="book-info">
+                                                 <children>
+                                                     <Label styleClass="book-title" text="The Great Gatsby" />
+                                                     <Label styleClass="book-author" text="F. Scott Fitzgerald" />
+                                                     <HBox spacing="10" styleClass="button-container">
+                                                        <children>
+                                                            <Button styleClass="view-button" text="View" />
+                                                            <Button styleClass="borrow-button" text="Borrow" />
+                                                        </children>
+                                                     </HBox>
+                                                 </children>
+                                              </VBox>
+                                          </children>
+                                       </VBox>
+      
+                                       <VBox fx:id="bookCard2" styleClass="book-card">
+         <children>
+                                              <StackPane styleClass="image-container">
+                                                 <children>
+                                                     <Rectangle height="250" styleClass="image-clip" width="200" />
+                                                     <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/uetbookclub.png" />
+                                                        </image>
+                                                     </ImageView>
+                                                 </children>
+                                              </StackPane>
+                                              <VBox styleClass="book-info">
+                                                 <children>
+                                                     <Label styleClass="book-title" text="The Great Gatsby" />
+                                                     <Label styleClass="book-author" text="F. Scott Fitzgerald" />
+                                                     <HBox spacing="10" styleClass="button-container">
+                                                        <children>
+                                                            <Button styleClass="view-button" text="View" />
+                                                            <Button styleClass="borrow-button" text="Borrow" />
+                                                        </children>
+                                                     </HBox>
+                                                 </children>
+                                              </VBox>
+         </children>
+                                       </VBox>
+      
+                                       <VBox fx:id="bookCard3" styleClass="book-card">
+         <children>
+                                              <StackPane styleClass="image-container">
+                                                 <children>
+                                                     <Rectangle height="250" styleClass="image-clip" width="200" />
+                                                     <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/uetbookclub.png" />
+                                                        </image>
+                                                     </ImageView>
+                                                 </children>
+                                              </StackPane>
+                                              <VBox styleClass="book-info">
+                                                 <children>
+                                                     <Label styleClass="book-title" text="The Great Gatsby" />
+                                                     <Label styleClass="book-author" text="F. Scott Fitzgerald" />
+                                                     <HBox spacing="10" styleClass="button-container">
+                                                        <children>
+                                                            <Button styleClass="view-button" text="View" />
+                                                            <Button styleClass="borrow-button" text="Borrow" />
+                                                        </children>
+                                                     </HBox>
+                                                 </children>
+                                              </VBox>
+         </children>
+                                       </VBox>
+      
+                                       <VBox fx:id="bookCard4" styleClass="book-card">
+         <children>
+                                              <StackPane styleClass="image-container">
+                                                 <children>
+                                                     <Rectangle height="250" styleClass="image-clip" width="200" />
+                                                     <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/uetbookclub.png" />
+                                                        </image>
+                                                     </ImageView>
+                                                 </children>
+                                              </StackPane>
+                                              <VBox styleClass="book-info">
+                                                 <children>
+                                                     <Label styleClass="book-title" text="The Great Gatsby" />
+                                                     <Label styleClass="book-author" text="F. Scott Fitzgerald" />
+                                                     <HBox spacing="10" styleClass="button-container">
+                                                        <children>
+                                                            <Button styleClass="view-button" text="View" />
+                                                            <Button styleClass="borrow-button" text="Borrow" />
+                                                        </children>
+                                                     </HBox>
+                                                 </children>
+                                              </VBox>
+         </children>
+                                       </VBox>
+      
+                                       <VBox fx:id="bookCard5" styleClass="book-card">
+         <children>
+                                              <StackPane styleClass="image-container">
+                                                 <children>
+                                                     <Rectangle height="250" styleClass="image-clip" width="200" />
+                                                     <ImageView fitHeight="250" fitWidth="200" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/uetbookclub.png" />
+                                                        </image>
+                                                     </ImageView>
+                                                 </children>
+                                              </StackPane>
+                                              <VBox styleClass="book-info">
+                                                 <children>
+                                                     <Label styleClass="book-title" text="The Great Gatsby" />
+                                                     <Label styleClass="book-author" text="F. Scott Fitzgerald" />
+                                                     <HBox spacing="10" styleClass="button-container">
+                                                        <children>
+                                                            <Button styleClass="view-button" text="View" />
+                                                            <Button styleClass="borrow-button" text="Borrow" />
+                                                        </children>
+                                                     </HBox>
+                                                 </children>
+                                              </VBox>
+         </children>
+                                       </VBox>
+                                   </children>
+                                </HBox>
+                            </content>
                          </ScrollPane>
 
                      </children>
@@ -463,40 +531,7 @@
                             </ScrollPane>
             </content>
                      </Tab>
-         
-                     <!-- Events Tab -->
-                     <Tab closable="false" text="Events">
-            <content>
-                            <VBox spacing="20" styleClass="content-container">
-                               <children>
-                                   <HBox alignment="CENTER_LEFT" spacing="10" styleClass="events-controls">
-                                      <children>
-                                          <DatePicker fx:id="eventDatePicker" promptText="Select Date" />
-                                          <ComboBox fx:id="eventTypeFilter" promptText="Event Type" />
-                                          <TextField fx:id="eventSearch" promptText="Search events" />
-                                          <Region HBox.hgrow="ALWAYS" />
-                                          <Button styleClass="add-calendar-button" text="Add to Calendar" />
-                                      </children>
-                                   </HBox>
-                                   <TableView fx:id="eventsTable">
-                                       <columns>
-                                           <TableColumn fx:id="eventDateColumn" prefWidth="120" text="Date" />
-                                           <TableColumn fx:id="eventTitleColumn" prefWidth="200" text="Event" />
-                                           <TableColumn fx:id="eventDescriptionColumn" prefWidth="300" text="Description" />
-                                           <TableColumn fx:id="eventLocationColumn" prefWidth="150" text="Location" />
-                                           <TableColumn fx:id="eventRegisterColumn" prefWidth="100" text="Register" />
-                                       </columns>
-                                   </TableView>
-                                   <HBox alignment="CENTER_RIGHT">
-                                      <children>
-                                          <Button styleClass="suggest-event-button" text="Suggest an Event" />
-                                      </children>
-                                   </HBox>
-                               </children>
-                            </VBox>
-            </content>
-                     </Tab>
-         
+
                      <!-- Community Tab -->
                      <Tab closable="false" text="Community">
             <content>
@@ -587,40 +622,6 @@
                                                     </children>
                                                  </HBox>
                                              </children>
-                                          </VBox>
-                  
-                                          <!-- Discussion Forums -->
-                                          <VBox styleClass="section">
-                     <children>
-                                                 <Label styleClass="section-title" text="Discussion Forums" />
-                                                 <TableView fx:id="forumTopicsTable">
-                                                     <columns>
-                                                         <TableColumn fx:id="topicTitleColumn" prefWidth="300" text="Topic" />
-                                                         <TableColumn fx:id="topicAuthorColumn" prefWidth="150" text="Started by" />
-                                                         <TableColumn fx:id="topicRepliesColumn" prefWidth="100" text="Replies" />
-                                                         <TableColumn fx:id="topicLastActivityColumn" prefWidth="150" text="Last Activity" />
-                                                     </columns>
-                                                 </TableView>
-                                                 <HBox alignment="CENTER_RIGHT" styleClass="forum-actions">
-                                                    <children>
-                                                        <Button styleClass="new-topic-button" text="New Topic" />
-                                                    </children>
-                                                 </HBox>
-                     </children>
-                                          </VBox>
-                  
-                                          <!-- Reading Buddies -->
-                                          <VBox styleClass="section">
-                     <children>
-                                                 <HBox alignment="CENTER_LEFT">
-                                                    <children>
-                                                        <Label styleClass="section-title" text="Reading Buddies" />
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                        <Button styleClass="find-buddy-button" text="Find a Buddy" />
-                                                    </children>
-                                                 </HBox>
-                                                 <FlowPane fx:id="readingBuddiesGrid" hgap="15" vgap="15" />
-                     </children>
                                           </VBox>
                                       </children>
                                    </VBox>

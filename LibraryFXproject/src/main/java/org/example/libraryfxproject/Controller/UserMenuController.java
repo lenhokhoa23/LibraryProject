@@ -25,6 +25,7 @@ import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
 import org.example.libraryfxproject.Util.AlertDisplayer;
+import org.example.libraryfxproject.View.BookDetailsView;
 import org.example.libraryfxproject.View.LoginView;
 import org.example.libraryfxproject.View.UserView;
 
@@ -43,10 +44,10 @@ import java.util.concurrent.TimeUnit;
 public class UserMenuController extends BaseController {
     private final UserView userView;
     private final SearchService searchService;
-    private final UserService userService;
     private final CartService cartService;
     private final UpdateService updateService;
     private final BookService bookService;
+    private final LoginService loginService;
     private final int ROWS_PER_PAGE = 15;
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -57,14 +58,14 @@ public class UserMenuController extends BaseController {
         super(alertDisplayer);
         this.userView = userView;
         searchService = SearchService.getInstance();
-        userService = UserService.getInstance();
         cartService = CartService.getInstance();
         updateService = UpdateService.getInstance();
         bookService = BookService.getInstance();
+        loginService = LoginService.getInstance();
     }
 
     public void registerEvent() {
-        userView.setUser(userService.findUserByUsername(userView.getUsername()));
+        userView.setUser(loginService.findUserByUsername(userView.getUsername()));
         userView.getWelcomeMessage().setText("Welcome back, " + userView.getUser().getName() + "!");
         hideSuggestions(userView.getSuggestions());
         hideSuggestions(userView.getSuggestions1());
@@ -211,6 +212,13 @@ public class UserMenuController extends BaseController {
         initializeTable();
         initializePagination();
         initializeDueTable();
+
+        userView.getSearchBookButton().setOnAction(e -> {
+            Book book = bookService.getBookByTitle(userView.getSearchField().getText());
+            new BookDetailsView(book);
+        });
+
+
     }
 
     public void initializeTable() {

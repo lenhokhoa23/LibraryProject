@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainMenuView {
+    private String username;
+    private Librarian librarian;
+
     @FXML
     private TextField title;
 
@@ -341,8 +344,9 @@ public class MainMenuView {
     private Button quickAddBookButton;
 
 
-    public MainMenuView(Stage stage) {
+    public MainMenuView(Stage stage, String username) {
         this.stage = stage;
+        this.username = username;
         initializeMainMenuView();
     }
 
@@ -409,7 +413,6 @@ public class MainMenuView {
     public void setCatalogPagination(Pagination catalogPagination) {
         this.catalogPagination = catalogPagination;
     }
-
 
     public TextField getPageNumberField() {
         return pageNumberField;
@@ -1118,4 +1121,19 @@ public class MainMenuView {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Librarian getLibrarian() {
+        return librarian;
+    }
+
+    public void setLibrarian(Librarian librarian) {
+        this.librarian = librarian;
+    }
 }

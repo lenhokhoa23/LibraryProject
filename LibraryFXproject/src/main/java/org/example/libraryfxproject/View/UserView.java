@@ -1,3 +1,4 @@
+
 package org.example.libraryfxproject.View;
 
 import javafx.collections.ObservableList;
@@ -6,7 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.UserMenuController;
@@ -44,6 +46,16 @@ public class UserView {
     private Label borrowedBooksLabel;
     @FXML
     private Label membershipTypeLabel;
+
+    @FXML
+    private Button borrowBook;
+
+    @FXML
+    private Button returnBook;
+    @FXML
+    private MenuItem logoutItem;
+    @FXML
+    private MenuButton profileButton;
     @FXML
     private ListView<String> suggestions;
     @FXML
@@ -168,10 +180,10 @@ public class UserView {
     private ToggleButton searchToggle;
 
     @FXML
-    private Button borrowBook;
-
+    private Button searchBookButton;
+  
     @FXML
-    private Button returnBook;
+    private Label welcomeMessage;
 
     private AlertDisplayer alertDisplayer;
 
@@ -227,6 +239,10 @@ public class UserView {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Button getSearchBookButton() {
+        return searchBookButton;
     }
 
     public MenuButton getProfileButton() {
@@ -529,35 +545,7 @@ public class UserView {
     public ListView<String> getSuggestions1() {
         return suggestions1;
     }
-
-    public void setSuggestions1(ListView<String> suggestions1) {
-        this.suggestions1 = suggestions1;
-    }
-
-    public ListView<String> getSuggestions2() {
-        return suggestions2;
-    }
-
-    public void setSuggestions2(ListView<String> suggestions2) {
-        this.suggestions2 = suggestions2;
-    }
-
-    public boolean isSelecting1() {
-        return isSelecting1;
-    }
-
-    public void setSelecting1(boolean selecting1) {
-        isSelecting1 = selecting1;
-    }
-
-    public boolean isSelecting2() {
-        return isSelecting2;
-    }
-
-    public void setSelecting2(boolean selecting2) {
-        isSelecting2 = selecting2;
-    }
-
+  
     public Button getReturnBook() {
         return returnBook;
     }
@@ -634,6 +622,42 @@ public class UserView {
         this.membershipTypeLabel = membershipTypeLabel;
     }
 
+    public void setSuggestions1(ListView<String> suggestions1) {
+        this.suggestions1 = suggestions1;
+    }
+
+    public ListView<String> getSuggestions2() {
+        return suggestions2;
+    }
+
+    public void setSuggestions2(ListView<String> suggestions2) {
+        this.suggestions2 = suggestions2;
+    }
+
+    public boolean isSelecting1() {
+        return isSelecting1;
+    }
+
+    public void setSelecting1(boolean selecting1) {
+        isSelecting1 = selecting1;
+    }
+
+    public boolean isSelecting2() {
+        return isSelecting2;
+    }
+
+    public void setSelecting2(boolean selecting2) {
+        isSelecting2 = selecting2;
+    }
+
+    public Label getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(Label welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
+
     public void initializeUserView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
@@ -653,12 +677,11 @@ public class UserView {
             e.printStackTrace();
         }
     }
-
     public void initializeStudentDetailsView(UserMenuController userMenuController) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
         loader.setController(this);
         try {
-            Parent studentDetails = loader.load();
+            Parent studentDetails = loader.load();S
             Scene studentDetailsScene = new Scene(studentDetails);
             Stage details = new Stage();
             details.setScene(studentDetailsScene);

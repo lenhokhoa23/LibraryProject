@@ -3,6 +3,7 @@ package org.example.libraryfxproject.Service;
 import org.example.libraryfxproject.Dao.AccountDAO;
 import org.example.libraryfxproject.Dao.CartDAO;
 import org.example.libraryfxproject.Dao.UserDAO;
+import org.example.libraryfxproject.Model.Librarian;
 import org.example.libraryfxproject.Model.User;
 
 import java.lang.reflect.AccessFlag;
@@ -32,9 +33,7 @@ public class UserService {
         return userDAO;
     }
 
-    public User findUserByUsername(String username) {
-        return userDAO.findUserByUsername(username);
-    }
+
 
     public void deleteUser(String usernameToDelete) {
         userDAO.deleteUserForNextRun(usernameToDelete);
