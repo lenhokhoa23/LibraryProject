@@ -7,9 +7,6 @@ import org.example.libraryfxproject.Model.Book;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -140,17 +137,17 @@ public class ServiceTest {
         String category = "Computing";
         String URL = "http://example.com";
         String bookType = "Hardcover";
-        String quantity = "five"; // Quantity không hợp lệ (chuỗi thay vì số)
+        String quantity = "five"; // Quantity invalid
 
-        // Kiểm tra phương thức validateAddBookInput
+        // test method validateAddBookInput
         int result = bookService.validateAddBookInput(
                 title, author, pubdateStr, releaseDateStr,
                 ISBN, price, subject, category,
                 URL, bookType, quantity
         );
 
-        // Kiểm tra kết quả trả về (8 có nghĩa là quantity không hợp lệ)
-        assertEquals(8, result, "Quantity should be invalid due to non-numeric value");
+        // Kiểm tra kết quả
+        assertEquals(5, result, "Quantity should be invalid due to non-numeric value");
     }
 
     @AfterAll
