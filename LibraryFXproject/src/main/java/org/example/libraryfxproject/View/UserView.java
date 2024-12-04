@@ -1,4 +1,3 @@
-
 package org.example.libraryfxproject.View;
 
 import javafx.collections.ObservableList;
@@ -53,7 +52,6 @@ public class UserView {
 
     @FXML
     private Button returnBook;
-
     @FXML
     private ListView<String> suggestions;
     @FXML
@@ -179,7 +177,7 @@ public class UserView {
 
     @FXML
     private Button searchBookButton;
-  
+
     @FXML
     private Label welcomeMessage;
 
@@ -543,7 +541,7 @@ public class UserView {
     public ListView<String> getSuggestions1() {
         return suggestions1;
     }
-  
+
     public Button getReturnBook() {
         return returnBook;
     }
@@ -658,7 +656,7 @@ public class UserView {
 
     public void initializeUserView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/UserView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/UserView.fxml"));
         fxmlLoader.setController(this);
         try {
             Parent userParent = fxmlLoader.load();
@@ -694,3 +692,4 @@ public class UserView {
     }
 
 }
+

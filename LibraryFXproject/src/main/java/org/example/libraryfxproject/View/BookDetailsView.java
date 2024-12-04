@@ -1,18 +1,13 @@
 package org.example.libraryfxproject.View;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.example.libraryfxproject.Controller.BookDetailsController;
-import org.example.libraryfxproject.Controller.MainMenuController;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.Comment;
 import org.example.libraryfxproject.Util.AlertDisplayer;
@@ -197,7 +192,7 @@ public class BookDetailsView {
 
     public void initializeBookDetailsView(Book book) {
         stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/BookDetailView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/BookDetailView.fxml"));
         fxmlLoader.setController(this);
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         try {

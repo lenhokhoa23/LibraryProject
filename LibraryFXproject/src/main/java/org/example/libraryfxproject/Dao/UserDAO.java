@@ -107,7 +107,6 @@ public class UserDAO extends GeneralDAO<String, User> {
         }
     }
 
-
     public List<User> findUserByComponentOfUserName(String component) {
         List<User> userList = new ArrayList<>();
         String sql = "SELECT * FROM user WHERE username LIKE '%" + component + "%'";
@@ -167,5 +166,25 @@ public class UserDAO extends GeneralDAO<String, User> {
         }
     }
 
+    public static void modifyUserByAttribute(int userId, String attribute, String newValue) {
+        String sql = "UPDATE user SET " + attribute + " = ? WHERE Cart_ID = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, newValue);
+            statement.setInt(2, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Cập nhật thành công thuộc tính " + attribute + " cho người dùng có Cart_ID: " + userId);
+            } else {
+                System.out.println("Không tìm thấy người dùng với Cart_ID: " + userId);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi cập nhật thuộc tính của người dùng!");
+            e.printStackTrace();
+        }
+    }
 
 }

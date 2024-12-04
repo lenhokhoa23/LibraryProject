@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" prefHeight="760.0" prefWidth="1107.0" stylesheets="@bookdetail.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fitToWidth="true" prefHeight="760.0" prefWidth="1107.0" stylesheets="@../styles/bookdetail.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
        <AnchorPane prefHeight="734.0" prefWidth="1061.0" styleClass="main-container">
           <children>

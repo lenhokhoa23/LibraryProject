@@ -81,7 +81,6 @@ public class BookService {
         return 0; // Tất cả hợp lệ
     }
 
-
     public void insertBookToDatabase(String title, String author, String pubdateStr, String releaseDateStr,
                                      String ISBN, String price, String subject, String category, String URL,
                                      String bookType, String quantity) {

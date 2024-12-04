@@ -29,7 +29,6 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -40,7 +39,7 @@
 
 <StackPane styleClass="main-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
-      <URL value="@mainmenuStyle.css" />
+      <URL value="@../styles/mainmenuStyle.css" />
    </stylesheets>
    <children>
       <VBox>
@@ -53,7 +52,7 @@
                         <Circle radius="25" styleClass="logo-background" />
                         <ImageView fitHeight="35" fitWidth="35" preserveRatio="true">
                            <image>
-                              <Image url="@images/book-stack.png" />
+                              <Image url="@../images/book-stack.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -66,7 +65,7 @@
                            <children>
                               <ImageView fitHeight="24" fitWidth="24">
                                  <image>
-                                    <Image url="@images/setting_white.png" />
+                                    <Image url="@../images/setting_white.png" />
                                  </image>
                               </ImageView>
                               <Circle fx:id="notificationBadge" radius="5" styleClass="notification-badge" StackPane.alignment="TOP_RIGHT" />
@@ -78,7 +77,7 @@
                      <graphic>
                         <ImageView fitHeight="40" fitWidth="40">
                            <image>
-                              <Image url="@images/students_white.png" />
+                              <Image url="@../images/students_white.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -118,7 +117,7 @@
                                                          <graphic>
                                                             <ImageView fitHeight="20.0" fitWidth="20.0">
                                                                <image>
-                                                                  <Image url="@images/search.png" />
+                                                                  <Image url="@../images/search.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -246,19 +245,19 @@
                                        <graphic>
                                           <ImageView fitHeight="15" fitWidth="15">
                                              <image>
-                                                <Image url="@images/search.png" />
+                                                <Image url="@../images/search.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                        Search
                                     </ToggleButton>
                                     <Button fx:id="addItemButton" prefHeight="38.0" prefWidth="114.0" styleClass="add-item-button" text="Add New Item" />
-                                    <Button fx:id="modifyButton" prefHeight="37.0" prefWidth="95.0" styleClass="delete-item-button" text="Modify" />
+                                    <Button fx:id="modifyButton" prefHeight="38.0" prefWidth="109.0" styleClass="delete-item-button" text="Modify Item" />
                                     <Button fx:id="refreshButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                        <graphic>
                                           <ImageView fitHeight="20" fitWidth="20">
                                              <image>
-                                                <Image url="@images/refresh.png" />
+                                                <Image url="@../images/refresh.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -307,11 +306,12 @@
 
                                                       <Button fx:id="studentSearchButton" styleClass="add-student-button" text="Search" />
                                                       <Button fx:id="addStudentButton" styleClass="add-student-button" text="Add New Student" />
+                                                      <Button fx:id="modifyStudentButton" mnemonicParsing="false" styleClass="delete-item-button" text="Modify Student" />
                                                       <Button fx:id="refreshStudentButton" prefHeight="29.0" prefWidth="95.0" styleClass="refresh-toggle" text="Refresh">
                                                          <graphic>
                                                             <ImageView fitHeight="20" fitWidth="20">
                                                                <image>
-                                                                  <Image url="@images/refresh.png" />
+                                                                  <Image url="@../images/refresh.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -355,7 +355,7 @@
                                                          <graphic>
                                                             <ImageView fitHeight="20" fitWidth="20">
                                                                <image>
-                                                                  <Image url="@images/refresh.png" />
+                                                                  <Image url="@../images/refresh.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -379,11 +379,6 @@
                                           </VBox>
                                        </content>
                                     </Tab>
-                                    <Tab closable="false" text="Modify Information">
-                                      <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                      </content>
-                                    </Tab>
                                  </tabs>
                               </TabPane>
                            </children>
@@ -394,23 +389,23 @@
             <!-- Book Borrowing Management Tab -->
             <Tab fx:id="service" closable="false" text="Service">
                <content>
-                  <VBox spacing="20" styleClass="content-container">
+                  <VBox prefWidth="1240.0" spacing="20" styleClass="content-container">
                      <children>
                         <TabPane>
                            <tabs>
                               <!-- Borrow Books Tab -->
                               <Tab fx:id="borrowANewBookTab" closable="false" text="Borrow a new book">
                                  <content>
-                                    <Pane prefHeight="459.0" prefWidth="1200.0" styleClass="borrow-section">
+                                    <Pane prefHeight="371.0" prefWidth="1200.0" styleClass="borrow-section">
                                        <children>
-                                          <TextField fx:id="borrowISBNField1" layoutX="125.0" layoutY="61.0" prefHeight="28.0" prefWidth="668.0" promptText="Enter book title" />
-                                          <Label fx:id="ISBN1" layoutX="59.0" layoutY="66.0" text="Title:" />
+                                          <TextField fx:id="borrowISBNField1" layoutX="123.0" layoutY="74.0" prefHeight="28.0" prefWidth="892.0" promptText="Enter book title" />
+                                          <Label fx:id="ISBN1" layoutX="71.0" layoutY="79.0" text="Title:" />
                                           <TextField fx:id="borrowStudentIdField1" layoutX="125.0" layoutY="22.0" prefHeight="28.0" prefWidth="179.0" promptText="Enter Student_ID" />
-                                          <Label fx:id="ID1" layoutX="23.0" layoutY="27.0" text="Student_ID:" />
-                                                <ListView fx:id="suggestions1" layoutX="125.0" layoutY="89.0" prefHeight="200.0" prefWidth="667.0" />
+                                          <Label fx:id="ID1" layoutX="36.0" layoutY="27.0" text="Student_ID:" />
+                                                <ListView fx:id="suggestions1" layoutX="123.0" layoutY="102.0" prefHeight="200.0" prefWidth="892.0" />
                                           <DatePicker fx:id="borrowDueDatePicker1" layoutX="589.0" layoutY="22.0" promptText="Enter return date" />
                                           <Label fx:id="returnDate1" layoutX="495.0" layoutY="27.0" text="Return date:" />
-                                          <Button fx:id="borrowServiceButton" layoutX="125.0" layoutY="319.0" styleClass="borrow-button" text="BORROW" />
+                                          <Button fx:id="borrowServiceButton" layoutX="907.0" layoutY="17.0" prefHeight="35.0" prefWidth="110.0" styleClass="borrow-button" text="BORROW" />
                                        </children>
                                     </Pane>
                                  </content>
@@ -422,10 +417,10 @@
                                     <Pane styleClass="return-section">
                                        <children>
                                                 <ListView fx:id="suggestions2" layoutX="95.0" layoutY="116.0" prefHeight="200.0" prefWidth="892.0" />
-                                          <Button fx:id="returnServiceButton" layoutX="95.0" layoutY="348.0" styleClass="return-button" text="RETURN" />
-                                                <TextField fx:id="returnISBNField1" layoutX="95.0" layoutY="88.0" prefHeight="28.0" prefWidth="891.0" promptText="Enter book title" />
+                                          <Button fx:id="returnServiceButton" layoutX="883.0" layoutY="33.0" prefHeight="26.0" prefWidth="104.0" styleClass="return-button" text="RETURN" />
+                                                <TextField fx:id="returnISBNField1" layoutX="95.0" layoutY="88.0" prefHeight="28.0" prefWidth="892.0" promptText="Enter book title" />
                                                 <Label fx:id="ISBN2" layoutX="51.0" layoutY="93.0" prefHeight="18.0" prefWidth="45.0" text="Title:" />
-                                          <TextField fx:id="returnStudentIdField1" layoutX="95.0" layoutY="38.0" prefHeight="28.0" prefWidth="223.0" promptText="Enter Student_ID" />
+                                          <TextField fx:id="returnStudentIdField1" layoutX="95.0" layoutY="38.0" prefHeight="28.0" prefWidth="735.0" promptText="Enter Student_ID" />
                                           <Label fx:id="ID2" layoutX="14.0" layoutY="43.0" text="Student_ID:" />
                                        </children>
                                     </Pane>

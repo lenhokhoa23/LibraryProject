@@ -23,7 +23,6 @@ import org.example.libraryfxproject.Util.AlertDisplayer;
 import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainMenuView {
     private String username;
@@ -254,9 +253,6 @@ public class MainMenuView {
     private TextField isbnField;
 
     @FXML
-    private TextField attributeField;
-
-    @FXML
     private TextField newValueField;
 
     @FXML
@@ -343,6 +339,26 @@ public class MainMenuView {
     @FXML
     private Button quickAddBookButton;
 
+    @FXML
+    private ComboBox<String> attributeStudentComboBox;
+
+    @FXML
+    private ComboBox<String> attributeBookComboBox;
+
+    @FXML
+    private TextField studentIdField1;
+
+    @FXML
+    private TextField newValueField1;
+
+    @FXML
+    private Button updateButton1;
+
+    @FXML
+    private Button backButton1;
+
+    @FXML
+    private Button modifyStudentButton;
 
     public MainMenuView(Stage stage, String username) {
         this.stage = stage;
@@ -693,14 +709,6 @@ public class MainMenuView {
         this.isbnField = isbnField;
     }
 
-    public TextField getAttributeField() {
-        return attributeField;
-    }
-
-    public void setAttributeField(TextField attributeField) {
-        this.attributeField = attributeField;
-    }
-
     public TextField getNewValueField() {
         return newValueField;
     }
@@ -1042,7 +1050,7 @@ public class MainMenuView {
 
     public void initializeMainMenuView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/MainMenu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/MainMenu.fxml"));
         fxmlLoader.setController(this);
         try {
             Parent mainViewParent = fxmlLoader.load();
@@ -1066,7 +1074,7 @@ public class MainMenuView {
     }
 
     public void initializeAddStudentView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addStudent.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addStudent.fxml"));
         fxmlLoader.setController(this);
         try {
             Parent addStudentParent = fxmlLoader.load();
@@ -1082,12 +1090,29 @@ public class MainMenuView {
         }
     }
 
+    public void initializeModifyStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent modifyStudentParent = fxmlLoader.load();
+            Scene modifyStudentScene = new Scene(modifyStudentParent);
+            Stage modifyStudentStage = new Stage();
+            modifyStudentStage.setScene(modifyStudentScene);
+            modifyStudentStage.initModality(Modality.APPLICATION_MODAL);
+            modifyStudentStage.initOwner(stage);
+            modifyStudentStage.show();
+            mainMenuController.registerForModifyStudent(modifyStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Button getModifyButton() {
         return modifyButton;
     }
 
     public void initializeModifyBookView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/modifyBook.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyBook.fxml"));
         fxmlLoader.setController(this);
         try {
             Parent modifyBookParent = fxmlLoader.load();
@@ -1105,7 +1130,7 @@ public class MainMenuView {
     }
 
     public void initializeAddBookView(MainMenuController mainMenuController) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/addBookView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addBookView.fxml"));
         loader.setController(this);
         try {
             Parent addBookParent = loader.load();
@@ -1135,5 +1160,61 @@ public class MainMenuView {
 
     public void setLibrarian(Librarian librarian) {
         this.librarian = librarian;
+    }
+
+    public TextField getStudentIdField1() {
+        return studentIdField1;
+    }
+
+    public void setStudentIdField1(TextField studentIdField1) {
+        this.studentIdField1 = studentIdField1;
+    }
+
+    public TextField getNewValueField1() {
+        return newValueField1;
+    }
+
+    public void setNewValueField1(TextField newValueField1) {
+        this.newValueField1 = newValueField1;
+    }
+
+    public Button getUpdateButton1() {
+        return updateButton1;
+    }
+
+    public void setUpdateButton1(Button updateButton1) {
+        this.updateButton1 = updateButton1;
+    }
+
+    public Button getBackButton1() {
+        return backButton1;
+    }
+
+    public void setBackButton1(Button backButton1) {
+        this.backButton1 = backButton1;
+    }
+
+    public Button getModifyStudentButton() {
+        return modifyStudentButton;
+    }
+
+    public void setModifyStudentButton(Button modifyStudentButton) {
+        this.modifyStudentButton = modifyStudentButton;
+    }
+
+    public ComboBox<String> getAttributeStudentComboBox() {
+        return attributeStudentComboBox;
+    }
+
+    public void setAttributeStudentComboBox(ComboBox<String> attributeComboBox) {
+        this.attributeStudentComboBox = attributeComboBox;
+    }
+
+    public ComboBox<String> getAttributeBookComboBox() {
+        return attributeBookComboBox;
+    }
+
+    public void setAttributeBookComboBox(ComboBox<String> attributeBookComboBox) {
+        this.attributeBookComboBox = attributeBookComboBox;
     }
 }

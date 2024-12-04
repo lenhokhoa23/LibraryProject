@@ -1,6 +1,6 @@
 package org.example.libraryfxproject.Model;
 
-public class User extends Person{
+public class User extends Person {
     private int Cart_ID;
     private int borrowedBooks;
     private String membershipType;
@@ -32,7 +32,6 @@ public class User extends Person{
     public void setCart_ID(int Cart_ID) {
         this.Cart_ID = Cart_ID;
     }
-
 
     public String getMembershipType() {
         return membershipType;

@@ -12,7 +12,7 @@
 <?import javafx.collections.FXCollections?>
 <AnchorPane prefHeight="491.0" prefWidth="436.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
     <stylesheets>
-        <URL value="@addStudentStyle.css" />
+        <URL value="@../styles/addStudentStyle.css" />
     </stylesheets>
    <children>
        <VBox alignment="CENTER" layoutX="20.0" layoutY="26.0" spacing="15" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="26.0">

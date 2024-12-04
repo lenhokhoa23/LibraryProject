@@ -92,6 +92,7 @@ public class MainMenuController extends BaseController {
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             mainMenuView.getSearchToggle().setSelected(false);
+
             mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected");
             if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
                 mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
@@ -126,6 +127,12 @@ public class MainMenuController extends BaseController {
 
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
+            loadTableData();
+            initializePagination();
+        });
+
+        mainMenuView.getModifyStudentButton().setOnAction(event -> {
+            mainMenuView.initializeModifyStudentView(this);
             loadTableData();
             initializePagination();
         });
@@ -283,27 +290,35 @@ public class MainMenuController extends BaseController {
         });
     }
 
-    public void registerForModifyBook(Stage stage) {
-        mainMenuView.getUpdateButton().setOnAction(event -> {
+    public void registerForModifyStudent(Stage stage) {
+        mainMenuView.getAttributeStudentComboBox().getItems().addAll("username", "name", "email",
+                "phoneNumber", "borrowedBooks");
+        mainMenuView.getUpdateButton1().setOnAction(event -> {
             try {
-                String ISBN = mainMenuView.getIsbnField().getText();
-                String attribute = mainMenuView.getAttributeField().getText();
-                String newValue = mainMenuView.getNewValueField().getText();
-                if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    showErrorMessage("Please fill in all fields!");
+                String Student_ID = mainMenuView.getStudentIdField1().getText();
+                String attribute = mainMenuView.getAttributeStudentComboBox().getValue();
+                String newValue = mainMenuView.getNewValueField1().getText();
+                if (Student_ID.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    showErrorMessage("Vui lòng nhập đầy đủ thông tin");
                 } else {
-                    bookService.modifyBook(ISBN, attribute, newValue);
-                    showSuccessMessage("Book updated successfully!");
+                    userService.modifyStudent(Student_ID, attribute, newValue);
+                    showSuccessMessage("Student updated successfully!");
                     stage.close();
                 }
             } catch (Exception e) {
                 showErrorMessage("An error occurred. Please check the input values.");
             }
         });
-        mainMenuView.getBackButton().setOnAction(event -> stage.close());mainMenuView.getUpdateButton().setOnAction(event -> {
+        mainMenuView.getBackButton1().setOnAction(event -> stage.close());
+    }
+
+    public void registerForModifyBook(Stage stage) {
+        mainMenuView.getAttributeBookComboBox().getItems().addAll("no", "title", "author" , "pubdate",
+                "releaseDate", "ISBN", "price", "subject", "category", "URL", "bookType", "quantity");
+        mainMenuView.getUpdateButton().setOnAction(event -> {
             try {
                 String ISBN = mainMenuView.getIsbnField().getText();
-                String attribute = mainMenuView.getAttributeField().getText();
+                String attribute = mainMenuView.getAttributeBookComboBox().getValue();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
                     showErrorMessage("Please fill in all fields!");
@@ -463,6 +478,9 @@ public class MainMenuController extends BaseController {
             showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
         initializeLabel();
+        initializeBarChart();
+        initializePieChart();
+        initializeTable();
     }
 
     public void handleReturnService(Event event) {
@@ -489,6 +507,10 @@ public class MainMenuController extends BaseController {
         } catch (Exception e) {
             showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
+        initializeLabel();
+        initializeBarChart();
+        initializePieChart();
+        initializeTable();
     }
 
     private void scheduleSearch(TextField textField, ListView<String> listView) {

@@ -265,6 +265,7 @@ public class UserMenuController extends BaseController {
         } catch (Exception e) {
             showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
+        initializeDueTable();
     }
 
     public void handleReturnService(Event event) {
@@ -286,6 +287,7 @@ public class UserMenuController extends BaseController {
         } catch (Exception e) {
             showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
+        initializeDueTable();
     }
 
     private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {

@@ -36,8 +36,6 @@ public class UserService {
         return userDAO;
     }
 
-
-
     public void deleteUser(String usernameToDelete) {
         userDAO.deleteUserForNextRun(usernameToDelete);
     }
@@ -45,5 +43,9 @@ public class UserService {
     public boolean hasIDInUser(int ID) {
         String username = userDAO.getUsernameByCartId(ID);
         return username != null;
+    }
+
+    public void modifyStudent(String ID, String attribute, String newValue) {
+        UserDAO.modifyUserByAttribute(Integer.parseInt(ID), attribute, newValue);
     }
 }

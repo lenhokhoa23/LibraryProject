@@ -14,6 +14,7 @@ public class LoginService {
     private LibrarianDAO librarianDAO;
     private UserDAO userDAO;
     private static LoginService loginService;
+
     public static synchronized LoginService getInstance() {
         if (loginService == null) {
             loginService = new LoginService();

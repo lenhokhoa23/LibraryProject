@@ -3,13 +3,10 @@ package org.example.libraryfxproject.View;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.example.libraryfxproject.Controller.LoginController;
 import org.example.libraryfxproject.Util.AlertDisplayer;
@@ -43,7 +40,7 @@ public class LoginView implements Initializable {
     private void initializeLoginView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/Login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/Login.fxml"));
             fxmlLoader.setController(this); // Đặt controller là đối tượng hiện tại (LoginView)
             Parent loginViewParent = fxmlLoader.load();
             Scene scene = new Scene(loginViewParent);

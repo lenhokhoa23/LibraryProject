@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -100,7 +99,7 @@ public class RegisterView implements Initializable {
     }
 
     public void initializeRegisterView() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/Register.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/Register.fxml"));
         fxmlLoader.setController(this); // Đặt controller là đối tượng hiện tại
         try {
             Parent mainViewParent = fxmlLoader.load();
