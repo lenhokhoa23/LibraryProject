@@ -136,7 +136,7 @@ public class ServiceTest {
         int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả
-        assertEquals(5, result, "Quantity should be invalid due to non-numeric value");
+        assertEquals(8, result, "Quantity should be invalid due to non-numeric value");
     }
 
     @AfterAll

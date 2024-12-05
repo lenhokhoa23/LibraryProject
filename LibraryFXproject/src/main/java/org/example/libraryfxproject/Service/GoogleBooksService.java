@@ -29,6 +29,7 @@ public class GoogleBooksService {
                 JacksonFactory.getDefaultInstance(),
                 null)
                 .setApplicationName(LIBRARY_NAME)
+                .setGoogleClientRequestInitializer(new BooksRequestInitializer("AIzaSyC4y_RrRbfruzkYMiUFdQi_kkzdpCBW8WE"))
                 .build();
     }
 
