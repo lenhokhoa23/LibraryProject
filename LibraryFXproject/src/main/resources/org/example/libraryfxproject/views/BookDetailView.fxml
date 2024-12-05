@@ -29,7 +29,6 @@
                                           <Label fx:id="authorLabel" styleClass="author" />
                                           <Label fx:id="isbnLabel" styleClass="isbn" />
                                     <Label fx:id="quantityLabel" styleClass="isbn" />
-                                          <Button fx:id="addToCartButton" styleClass="add-to-cart-button" text="Add to Cart" />
                                       </children>
                                    </VBox>
                                </children>

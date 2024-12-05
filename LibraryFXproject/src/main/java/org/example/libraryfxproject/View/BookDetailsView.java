@@ -17,9 +17,8 @@ import java.io.IOException;
 
 public class BookDetailsView {
 
-//     private Stage stage;
-//     private AlertDisplayer alertDisplayer;
-//     private String username;
+     private Stage stage;
+     private AlertDisplayer alertDisplayer;
 
     /** FXML buttons declaration with getters and setters. */
 
@@ -57,8 +56,6 @@ public class BookDetailsView {
     Button submitButton;
     @FXML
     ListView<Comment> commentsListView;
-
-    private AlertDisplayer alertDisplayer;
 
     private String username;
 
