@@ -56,6 +56,7 @@ public class MainMenuController extends BaseController {
     private GoogleBooksService googleBooksService;
     private ContextMenuController contextMenuController;
 
+    /** Constructor khởi tạo các thành phần service và view. */
     public MainMenuController(MainMenuView mainMenuView, AlertDisplayer alertDisplayer) {
         super(alertDisplayer);
         this.mainMenuView = mainMenuView;
@@ -77,18 +78,26 @@ public class MainMenuController extends BaseController {
         loadTableData();
         initializePagination();
     }
-  
+
+    /**
+     * Đăng ký các sự kiện cho các thành phần giao diện người dùng trong MainMenuView.
+     */
     public void registerEvent() {
+
+        // Đặt giá trị cho librarian
         mainMenuView.setLibrarian(loginService.findLibrarianByUsername(mainMenuView.getUsername()));
 
+        // sự kiện search chính ở main view
         mainMenuView.getSearchBookButton().setOnAction(e -> {
             performSearch(mainMenuView.getSearchField().getText());
         });
 
+        // Sự kiện mở view sửa sách
         mainMenuView.getModifyButton().setOnAction(event -> {
             mainMenuView.initializeModifyBookView(this);
         });
 
+        // Nút refresh ở catalog view
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             mainMenuView.getSearchToggle().setSelected(false);
@@ -102,6 +111,7 @@ public class MainMenuController extends BaseController {
             initializePagination();
         });
 
+        // Sự kiện đăng xuất
         mainMenuView.getLogoutItem().setOnAction(event -> {
             Stage stage = (Stage) mainMenuView.getProfileButton().getScene().getWindow();
             stage.close();
@@ -115,43 +125,48 @@ public class MainMenuController extends BaseController {
         handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
         handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
 
+        // toggle button search sách
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
 
+        // Nút go to page
         mainMenuView.getGoToPageButton().setOnAction(event -> {
             goToPage();
         });
 
-        setupTableColumns();
-
+        // Sự kiện thêm học sinh
         mainMenuView.getAddStudentButton().setOnAction(event -> {
             mainMenuView.initializeAddStudentView(this);
             loadTableData();
             initializePagination();
         });
 
+        // Sự kiện sửa thông tin học sinh
         mainMenuView.getModifyStudentButton().setOnAction(event -> {
             mainMenuView.initializeModifyStudentView(this);
             loadTableData();
             initializePagination();
         });
 
+        // Sự kiện thêm sách
         mainMenuView.getAddItemButton().setOnAction(event -> {
             mainMenuView.initializeAddBookView(this);
         });
 
+        // Sự kiện tìm học sinh
         mainMenuView.getStudentSearchButton().setOnAction(event -> {
             ObservableList<User> filteredUser = searchService.searchUserByUsername(mainMenuView.getStudentSearch().getText().trim());
             updateUserTableView(filteredUser);
         });
 
+        // Sự kiện refresh
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
             mainMenuView.getStudentSearch().setText("");
             loadTableData();
             initializePagination();
         });
-
+        setupTableColumns();
         initializeLabel();
         initializePieChart();
         initializeBarChart();
@@ -220,16 +235,28 @@ public class MainMenuController extends BaseController {
         });
     }
 
+    /**
+     * Xử lý sự kiện khi người dùng nhập liệu vào một trường TextField, bao gồm:
+     * - Hiển thị danh sách gợi ý khi người dùng gõ
+     * - Ẩn danh sách gợi ý khi nhấn Enter hoặc khi trường mất focus
+     * - Cập nhật giá trị của trường TextField khi người dùng chọn một mục từ danh sách gợi ý.
+     *
+     * @param textField Trường TextField mà người dùng nhập liệu vào.
+     * @param listView Danh sách gợi ý (ListView) chứa các mục gợi ý.
+     * @param x Biến chỉ định loại trường hợp (0: trường tìm kiếm, 1: trường ISBN mượn, 2: trường ISBN trả).
+     */
     private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
         textField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                hideSuggestions(listView);
+                hideSuggestions(listView); // Ẩn gợi ý khi nhấn Enter
             } else {
-                scheduleSearch(textField, listView);
+                scheduleSearch(textField, listView); // Thực hiện tìm kiếm khi nhập liệ
             }
         });
 
+        // Xử lý khi người dùng click vào một mục trong danh sách gợi ý
         listView.setOnMouseClicked((MouseEvent event) -> {
+            // Cập nhật trạng thái chọn cho trường tương ứng
             if (event.getClickCount() == 1) {
                 if (x == 0) {
                     mainMenuView.setSelecting(false);
@@ -254,6 +281,7 @@ public class MainMenuController extends BaseController {
             }
         });
 
+        // Xử lý khi trường TextField thay đổi focus
         textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 showSuggestionsIfNotEmpty(listView);
@@ -274,10 +302,19 @@ public class MainMenuController extends BaseController {
 
     }
 
+    /**
+     * Đăng ký các sự kiện cho nút thêm sinh viên.
+     * Khi người dùng nhấn nút "Cancel", cửa sổ thêm sinh viên sẽ bị đóng.
+     * Khi người dùng nhấn nút "Add Student", xác nhận sẽ được yêu cầu và sau đó
+     * thông tin sinh viên mới sẽ được lưu vào cơ sở dữ liệu.
+     *
+     * @param addStudentStage Cửa sổ chứa thông tin sinh viên mới.
+     */
     public void registerForAddStudent(Stage addStudentStage) {
         mainMenuView.getCancelAddStudentButton().setOnAction(event -> {
             addStudentStage.close();
         });
+        // Xử lý sự kiện nút "Add Student"
         mainMenuView.getAddStudent().setOnAction(event -> {
             if (showConfirmation("A new User will be added, are you sure?")) {
                 userService.getUserDAO().saveUserToDatabase(mainMenuView.getNameField().getText(),
@@ -285,16 +322,24 @@ public class MainMenuController extends BaseController {
                         mainMenuView.getUsernameField().getText(),
                         mainMenuView.getPasswordField().getText(),
                         mainMenuView.getMembershipTypeComboBox().getValue());
-                studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
+                studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values()); // Cập nhật bookList
                 showSuccessMessage("Add user successfully!!");
                 addStudentStage.close();
             }
         });
     }
 
+    /**
+     * Đăng ký các sự kiện cho việc sửa thông tin sinh viên.
+     * Khi người dùng nhấn nút "Update", nếu các thông tin được nhập hợp lệ,
+     * thông tin sinh viên sẽ được sửa trong cơ sở dữ liệu.
+     *
+     * @param stage Cửa sổ chứa thông tin cần sửa đổi.
+     */
     public void registerForModifyStudent(Stage stage) {
         mainMenuView.getAttributeStudentComboBox().getItems().addAll("username", "name", "email",
                 "phoneNumber", "borrowedBooks");
+        // Xử lý sự kiện nút "Update"
         mainMenuView.getUpdateButton1().setOnAction(event -> {
             try {
                 String Student_ID = mainMenuView.getStudentIdField1().getText();
@@ -314,6 +359,13 @@ public class MainMenuController extends BaseController {
         mainMenuView.getBackButton1().setOnAction(event -> stage.close());
     }
 
+    /**
+     * Đăng ký các sự kiện cho việc sửa thông tin sách.
+     * Khi người dùng nhấn nút "Update", nếu các thông tin được nhập hợp lệ,
+     * thông tin sách sẽ được sửa trong cơ sở dữ liệu.
+     *
+     * @param stage Cửa sổ chứa thông tin sách cần sửa đổi.
+     */
     public void registerForModifyBook(Stage stage) {
         mainMenuView.getAttributeBookComboBox().getItems().addAll("no", "title", "author" , "pubdate",
                 "releaseDate", "ISBN", "price", "subject", "category", "URL", "bookType", "quantity");
@@ -336,6 +388,10 @@ public class MainMenuController extends BaseController {
         mainMenuView.getBackButton().setOnAction(event -> stage.close());
     }
 
+    /**
+     * Tải dữ liệu và cập nhật bảng sách và sinh viên.
+     * Dữ liệu sách và sinh viên được tải và hiển thị trên các bảng tương ứng.
+     */
     public void loadTableData() {
         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
         updateBookTableView(bookList);
@@ -343,6 +399,10 @@ public class MainMenuController extends BaseController {
         updateUserTableView(studentList);
     }
 
+    /**
+     * Khởi tạo phân trang cho bảng sách và bảng sinh viên.
+     * Phân trang sẽ hiển thị các dữ liệu theo trang trong các bảng sách và sinh viên.
+     */
     private void initializePagination() {
         int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
         mainMenuView.getCatalogPagination().setPageCount(pageCount);
@@ -372,6 +432,9 @@ public class MainMenuController extends BaseController {
 
     }
 
+    /**
+     * Khởi tạo các nhãn hiển thị thông tin tổng quan về sách và sinh viên.
+     */
     public void initializeLabel() {
         mainMenuView.getTotalBooksLabel().setText(updateService.updatedLabel(1).getText());
         mainMenuView.getActiveStudentsLabel().setText(updateService.updatedLabel(2).getText());
@@ -379,6 +442,9 @@ public class MainMenuController extends BaseController {
         mainMenuView.getOverdueBooksLabel().setText(updateService.updatedLabel(4).getText());
     }
 
+    /**
+     * Khởi tạo và cập nhật biểu đồ tròn hiển thị thông tin lưu thông thể loại sách.
+     */
     public void initializePieChart() {
         updateService.updatePieChart(mainMenuView.getGenreCirculationChart());
         mainMenuView.getChartTitleLabel().setLayoutX(10);
@@ -391,11 +457,18 @@ public class MainMenuController extends BaseController {
         );
     }
 
+    /**
+     * Khởi tạo và cập nhật biểu đồ thanh hiển thị thông tin sách mượn theo thể loại.
+     */
     public void initializeBarChart() {
         updateService.updateBarChart(mainMenuView.getGenreBorrowedBarChart());
         VBox.setVgrow(mainMenuView.getGenreBorrowedBarChart(), Priority.ALWAYS);
     }
 
+    /**
+     * Khởi tạo và cập nhật các bảng hoạt động và lịch sử mượn sách.
+     * Bao gồm các cột thông tin cho hoạt động gần đây và lịch sử mượn sách của người dùng.
+     */
     public void initializeTable() {
         mainMenuView.getActivityTimeColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
         mainMenuView.getActivityUserIDColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
@@ -449,6 +522,14 @@ public class MainMenuController extends BaseController {
         });
     }
 
+    /**
+     * Xử lý hành động mượn sách cho sinh viên.
+     *
+     * <p>Phương thức này kiểm tra tính hợp lệ của mã sinh viên, ISBN sách và ngày trả sách. Nếu các thông tin nhập vào hợp lệ,
+     * nó sẽ thêm giao dịch mượn vào giỏ hàng và cập nhật giao diện người dùng với thông tin liên quan.</p>
+     *
+     * @param event Sự kiện được kích hoạt bởi hành động mượn sách.
+     */
     public void handleBorrowService(Event event) {
         String studentId = mainMenuView.getBorrowStudentIdField1().getText();
         String title = mainMenuView.getBorrowISBNField1().getText();
@@ -485,6 +566,14 @@ public class MainMenuController extends BaseController {
         initializeTable();
     }
 
+    /**
+     * Xử lý hành động trả sách cho sinh viên.
+     *
+     * <p>Phương thức này kiểm tra tính hợp lệ của mã sinh viên và kiểm tra xem sách có trong giỏ hàng của sinh viên hay không.
+     * Nếu các thông tin hợp lệ, phương thức sẽ xóa sách khỏi giỏ hàng và cập nhật giao diện người dùng tương ứng.</p>
+     *
+     * @param event Sự kiện được kích hoạt bởi hành động trả sách.
+     */
     public void handleReturnService(Event event) {
         String studentId = mainMenuView.getReturnStudentIdField1().getText();
         String title = mainMenuView.getReturnISBNField1().getText();
@@ -515,6 +604,15 @@ public class MainMenuController extends BaseController {
         initializeTable();
     }
 
+    /**
+     * Lên lịch tìm kiếm sách dựa trên đầu vào của người dùng trong trường tìm kiếm.
+     *
+     * <p>Phương thức này sẽ lên lịch thực hiện tìm kiếm sách với độ trễ ngắn khi người dùng nhập văn bản vào trường tìm kiếm.
+     * Nó giúp cải thiện hiệu suất tìm kiếm và giảm thiểu việc gọi tìm kiếm khi người dùng nhập liệu quá nhanh.</p>
+     *
+     * @param textField Trường văn bản chứa từ khóa tìm kiếm.
+     * @param listView Danh sách hiển thị các gợi ý sách dựa trên từ khóa tìm kiếm.
+     */
     private void scheduleSearch(TextField textField, ListView<String> listView) {
         if (searchTask != null && !searchTask.isDone()) {
             searchTask.cancel(false);
@@ -522,6 +620,15 @@ public class MainMenuController extends BaseController {
         searchTask = scheduler.schedule(() -> updateSuggestions(textField, listView), 50, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Cập nhật các gợi ý sách dựa trên đầu vào tìm kiếm của người dùng.
+     *
+     * <p>Phương thức này sẽ lọc các sách từ cơ sở dữ liệu dựa trên tiền tố của từ khóa tìm kiếm và cập nhật danh sách các gợi ý sách
+     * trong giao diện người dùng.</p>
+     *
+     * @param textField Trường văn bản chứa từ khóa tìm kiếm.
+     * @param listView Danh sách hiển thị các gợi ý sách.
+     */
     private void updateSuggestions(TextField textField, ListView<String> listView) {
         Platform.runLater(() -> {
             String query = textField.getText().toLowerCase();
@@ -536,36 +643,67 @@ public class MainMenuController extends BaseController {
         });
     }
 
+    /**
+     * Hiển thị danh sách gợi ý nếu danh sách không rỗng.
+     * Phương thức này kiểm tra nếu danh sách gợi ý có ít nhất một phần tử và hiển thị danh sách đó.</p>
+     *
+     * @param listView Danh sách gợi ý cần kiểm tra và hiển thị nếu không rỗng.
+     */
     private void showSuggestionsIfNotEmpty(ListView<String> listView) {
         if (!listView.getItems().isEmpty()) {
             listView.setVisible(true);
         }
     }
 
+    /**
+     * Ẩn danh sách gợi ý.
+     *
+     * @param listView Danh sách gợi ý cần ẩn.
+     */
     private void hideSuggestions(ListView<String> listView) {
         listView.setVisible(false);
     }
 
+    /**
+     * Thực hiện tìm kiếm thông tin sách khi người dùng chọn một gợi ý.
+     * Phương thức này sẽ lấy thông tin sách từ cơ sở dữ liệu dựa trên tên sách được chọn và hiển thị chi tiết sách.</p>
+     *
+     * @param selectedItem Tên sách được chọn từ danh sách gợi ý.
+     */
     private void performSearch(String selectedItem) {
         Book book = bookService.getBookByTitle(selectedItem);
         new BookDetailsView(book, mainMenuView.getUsername());
         hideSuggestions(mainMenuView.getSuggestions());
     }
 
+    // ??
     public void shutdown() {
         scheduler.shutdownNow();
     }
 
+    /**
+     * Cập nhật dữ liệu trong bảng sách.
+     * Phương thức này sẽ làm sạch bảng hiện tại và hiển thị các sách mới trong bảng.</p>
+     *
+     * @param books Danh sách sách cần hiển thị trong bảng.
+     */
     public void updateBookTableView(ObservableList<Book> books) {
         mainMenuView.getCatalogTableView().getItems().clear();
         mainMenuView.getCatalogTableView().setItems(books);
     }
 
+    /**
+     * Cập nhật dữ liệu trong bảng người dùng.
+     * Phương thức này sẽ làm sạch bảng hiện tại và hiển thị các người dùng mới trong bảng.</p>
+     *
+     * @param users Danh sách người dùng cần hiển thị trong bảng.
+     */
     public void updateUserTableView(ObservableList<User> users) {
         mainMenuView.getStudentTableView().getItems().clear();
         mainMenuView.getStudentTableView().setItems(users);
     }
 
+    // Cập nhật dữ liệu của tableview mới khi chuyển page
     private void updateBookTable(int pageIndex) {
         int start = pageIndex * ROWS_PER_PAGE;
         int end = Math.min(start + ROWS_PER_PAGE, bookList.size());
@@ -578,6 +716,11 @@ public class MainMenuController extends BaseController {
         mainMenuView.getStudentTableView().setItems(FXCollections.observableArrayList(studentList.subList(start, end)));
     }
 
+    /**
+     * Xử lý sự kiện thay đổi giữa chế độ lọc và chế độ hiển thị tất cả sách.
+     * Phương thức này sẽ lọc sách theo thuộc tính được chọn và từ khóa tìm kiếm nếu chế độ lọc đang bật,
+     * nếu không thì nó sẽ hiển thị lại tất cả các sách trong danh sách.
+     */
     public void CatalogEvent() {
         if (isFilteredView) {
             loadTableData();
@@ -594,6 +737,11 @@ public class MainMenuController extends BaseController {
         }
     }
 
+    /**
+     * Thiết lập các cột cho bảng sách và bảng người dùng.
+     *
+     * Phương thức này sẽ thiết lập các cột cần thiết cho bảng sách và bảng người dùng trong giao diện người dùng.
+     */
     private void setupTableColumns () {
         mainMenuView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));
         mainMenuView.getTitleColumn().setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -626,6 +774,11 @@ public class MainMenuController extends BaseController {
                 mainMenuView.getMembershipTypeColumn());
     }
 
+    /**
+     * Chuyển đến trang cụ thể trong phân trang của bảng sách.
+     *
+     * <p>Phương thức này sẽ lấy số trang từ người dùng và thay đổi trang hiện tại của phân trang nếu số trang hợp lệ.</p>
+     */
     private void goToPage () {
         try {
             int pageNumber = Integer.parseInt(mainMenuView.getPageNumberField().getText()) - 1;
@@ -641,11 +794,18 @@ public class MainMenuController extends BaseController {
         }
     }
 
+    /**
+     * Đăng ký hành động khi nhấn nút "Thêm sách" và "Quay lại" trong giao diện thêm sách.
+     *
+     * <p>Phương thức này xử lý các hành động nhấn nút để thêm sách mới vào hệ thống hoặc quay lại màn hình trước đó.</p>
+     *
+     * @param addBookStage Cửa sổ giao diện thêm sách.
+     */
     public void registerForAddBook (Stage addBookStage){
         // Handle Add Book button click
         mainMenuView.getAddBookButton().setOnAction(event -> {
             try {
-                // Extract input values
+                // Lấy dữ liệu đầu vào từ textfield
                 String title = mainMenuView.getTitle().getText();
                 String author = mainMenuView.getAuthor().getText();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy");
@@ -663,9 +823,10 @@ public class MainMenuController extends BaseController {
                 String URL = mainMenuView.getURL().getText();
                 String bookType = mainMenuView.getBookType().getText();
                 String quantity = mainMenuView.getQuantity().getText();
-                // Kiểm tra dữ liệu đầu vào bằng validateAddBookInput
-                int validate = bookService.validateAddBookInput(title, author, pubdate, releaseDate,
+                Book book = new Book(9999, title, author, pubdate, releaseDate,
                         ISBN, price, subject, category, URL, bookType, quantity);
+                // Kiểm tra dữ liệu đầu vào bằng validateAddBookInput
+                int validate = bookService.validateAddBookInput(book);
 
                 switch (validate) {
                     case 1 -> alertDisplayer.showErrorAlert("Error", "Invalid ISBN. It must be exactly 13 digits.");
@@ -679,7 +840,8 @@ public class MainMenuController extends BaseController {
                     case 9 -> alertDisplayer.showErrorAlert("Error", "Invalid author. Special characters are not allowed.");
                     default -> {
                         // Nếu tất cả đều hợp lệ, thêm sách vào database
-                        bookService.insertBookToDatabase(title, author, pubdate, releaseDate, ISBN, price, subject, category, URL, bookType, quantity);
+                        bookService.insertBookToDatabase(book);
+                        // Cập nhật lại danh sách bookList
                         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
                         alertDisplayer.showInformationAlert("Successful message!", "Add book successfully!");
                         addBookStage.close();
@@ -694,6 +856,7 @@ public class MainMenuController extends BaseController {
             addBookStage.close();
         });
 
+        // Xử lý sự kiện add sách nhanh qua ISBN bằng google API
         mainMenuView.getQuickAddBookButton().setOnAction(event -> {
             Book book = null;
             try {
@@ -715,6 +878,11 @@ public class MainMenuController extends BaseController {
         });
     }
 
+    /**
+     * Thiết lập menu ngữ cảnh cho bảng sinh viên với tùy chọn xóa.
+     *
+     * <p>Phương thức này tạo ra một menu ngữ cảnh cho bảng sinh viên và cho phép xóa sinh viên khi nhấn chuột phải.</p>
+     */
     private void setupContextMenuForStudent() {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Delete");
@@ -732,6 +900,11 @@ public class MainMenuController extends BaseController {
         });
     }
 
+    /**
+     * Xử lý hành động xóa sinh viên khỏi hệ thống.
+     *
+     * <p>Phương thức này hiển thị hộp thoại xác nhận và xóa sinh viên đã chọn khỏi bảng khi người dùng xác nhận.</p>
+     */
     private void handleDeleteStudentAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");

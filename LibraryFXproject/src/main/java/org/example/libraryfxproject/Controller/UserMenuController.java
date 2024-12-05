@@ -64,13 +64,19 @@ public class UserMenuController extends BaseController {
         loginService = LoginService.getInstance();
     }
 
-    public void registerEvent() {
+    /**
+     * Phương thức này đăng ký  các sự kiện và hành động cho các thành phần giao diện người dùng trong UserView.
+     * Các sự kiện bao gồm việc xử lý hành động khi người dùng tìm kiếm sách, mượn sách, trả sách, đăng xuất,
+     * cũng như các sự kiện liên quan đến các nút và menu trong giao diện người dùng.
+     */
+     public void registerEvent() {
         userView.setUser(loginService.findUserByUsername(userView.getUsername()));
         userView.getWelcomeMessage().setText("Welcome back, " + userView.getUser().getName() + "!");
         hideSuggestions(userView.getSuggestions());
         hideSuggestions(userView.getSuggestions1());
         hideSuggestions(userView.getSuggestions2());
 
+        // Sự kiện đăng xuất
         userView.getLogoutItem().setOnAction(event -> {
             Stage stage = (Stage) userView.getProfileButton().getScene().getWindow();
             stage.close();
@@ -98,6 +104,7 @@ public class UserMenuController extends BaseController {
             }
         });
 
+        // Các sự kiện tiện ích bổ sung: điều khoản, hội nhóm,...
         userView.getContact().setOnAction(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://www.facebook.com/mgcfrog912"));
@@ -173,6 +180,7 @@ public class UserMenuController extends BaseController {
             }
         });
 
+        // Nút refresh cho catalog view
         userView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             userView.getSearchToggle().setSelected(false);
@@ -186,33 +194,48 @@ public class UserMenuController extends BaseController {
             initializePagination();
         });
 
+        // Nút toggle search bật tắt
         userView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
         });
 
+        // Nút chuyển sang tab khác
         userView.getBorrowBook().setOnAction(event -> {
             TabPane tabPane = userView.getTabPane();
             tabPane.getSelectionModel().select(4);
         });
 
+        // Vẫn vậy
         userView.getReturnBook().setOnAction(event -> {
             TabPane tabPane = userView.getTabPane();
             tabPane.getSelectionModel().select(4);
         });
 
+        // Hiện chi tiết profile của user
         userView.getStudentProfileDetails().setOnAction(event -> {
             userView.initializeStudentDetailsView(this);
         });
 
+        //Xử lý sự kiện mượn sách
         userView.getUserBorrowButton().setOnAction(this::handleBorrowService);
         userView.getUserReturnButton().setOnAction(this::handleReturnService);
 
+        // Thiết lập bảng catalog
         setupTableColumns();
+
+        // Load dữ liệu cho bảng
         loadTableData();
+
+        // Thiết lập bang sách đã mượn
         initializeTable();
+
+        //Khởi tạo thanh chuyển page
         initializePagination();
+
+
         initializeDueTable();
 
+        // Hiển thị chi tiết thông tin sách
         userView.getSearchBookButton().setOnAction(e -> {
             Book book = bookService.getBookByTitle(userView.getSearchField().getText());
             new BookDetailsView(book, userView.getUsername());
@@ -221,6 +244,12 @@ public class UserMenuController extends BaseController {
 
     }
 
+    /**
+     * Khởi tạo bảng để hiển thị các sách đã mượn của người dùng.
+     * Thiết lập các giá trị cho từng cột trong bảng sách mượn
+     * và điền dữ liệu vào bảng từ dịch vụ giỏ hàng dựa trên ID người dùng.
+     * Thêm một trình lắng nghe để làm mới bảng khi người dùng nhấn nút làm mới.
+     */
     public void initializeTable() {
         userView.getBorrowedUserDateColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(0)));
         userView.getBorrowedIDColumn().setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(1)));
@@ -234,6 +263,12 @@ public class UserMenuController extends BaseController {
         });
     }
 
+    /**
+     * Phương thức này dùng để xử lý việc mượn sách của người dùng.
+     * Nó kiểm tra các điều kiện như ISBN, ngày trả sách hợp lệ, và tồn kho của sách trước khi thực hiện mượn sách.
+     *
+     * @param event sự kiện kích hoạt phương thức (thường là từ một nút bấm)
+     */
     public void handleBorrowService(Event event) {
         int studentId = userView.getUser().getUserID();
         String title = userView.getUserBorrowISBN().getText();
@@ -243,6 +278,7 @@ public class UserMenuController extends BaseController {
             showErrorMessage("Error, please fill in all fields before borrowing a book.");
             return;
         }
+        // Kiểm tra sách tồn kho và ngày trả sách hợp lệ
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
         }
@@ -253,6 +289,7 @@ public class UserMenuController extends BaseController {
             showErrorMessage("Ngày được chọn không hợp lệ!\nVui lòng thử lại");
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // Thêm vào giỏ hàng
         try {
             cartService.addCart(
                     studentId,
@@ -268,6 +305,13 @@ public class UserMenuController extends BaseController {
         initializeDueTable();
     }
 
+    /**
+     * Xử lý hành động trả sách đã mượn.
+     * Kiểm tra xem ISBN mà người dùng nhập có trong giỏ hàng của họ hay không và,
+     * nếu có, xóa sách khỏi giỏ hàng và cập nhật bảng ngày đến hạn.
+     *
+     * @param event Sự kiện kích hoạt hành động trả sách.
+     */
     public void handleReturnService(Event event) {
         int studentId = userView.getUser().getUserID();
         String title = userView.getUserReturnISBN().getText();
@@ -290,6 +334,16 @@ public class UserMenuController extends BaseController {
         initializeDueTable();
     }
 
+    /**
+     * Xử lý sự kiện khi người dùng nhập văn bản vào ô tìm kiếm.
+     * Nếu người dùng nhấn phím Enter, thực hiện tìm kiếm ngay lập tức.
+     * Nếu người dùng nhập một ký tự, thực hiện tìm kiếm có độ trễ.
+     * Khi người dùng chọn một mục trong danh sách gợi ý, điền vào ô tìm kiếm và thực hiện tìm kiếm.
+     *
+     * @param textField Ô nhập văn bản của người dùng.
+     * @param listView Danh sách gợi ý để hiển thị kết quả tìm kiếm.
+     * @param x Chỉ số dùng để phân biệt các ô nhập liệu.
+     */
     private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
         textField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -344,6 +398,13 @@ public class UserMenuController extends BaseController {
         });
     }
 
+    /**
+     * Lên lịch tìm kiếm sau một khoảng thời gian ngắn khi người dùng nhập văn bản vào ô tìm kiếm.
+     * Nếu có một tìm kiếm đang chạy, nó sẽ bị hủy trước khi bắt đầu tìm kiếm mới.
+     *
+     * @param textField Ô nhập văn bản mà người dùng sử dụng để tìm kiếm.
+     * @param listView Danh sách gợi ý kết quả tìm kiếm sẽ được hiển thị.
+     */
     private void scheduleSearch(TextField textField, ListView<String> listView) {
         if (searchTask != null && !searchTask.isDone()) {
             searchTask.cancel(false);
@@ -351,6 +412,14 @@ public class UserMenuController extends BaseController {
         searchTask = scheduler.schedule(() -> updateSuggestions(textField, listView), 50, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Cập nhật các gợi ý tìm kiếm dựa trên văn bản người dùng nhập vào ô tìm kiếm.
+     * Nếu văn bản tìm kiếm không rỗng, nó sẽ tìm kiếm sách có tiền tố phù hợp và hiển thị kết quả.
+     * Nếu không có kết quả tìm kiếm, danh sách gợi ý sẽ bị ẩn.
+     *
+     * @param textField Ô nhập văn bản của người dùng.
+     * @param listView Danh sách gợi ý kết quả tìm kiếm.
+     */
     private void updateSuggestions(TextField textField, ListView<String> listView) {
         Platform.runLater(() -> {
             String query = textField.getText().toLowerCase();
@@ -383,6 +452,10 @@ public class UserMenuController extends BaseController {
         scheduler.shutdownNow();
     }
 
+    /**
+     * Khởi tạo bảng hiển thị thông tin về các sách đã đến hạn trả của người dùng.
+     * Thiết lập các giá trị cho từng cột trong bảng và cập nhật bảng với dữ liệu từ dịch vụ.
+     */
     public void initializeDueTable() {
         userView.getTimeDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(0)));
         userView.getUserIdDueColumn().setCellValueFactory(data -> new SimpleStringProperty(data.getValue().get(1)));
@@ -393,16 +466,32 @@ public class UserMenuController extends BaseController {
         userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
     }
 
+    /**
+     * Xử lý hành động khi người dùng nhấn nút thông báo.
+     * Hiển thị bảng thông báo về các sách đã đến hạn trả và thay đổi hành động của nút thông báo.
+     *
+     * @param event Sự kiện kích hoạt hành động (nhấn nút).
+     */
     public void handleNotificationButtonAction(Event event) {
         userView.getActivityDueTable().setVisible(true);
         userView.getNotificationButton().setOnAction(this::closeNotificationPanel);
     }
 
+    /**
+     * Xử lý hành động khi người dùng nhấn nút tắt thông báo.
+     * Ẩn hiển thị bảng .
+     *
+     * @param event Sự kiện kích hoạt hành động (nhấn nút).
+     */
     private void closeNotificationPanel(Event event) {
         userView.getActivityDueTable().setVisible(false);
         userView.getNotificationButton().setOnAction(this::handleNotificationButtonAction);
     }
 
+    /**
+     * Khởi tạo phân trang cho bảng sách trong giao diện người dùng.
+     * Tính toán số trang và thiết lập chức năng phân trang cho bảng sách.
+     */
     private void initializePagination() {
         int pageCount = (int) Math.ceil((double) bookList.size() / ROWS_PER_PAGE);
         userView.getCatalogPagination().setPageCount(pageCount);
@@ -417,17 +506,34 @@ public class UserMenuController extends BaseController {
         userView.getCatalogPagination().setMaxHeight(Double.MAX_VALUE);
     }
 
+    /**
+     * Cập nhật bảng hiển thị sách trong giao diện người dùng với danh sách sách mới.
+     * Phương thức này sẽ xóa các mục hiện tại trong bảng và thêm các sách từ danh sách được cung cấp.
+     *
+     * @param books Danh sách sách mới cần hiển thị trong bảng.
+     */
     public void updateBookTableView(ObservableList<Book> books) {
         userView.getCatalogTableView().getItems().clear();
         userView.getCatalogTableView().setItems(books);
     }
 
+    /**
+     * Cập nhật bảng sách hiển thị trên trang hiện tại dựa trên chỉ số trang.
+     * Dữ liệu sẽ được phân trang và chỉ hiển thị các sách trong phạm vi trang hiện tại.
+     *
+     * @param pageIndex Chỉ số của trang hiện tại.
+     */
     private void updateBookTable(int pageIndex) {
         int start = pageIndex * ROWS_PER_PAGE;
         int end = Math.min(start + ROWS_PER_PAGE, bookList.size());
         userView.getCatalogTableView().setItems(FXCollections.observableArrayList(bookList.subList(start, end)));
     }
 
+    /**
+     * Cấu hình các cột trong bảng sách của giao diện người dùng.
+     * Phương thức này thiết lập các thuộc tính cho mỗi cột trong bảng, như ID mục, tiêu đề, tác giả,
+     * chủ đề, loại sách và số lượng. Sau đó, nó thêm các cột này vào bảng hiển thị.
+     */
     private void setupTableColumns () {
         userView.getItemIdColumn().setCellValueFactory(new PropertyValueFactory<>("no"));
         userView.getTitleColumn().setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -446,11 +552,18 @@ public class UserMenuController extends BaseController {
 
     }
 
+    /**
+     * Tải dữ liệu sách và cập nhật bảng sách hiển thị trong giao diện người dùng.
+     */
     public void loadTableData() {
         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
         updateBookTableView(bookList);
     }
 
+    /**
+     * Xử lý sự kiện tìm kiếm và lọc danh sách sách trong catalog.
+     * Nếu có bộ lọc, tìm kiếm sách theo bộ lọc và cập nhật bảng sách.
+     */
     public void CatalogEvent() {
         if (isFilteredView) {
             loadTableData();
@@ -471,6 +584,12 @@ public class UserMenuController extends BaseController {
         updateUserInfo(userView.getUser());
     }
 
+    /**
+     * Cập nhật thông tin người dùng trong giao diện người dùng.
+     * Hiển thị thông tin chi tiết của người dùng như tên, email, số điện thoại, v.v.
+     *
+     * @param user Đối tượng người dùng cần cập nhật thông tin.
+     */
     public void updateUserInfo(User user) {
         if (user == null) {
             return;

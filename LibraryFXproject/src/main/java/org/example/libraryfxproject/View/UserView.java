@@ -24,6 +24,7 @@ public class UserView {
     private User user;
     private final Stage stage;
 
+    /** FXML buttons declaration with getters and setters. */
     @FXML
     private TabPane tabPane;
     @FXML
@@ -654,6 +655,11 @@ public class UserView {
         this.welcomeMessage = welcomeMessage;
     }
 
+    /**
+     * Khởi tạo và hiển thị giao diện người dùng, thiết lập cửa sổ chính của ứng dụng.
+     * Đăng ký `UserMenuController` để xử lý các tương tác của menu người dùng.
+     * @throws IOException nếu có lỗi khi tải tệp FXML .
+     */
     public void initializeUserView() {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/UserView.fxml"));
@@ -674,6 +680,13 @@ public class UserView {
         }
     }
 
+    /**
+     * Khởi tạo và hiển thị cửa sổ chi tiết sinh viên trong một cửa sổ mới.
+     * Phương thức này tải tệp FXML StudentProfileDetails và tạo một cửa sổ mới
+     * để hiển thị chi tiết sinh viên. Cửa sổ cũng được đăng ký với UserMenuController.
+     * @param userMenuController controller cha.
+     * @throws RuntimeException nếu có lỗi khi tải tệp FXML.
+     */
     public void initializeStudentDetailsView(UserMenuController userMenuController) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
         loader.setController(this);
@@ -690,6 +703,7 @@ public class UserView {
             throw new RuntimeException(e);
         }
     }
+
 
 }
 

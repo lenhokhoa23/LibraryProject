@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CartTest {
     private static Connection connection;
-    private CartDAO cartDAO = new CartDAO();
+    private CartDAO cartDAO = CartDAO.getInstance();
 
     @BeforeAll
     public static void setupDatabase() throws SQLException {

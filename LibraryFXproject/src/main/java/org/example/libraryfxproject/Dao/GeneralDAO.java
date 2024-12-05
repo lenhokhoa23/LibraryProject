@@ -3,6 +3,7 @@ package org.example.libraryfxproject.Dao;
 import java.sql.Connection;
 import java.util.HashMap;
 
+/** Gereric loader class for inheritance purpose. */
 public abstract class GeneralDAO<K, V> {
     protected HashMap<K, V> dataMap = new HashMap<>();
     protected final Connection connection = DatabaseConnection.getConnection();

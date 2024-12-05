@@ -62,7 +62,9 @@ public class BookTest {
         String bookType = "Hardcover";
         String quantity = "5";
 
-        bookDAO.insertBookToDatabase(title, author, pubdateStr, releaseDateStr, ISBN, price, subject, category, URL, bookType, quantity);
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
+        bookDAO.insertBookToDatabase(book);
 
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM books WHERE ISBN = ?")) {
             stmt.setString(1, ISBN);

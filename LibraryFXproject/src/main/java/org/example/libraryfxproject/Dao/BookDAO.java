@@ -52,6 +52,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
         this.trieNode = trieNode;
     }
 
+    /** Load data cho DAO. */
     private BookDAO() {
         LoadService.loadData(this);
     }
@@ -63,7 +64,11 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return bookDAO;
     }
 
-
+    /**
+     * Chèn một từ vào Trie. Từ này sẽ được sử dụng để tìm kiếm sách dựa trên tên của chúng.
+     *
+     * @param word Từ cần chèn vào Trie để tạo chỉ mục tìm kiếm.
+     */
     public void insert(String word) {
         TrieNode current = trie.getRoot();
         for (char ch : word.toCharArray()) {
@@ -72,6 +77,12 @@ public class BookDAO extends GeneralDAO<String, Book> {
         current.setEndOfWord(true);
     }
 
+    /**
+     * Tải dữ liệu sách từ cơ sở dữ liệu vào `dataMap` và Trie.
+     * Dữ liệu sách sẽ được lưu vào trong bản đồ `dataMap` theo tiêu đề sách và
+     * đồng thời chèn tên sách vào Trie để hỗ trợ tìm kiếm nhanh.
+     * Đồng thời, tổng số lượng sách (`totalQuantity`) sẽ được tính lại.
+     */
     @Override
     public void loadData() {
         totalQuantity = 0;  // Reset tổng số lượng sách khi load lại
@@ -114,6 +125,14 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return super.getDataMap();
     }
 
+    /**
+     * Tìm một cuốn sách dựa trên một thuộc tính duy nhất, ví dụ: số, tiêu đề, ISBN hoặc URL.
+     *
+     * @param type Giá trị của thuộc tính cần tìm (ví dụ: số, tiêu đề, ISBN, hoặc URL).
+     * @param searchType Kiểu tìm kiếm (1: theo số, 2: theo tiêu đề, 3: theo ISBN, 4: theo URL).
+     * @return Đối tượng `Book` tìm được hoặc null nếu không tìm thấy sách.
+     * @throws IllegalArgumentException Nếu kiểu tìm kiếm không hợp lệ.
+     */
     public Book findBookByDistinctAttribute(String type, int searchType) {
         Book book = null;
         Connection connection = DatabaseConnection.getConnection();
@@ -170,6 +189,14 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return book;
     }
 
+    /**
+     * Tìm kiếm các cuốn sách dựa trên một thuộc tính cụ thể (ví dụ: tên, tác giả, ISBN, v.v.).
+     * Phương thức này sẽ trả về danh sách các cuốn sách có thuộc tính tương ứng với giá trị tìm kiếm.
+     *
+     * @param attribute Tên thuộc tính cần tìm kiếm (ví dụ: "title", "author", "ISBN", v.v.).
+     * @param value Giá trị của thuộc tính cần tìm kiếm.
+     * @return Danh sách các cuốn sách khớp với giá trị tìm kiếm, hoặc một danh sách rỗng nếu không tìm thấy sách.
+     */
     public List<Book> findBooksByAttribute(String attribute, String value) {
         // List to hold the result
         List<Book> books = new ArrayList<>();
@@ -249,18 +276,47 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return books;
     }
 
+    /**
+     * Lấy số lượng sách từ cơ sở dữ liệu dựa trên một thuộc tính cụ thể (ví dụ: số sách, tiêu đề sách, ISBN, v.v.).
+     *
+     * @param type Giá trị của thuộc tính cần tìm (ví dụ: số sách, tiêu đề sách, ISBN, v.v.).
+     * @param searchType Kiểu tìm kiếm (1: theo số sách, 2: theo tiêu đề, 3: theo ISBN, 4: theo URL).
+     * @return Số lượng sách tương ứng với thuộc tính tìm kiếm.
+     */
     public int fetchQuantityFromBooks(String type, int searchType) {
         return Integer.parseInt(findBookByDistinctAttribute(type, searchType).getQuantity());
     }
 
+    /**
+     * Lấy ISBN của một cuốn sách dựa trên một thuộc tính cụ thể (ví dụ: số sách, tiêu đề sách, v.v.).
+     *
+     * @param type Giá trị của thuộc tính cần tìm (ví dụ: số sách, tiêu đề sách, ISBN, v.v.).
+     * @param searchType Kiểu tìm kiếm (1: theo số sách, 2: theo tiêu đề, 3: theo ISBN, 4: theo URL).
+     * @return ISBN của cuốn sách tìm được.
+     */
     public String fetchISBNFromBooks(String type, int searchType) {
         return findBookByDistinctAttribute(type, searchType).getISBN();
     }
+
+    /**
+     * Lấy tiêu đề của một cuốn sách dựa trên một thuộc tính cụ thể (ví dụ: số sách, tiêu đề sách, ISBN, v.v.).
+     *
+     * @param type Giá trị của thuộc tính cần tìm (ví dụ: số sách, tiêu đề sách, ISBN, v.v.).
+     * @param searchType Kiểu tìm kiếm (1: theo số sách, 2: theo tiêu đề, 3: theo ISBN, 4: theo URL).
+     * @return Tiêu đề của cuốn sách tìm được.
+     */
 
     public String fetchTitleFromBooks(String type, int searchType) {
         return findBookByDistinctAttribute(type, searchType).getTitle();
     }
 
+    /**
+     * Lấy giá của một cuốn sách từ cơ sở dữ liệu dựa trên ISBN của nó.
+     *
+     * @param ISBN ISBN của cuốn sách cần lấy giá.
+     * @param searchType Kiểu tìm kiếm (có thể dùng để xác định tìm kiếm theo ISBN).
+     * @return Giá của cuốn sách tìm được, hoặc null nếu không tìm thấy.
+     */
     public String fetchPriceFromBooks(String ISBN, int searchType) {
         String price = null;
         String query = "SELECT price FROM books WHERE ISBN = ?";  // Truy vấn trực tiếp cột price theo ISBN
@@ -279,9 +335,13 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return price;  // Trả về giá hoặc null nếu không tìm thấy
     }
 
-    public void insertBookToDatabase(String title, String author, String pubdate, String releaseDate,
-                                     String ISBN, String price, String subject, String category,
-                                     String URL, String bookType, String quantity) {
+    /**
+     * Thêm một cuốn sách vào cơ sở dữ liệu với các thông tin được cung cấp.
+     * Phương thức này sẽ tìm ID tiếp theo có sẵn trong cơ sở dữ liệu và sử dụng ID đó để chèn thông tin sách vào bảng `books`.
+     *
+     * @param book  Sách cần thêm.
+     */
+    public void insertBookToDatabase(Book book) {
         Callable<Void> task = () -> {
             String findNextAvailableIDQuery = "SELECT t1.no + 1 AS next_id FROM books t1 "
                     + "LEFT JOIN books t2 ON t1.no + 1 = t2.no WHERE t2.no IS NULL LIMIT 1";
@@ -299,22 +359,22 @@ public class BookDAO extends GeneralDAO<String, Book> {
 
                 // Nếu không tìm thấy ID trống, thì sử dụng ID tự động tăng.
                 if (nextAvailableID == -1) {
-                    nextAvailableID = getNextAutoIncrementID(conn); // Lấy ID tiếp theo tự động tăng
+                    nextAvailableID = getNextAutoIncrementID(conn);
                 }
 
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                     pstmt.setInt(1, nextAvailableID);
-                    pstmt.setString(2, title);
-                    pstmt.setString(3, author);
-                    pstmt.setString(4, pubdate);
-                    pstmt.setString(5, releaseDate);
-                    pstmt.setString(6, ISBN);
-                    pstmt.setString(7, price);
-                    pstmt.setString(8, subject);
-                    pstmt.setString(9, category);
-                    pstmt.setString(10, URL);
-                    pstmt.setString(11, bookType);
-                    pstmt.setString(12, quantity);
+                    pstmt.setString(2, book.getTitle());
+                    pstmt.setString(3, book.getAuthor());
+                    pstmt.setString(4, book.getPubdate());
+                    pstmt.setString(5, book.getReleaseDate());
+                    pstmt.setString(6, book.getISBN());
+                    pstmt.setString(7, book.getPrice());
+                    pstmt.setString(8, book.getSubject());
+                    pstmt.setString(9, book.getCategory());
+                    pstmt.setString(10, book.getURL());
+                    pstmt.setString(11, book.getBookType());
+                    pstmt.setString(12, book.getQuantity());
                     pstmt.executeUpdate();
                 }
 
@@ -336,6 +396,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
 
     }
 
+    /** Lấy ra ID để thêm sách. */
     private int getNextAutoIncrementID(Connection conn) throws SQLException {
         String autoIncrementQuery = "SELECT AUTO_INCREMENT FROM information_schema.tables "
                 + "WHERE table_name = 'books' AND table_schema = DATABASE()";
@@ -348,18 +409,22 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
-    private LocalDate parseDate(String dateStr, DateTimeFormatter formatter) {
-        try {
-            return LocalDate.parse(dateStr, formatter);
-        } catch (DateTimeParseException e) {
-            System.err.println("Invalid date format: " + dateStr);
-            return null;
-        }
-    }
+    /**
+     * Lấy sách từ `dataMap` theo tên sách (title).
+     *
+     * @param title tên sách cần tìm.
+     * @return sách tìm thấy trong `dataMap` dựa trên tên sách, nếu không tìm thấy trả về null.
+     */
     public Book getBookByBookname(String title) {
         return dataMap.get(title);
     }
 
+    /**
+     * Cập nhật thuộc tính của sách theo ISBN.
+     * @param ISBN mã ISBN của sách.
+     * @param attribute tên thuộc tính cần cập nhật (ví dụ: title, author, price).
+     * @param newValue giá trị mới của thuộc tính.
+     */
     public static void modifyBookAttribute(String ISBN, String attribute, String newValue) {
         String sql = "UPDATE books SET " + attribute + " = ? WHERE ISBN = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -381,6 +446,11 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+    /**
+     * Xoá sách khỏi cơ sở dữ liệu dựa trên tên sách.
+     *
+     * @param title tên sách cần xoá.
+     */
     public void deleteBookFromDatabase (String title) {
         String sql = "DELETE FROM books where title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -397,6 +467,11 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+    /**
+     * Tải dữ liệu về số lượng sách trong các thể loại (genre) vào biểu đồ PieChart.
+     *
+     * @param genreCirculationChart biểu đồ dạng PieChart để hiển thị dữ liệu.
+     */
     public void loadGenreCirculationData(PieChart genreCirculationChart) {
         String sql = "SELECT category, SUM(quantity) AS total_quantity " +
                 "FROM books " +
@@ -422,6 +497,11 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+    /**
+     * Tải dữ liệu về số lượng sách mượn theo thể loại và hiển thị dưới dạng biểu đồ XY.
+     *
+     * @return danh sách các series dữ liệu thể hiện số lượng sách mượn theo từng thể loại.
+     */
     public ObservableList<XYChart.Series<String, Number>> loadGenreBorrowedData() {
         String sql = "SELECT b.category, COUNT(c.ISBN) AS borrow_count " +
                 "FROM books b " +
@@ -454,6 +534,13 @@ public class BookDAO extends GeneralDAO<String, Book> {
         return seriesList;
     }
 
+    /**
+     * Cập nhật số lượng sách trong cơ sở dữ liệu khi người dùng mượn hoặc trả sách.
+     *
+     * @param username tên người dùng.
+     * @param bookName tên sách.
+     * @param operation loại thao tác ("BORROW" hoặc "RETURN").
+     */
     public void updateQuantity(String username, String bookName, String operation) {
         Connection connection = null;
         PreparedStatement statementBook = null;
@@ -498,8 +585,13 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
-//    author	content	timemark	ISBN
-
+    /**
+     * Thêm một bình luận mới vào cơ sở dữ liệu cho cuốn sách cụ thể.
+     *
+     * @param book cuốn sách mà bình luận được thêm vào.
+     * @param comment bình luận sẽ được thêm vào cơ sở dữ liệu.
+     * @throws RuntimeException nếu có lỗi khi thêm bình luận vào cơ sở dữ liệu.
+     */
     public void addNewComment(Book book, Comment comment) throws RuntimeException {
         String author = comment.getAuthor();
         String content = comment.getContent();
@@ -518,6 +610,12 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
+    /**
+     * Lấy danh sách các bình luận của cuốn sách dựa trên mã ISBN.
+     *
+     * @param ISBN mã ISBN của cuốn sách.
+     * @return danh sách các bình luận cho cuốn sách có mã ISBN.
+     */
     public List<Comment> getBookComment(String ISBN) {
         List<Comment> commentList = new ArrayList<>();
         String sql = "SELECT * FROM comment WHERE ISBN = ?";

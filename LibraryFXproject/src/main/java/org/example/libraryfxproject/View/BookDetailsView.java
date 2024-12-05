@@ -16,12 +16,12 @@ import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 import java.io.IOException;
 
 public class BookDetailsView {
+
     private Stage stage;
-
     private AlertDisplayer alertDisplayer;
-
     private String username;
 
+    /** FXML buttons declaration with getters and setters. */
     @FXML
     Label titleLabel;
     @FXML
@@ -183,13 +183,21 @@ public class BookDetailsView {
         this.quantityLabel = quantityLabel;
     }
 
+    /**
+     * Khởi tạo một đối tượng `BookDetailsView` với cuốn sách và tên người dùng.
+     * @param book đối tượng `Book` chứa thông tin chi tiết của cuốn sách.
+     * @param username tên người dùng hiện tại.
+     */
     public BookDetailsView(Book book, String username) {
         commentsListView = new ListView<>();
         this.username = username;
         initializeBookDetailsView(book);
-
     }
 
+    /**
+     * Khởi tạo giao diện chi tiết cuốn sách, tải tệp FXML và thiết lập các sự kiện liên quan.
+     * @param book đối tượng `Book` chứa thông tin chi tiết của cuốn sách cần hiển thị.
+     */
     public void initializeBookDetailsView(Book book) {
         stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/BookDetailView.fxml"));
@@ -200,6 +208,8 @@ public class BookDetailsView {
             Scene scene = new Scene(bookDetailsParent);
             stage.setScene(scene);
             stage.show();
+
+            // Khởi tạo và đăng ký sự kiện cho BookDetailsController.
             BookDetailsController bookDetailsController = new BookDetailsController(this, alertDisplayer, username);
             bookDetailsController.registerEvent(book);
         } catch (IOException e) {

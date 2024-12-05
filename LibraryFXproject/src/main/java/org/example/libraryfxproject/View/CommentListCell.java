@@ -9,12 +9,22 @@ import org.example.libraryfxproject.Model.Comment;
 
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Lớp `CommentListCell` định nghĩa cách hiển thị mỗi phần tử `Comment` trong một `ListView`.
+ * `authorLabel`: Hiển thị tên tác giả của bình luận.
+ * `commentLabel`: Hiển thị nội dung bình luận.
+ * `timestampLabel`: Hiển thị thời gian đăng bình luận.
+ */
 public class CommentListCell extends ListCell<Comment> {
+
     private VBox content;
     private Label authorLabel;
     private Label commentLabel;
     private Label timestampLabel;
 
+    /**
+     * Khởi tạo một `CommentListCell`, thiết lập các thành phần giao diện và kiểu dáng.
+     */
     public CommentListCell() {
         super();
         authorLabel = new Label();
@@ -37,6 +47,11 @@ public class CommentListCell extends ListCell<Comment> {
         );
     }
 
+    /**
+     * Cập nhật nội dung của `CommentListCell` với thông tin từ đối tượng `Comment`.
+     * @param comment đối tượng `Comment` chứa dữ liệu cần hiển thị.
+     * @param empty chỉ ra liệu phần tử hiện tại có phải null
+     */
     @Override
     protected void updateItem(Comment comment, boolean empty) {
         super.updateItem(comment, empty);
