@@ -87,6 +87,7 @@ public class MainMenuController extends BaseController {
         // Đặt giá trị cho librarian
         mainMenuView.setLibrarian(loginService.findLibrarianByUsername(mainMenuView.getUsername()));
 
+
         // sự kiện search chính ở main view
         mainMenuView.getSearchBookButton().setOnAction(e -> {
             performSearch(mainMenuView.getSearchField().getText());
@@ -101,7 +102,6 @@ public class MainMenuController extends BaseController {
         mainMenuView.getRefreshButton().setOnAction(event -> {
             isFilteredView = false;
             mainMenuView.getSearchToggle().setSelected(false);
-
             mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected");
             if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
                 mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
@@ -117,14 +117,12 @@ public class MainMenuController extends BaseController {
             stage.close();
             LoginView.openLoginView(new Stage());
         });
-
         hideSuggestions(mainMenuView.getSuggestions());
         hideSuggestions(mainMenuView.getSuggestions1());
         hideSuggestions(mainMenuView.getSuggestions2());
         handleUsingTextField(mainMenuView.getSearchField(), mainMenuView.getSuggestions(), 0);
         handleUsingTextField(mainMenuView.getBorrowISBNField1(), mainMenuView.getSuggestions1(), 1);
         handleUsingTextField(mainMenuView.getReturnISBNField1(), mainMenuView.getSuggestions2(), 2);
-
         // toggle button search sách
         mainMenuView.getSearchToggle().setOnAction(event -> {
             CatalogEvent();
@@ -166,15 +164,14 @@ public class MainMenuController extends BaseController {
             loadTableData();
             initializePagination();
         });
+
         setupTableColumns();
         initializeLabel();
         initializePieChart();
         initializeBarChart();
         initializeTable();
-
         mainMenuView.getBorrowServiceButton().setOnAction(this::handleBorrowService);
         mainMenuView.getReturnServiceButton().setOnAction(this::handleReturnService);
-
         mainMenuView.getExportDataButton().setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("Choose export location");
@@ -217,11 +214,9 @@ public class MainMenuController extends BaseController {
         });
         setupContextMenuForStudent();
         mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
-
         mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
         mainMenuView.getSuggestions1().setOnMousePressed(event -> mainMenuView.setSelecting1(true));
         mainMenuView.getSuggestions2().setOnMousePressed(event -> mainMenuView.setSelecting2(true));
-
         mainMenuView.getProfileButton().getScene().getRoot().setOnMouseClicked(event -> {
             if (!mainMenuView.getSearchField().isFocused() && !mainMenuView.getSuggestions().isFocused()) {
                 hideSuggestions(mainMenuView.getSuggestions());

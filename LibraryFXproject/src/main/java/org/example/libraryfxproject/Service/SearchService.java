@@ -22,6 +22,7 @@ public class SearchService {
         bookDAO = BookDAO.getInstance();
     }
 
+
     public static synchronized SearchService getInstance() {
         if (searchService == null) {
             searchService = new SearchService();

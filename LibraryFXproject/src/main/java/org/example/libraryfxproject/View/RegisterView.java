@@ -36,6 +36,7 @@ public class RegisterView implements Initializable {
     private Button backButton;
 
     private AlertDisplayer alertDisplayer;
+
     private final Stage stage;
 
     public TextField getName() {

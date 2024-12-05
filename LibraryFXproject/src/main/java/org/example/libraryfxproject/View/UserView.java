@@ -20,8 +20,6 @@ import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 import java.io.IOException;
 
 public class UserView {
-    private String username;
-    private User user;
     private final Stage stage;
 
     /** FXML buttons declaration with getters and setters. */
@@ -140,6 +138,8 @@ public class UserView {
     @FXML
     private Pagination catalogPagination;
 
+    private User user;
+
     @FXML
     private TableColumn<Book, Integer> itemIdColumn;
 
@@ -173,6 +173,8 @@ public class UserView {
     @FXML
     private Button refreshButton;
 
+    private String username;
+
     @FXML
     private ToggleButton searchToggle;
 
@@ -181,6 +183,8 @@ public class UserView {
 
     @FXML
     private Label welcomeMessage;
+
+
 
     private AlertDisplayer alertDisplayer;
 
