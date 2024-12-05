@@ -19,6 +19,10 @@ public class GoogleBooksService {
 
     private final Books booksService;
 
+    /**
+     * Constructor tạo một thể hiện của GoogleBooksService để kết nối với Google Books API.
+     * @throws Exception nếu có lỗi khi tạo kết nối đến Google Books API
+     */
     public GoogleBooksService() throws Exception {
         booksService = new Books.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
@@ -28,6 +32,12 @@ public class GoogleBooksService {
                 .build();
     }
 
+    /**
+     * Tìm một cuốn sách từ Google Books API dựa trên ISBN.
+     * @param isbn Mã ISBN của cuốn sách
+     * @return Đối tượng Book chứa thông tin cuốn sách nếu tìm thấy, null nếu không tìm thấy
+     * @throws Exception nếu có lỗi trong quá trình kết nối hoặc lấy dữ liệu từ API
+     */
     public Book getBookByISBN(String isbn) throws Exception {
         if (isbn == null || !ValidationUtils.isValidISBN(isbn)) {
             throw new IllegalArgumentException("ISBN không hợp lệ");
@@ -57,6 +67,11 @@ public class GoogleBooksService {
         return null;
     }
 
+    /**
+     * Chuyển đối tượng Volume từ Google Books API thành đối tượng Book.
+     * @param volume Đối tượng Volume từ Google Books API
+     * @return Đối tượng Book với thông tin từ volume
+     */
     private Book convertVolumeToBook(Volume volume) {
         Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
         Book book = new Book();
@@ -73,6 +88,11 @@ public class GoogleBooksService {
         return book;
     }
 
+    /**
+     * Lấy thông tin ISBN từ đối tượng Volume.
+     * @param volumeInfo Thông tin về volume từ Google Books API
+     * @return ISBN của cuốn sách, hoặc "N/A" nếu không có
+     */
     private String getISBN(Volume.VolumeInfo volumeInfo) {
         if (volumeInfo.getIndustryIdentifiers() != null) {
             for (Volume.VolumeInfo.IndustryIdentifiers identifier : volumeInfo.getIndustryIdentifiers()) {
@@ -84,6 +104,11 @@ public class GoogleBooksService {
         return "N/A";
     }
 
+    /**
+     * Lấy giá của cuốn sách từ thông tin Volume.
+     * @param volume Thông tin về volume từ Google Books API
+     * @return Giá của cuốn sách, hoặc "N/A" nếu không có thông tin giá
+     */
     private String getPrice(Volume volume) {
         if (volume.getSaleInfo() != null && volume.getSaleInfo().getListPrice() != null) {
             return String.valueOf(volume.getSaleInfo().getListPrice().getAmount());
@@ -91,6 +116,11 @@ public class GoogleBooksService {
         return "N/A";
     }
 
+    /**
+     * Lấy chủ đề của cuốn sách từ thông tin Volume.
+     * @param volumeInfo Thông tin về volume từ Google Books API
+     * @return Chủ đề của cuốn sách, hoặc "N/A" nếu không có thông tin
+     */
     private String getSubject(Volume.VolumeInfo volumeInfo) {
         if (volumeInfo.getCategories() != null && !volumeInfo.getCategories().isEmpty()) {
             return volumeInfo.getCategories().get(0);
@@ -98,6 +128,11 @@ public class GoogleBooksService {
         return "N/A";
     }
 
+    /**
+     * Lấy danh mục của cuốn sách từ thông tin Volume.
+     * @param volumeInfo Thông tin về volume từ Google Books API
+     * @return Danh mục của cuốn sách, hoặc "N/A" nếu không có thông tin
+     */
     private String getCategory(Volume.VolumeInfo volumeInfo) {
         if (volumeInfo.getCategories() != null && !volumeInfo.getCategories().isEmpty()) {
             return String.join(", ", volumeInfo.getCategories());

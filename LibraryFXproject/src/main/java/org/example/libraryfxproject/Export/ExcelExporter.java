@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelExporter implements DataExporter {
+
+    /**
+     * Xuất dữ liệu sang tệp Excel tại đường dẫn chỉ định.
+     * @param data danh sách dữ liệu cần xuất
+     * @param filePath đường dẫn tệp Excel
+     * @throws ExportException nếu có lỗi trong quá trình xuất
+     */
     @Override
     public void exportData(List<?> data, String filePath) throws ExportException {
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -41,11 +48,9 @@ public class ExcelExporter implements DataExporter {
                     row.createCell(j).setCellValue(String.valueOf(field.get(item)));
                 }
             }
-
             for (int i = 0; i < allFields.size(); i++) {
                 sheet.autoSizeColumn(i);
             }
-
             try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
                 workbook.write(outputStream);
             }
@@ -54,11 +59,20 @@ public class ExcelExporter implements DataExporter {
         }
     }
 
+    /**
+     * Lấy phần mở rộng của tệp xuất.
+     * @return phần mở rộng tệp (".xlsx")
+     */
     @Override
     public String getFileExtension() {
         return ".xlsx";
     }
 
+    /**
+     * Lấy tất cả các trường của lớp (bao gồm các trường kế thừa).
+     * @param clazz lớp cần lấy trường
+     * @return danh sách các trường
+     */
     public List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         if (clazz != null) {
@@ -72,3 +86,4 @@ public class ExcelExporter implements DataExporter {
         return fields;
     }
 }
+

@@ -28,6 +28,7 @@ public class MainMenuView {
     private String username;
     private Librarian librarian;
 
+    /** FXML buttons declaration with getters and setters. */
     @FXML
     private TextField title;
 
@@ -1048,104 +1049,6 @@ public class MainMenuView {
         isSelecting2 = selecting2;
     }
 
-    public void initializeMainMenuView() {
-        alertDisplayer = JavaFXAlertDisplayer.getInstance();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/MainMenu.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent mainViewParent = fxmlLoader.load();
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth());
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight());
-            stage.setX((Screen.getPrimary().getBounds().getWidth() - stage.getWidth()) / 2);
-            stage.setY((Screen.getPrimary().getBounds().getHeight() - stage.getHeight()) / 2);
-            Scene scene = new Scene(mainViewParent);
-            stage.setX(-5);
-            stage.setY(-5);
-            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
-            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
-            stage.setScene(scene);
-            stage.show();
-            stage.setResizable(false);
-            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
-            mainMenuController.registerEvent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initializeAddStudentView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addStudent.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent addStudentParent = fxmlLoader.load();
-            Scene addStudentScene = new Scene(addStudentParent);
-            Stage addStudentStage = new Stage();
-            addStudentStage.setScene(addStudentScene);
-            addStudentStage.initModality(Modality.APPLICATION_MODAL);
-            addStudentStage.initOwner(stage);
-            addStudentStage.show();
-            mainMenuController.registerForAddStudent(addStudentStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void initializeModifyStudentView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyStudent.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent modifyStudentParent = fxmlLoader.load();
-            Scene modifyStudentScene = new Scene(modifyStudentParent);
-            Stage modifyStudentStage = new Stage();
-            modifyStudentStage.setScene(modifyStudentScene);
-            modifyStudentStage.initModality(Modality.APPLICATION_MODAL);
-            modifyStudentStage.initOwner(stage);
-            modifyStudentStage.show();
-            mainMenuController.registerForModifyStudent(modifyStudentStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Button getModifyButton() {
-        return modifyButton;
-    }
-
-    public void initializeModifyBookView(MainMenuController mainMenuController) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyBook.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            Parent modifyBookParent = fxmlLoader.load();
-            Scene modifyBookScene = new Scene(modifyBookParent);
-            Stage modifyBookStage = new Stage();
-            modifyBookStage.setTitle("Modify Book");
-            modifyBookStage.setScene(modifyBookScene);
-            modifyBookStage.initModality(Modality.APPLICATION_MODAL);
-            modifyBookStage.initOwner(stage);
-            modifyBookStage.show();
-            mainMenuController.registerForModifyBook(modifyBookStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void initializeAddBookView(MainMenuController mainMenuController) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addBookView.fxml"));
-        loader.setController(this);
-        try {
-            Parent addBookParent = loader.load();
-            Scene addBookScene = new Scene(addBookParent);
-            Stage addBookStage = new Stage();
-            addBookStage.setScene(addBookScene);
-            addBookStage.initModality(Modality.APPLICATION_MODAL);
-            addBookStage.initOwner(stage);
-            addBookStage.show();
-            mainMenuController.registerForAddBook(addBookStage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public String getUsername() {
         return username;
     }
@@ -1217,4 +1120,131 @@ public class MainMenuView {
     public void setAttributeBookComboBox(ComboBox<String> attributeBookComboBox) {
         this.attributeBookComboBox = attributeBookComboBox;
     }
+
+    public Button getModifyButton() {
+        return modifyButton;
+    }
+
+    /**
+     * Khởi tạo và hiển thị giao diện Main menu, thiết lập cửa sổ chính của ứng dụng
+     * (cho librarian).
+     * Đăng ký `MainMenuController` để xử lý các tương tác của menu chính.
+     * Một số thao tác căn chỉnh màn hình :).
+     * @throws IOException nếu có lỗi khi tải tệp FXML .
+     */
+    public void initializeMainMenuView() {
+        alertDisplayer = JavaFXAlertDisplayer.getInstance();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/MainMenu.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent mainViewParent = fxmlLoader.load();
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth());
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight());
+            stage.setX((Screen.getPrimary().getBounds().getWidth() - stage.getWidth()) / 2);
+            stage.setY((Screen.getPrimary().getBounds().getHeight() - stage.getHeight()) / 2);
+            Scene scene = new Scene(mainViewParent);
+            stage.setX(-5);
+            stage.setY(-5);
+            stage.setWidth(Screen.getPrimary().getBounds().getWidth() + 10);
+            stage.setHeight(Screen.getPrimary().getBounds().getHeight() - 30);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(false);
+            MainMenuController mainMenuController = new MainMenuController(this, alertDisplayer);
+            mainMenuController.registerEvent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Khởi tạo và hiển thị giao diện thêm sinh viên.
+     * Mở một cửa sổ mới cho phép thêm thông tin sinh viên vào hệ thống.
+     * @param mainMenuController đối tượng controller của menu chính để đăng ký sự kiện cho cửa sổ thêm sinh viên.
+     */
+    public void initializeAddStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent addStudentParent = fxmlLoader.load();
+            Scene addStudentScene = new Scene(addStudentParent);
+            Stage addStudentStage = new Stage();
+            addStudentStage.setScene(addStudentScene);
+            addStudentStage.initModality(Modality.APPLICATION_MODAL);
+            addStudentStage.initOwner(stage);
+            addStudentStage.show();
+            mainMenuController.registerForAddStudent(addStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Khởi tạo và hiển thị giao diện sửa thông tin sinh viên.
+     * Mở một cửa sổ mới cho phép sửa thông tin của sinh viên.
+     * @param mainMenuController đối tượng controller của menu chính để đăng ký sự kiện cho cửa sổ sửa sinh viên.
+     */
+    public void initializeModifyStudentView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyStudent.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent modifyStudentParent = fxmlLoader.load();
+            Scene modifyStudentScene = new Scene(modifyStudentParent);
+            Stage modifyStudentStage = new Stage();
+            modifyStudentStage.setScene(modifyStudentScene);
+            modifyStudentStage.initModality(Modality.APPLICATION_MODAL);
+            modifyStudentStage.initOwner(stage);
+            modifyStudentStage.show();
+            mainMenuController.registerForModifyStudent(modifyStudentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Khởi tạo và hiển thị giao diện sửa thông tin sách.
+     * Mở một cửa sổ mới cho phép sửa thông tin của sách.
+     * @param mainMenuController đối tượng controller của menu chính để đăng ký sự kiện cho cửa sổ sửa sách.
+     */
+    public void initializeModifyBookView(MainMenuController mainMenuController) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/modifyBook.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            Parent modifyBookParent = fxmlLoader.load();
+            Scene modifyBookScene = new Scene(modifyBookParent);
+            Stage modifyBookStage = new Stage();
+            modifyBookStage.setTitle("Modify Book");
+            modifyBookStage.setScene(modifyBookScene);
+            modifyBookStage.initModality(Modality.APPLICATION_MODAL);
+            modifyBookStage.initOwner(stage);
+            modifyBookStage.show();
+            mainMenuController.registerForModifyBook(modifyBookStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Khởi tạo và hiển thị giao diện thêm sách mới.
+     * Mở một cửa sổ mới cho phép thêm sách vào hệ thống.
+     * @param mainMenuController đối tượng controller của menu chính để đăng ký sự kiện cho cửa sổ thêm sách.
+     */
+    public void initializeAddBookView(MainMenuController mainMenuController) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/addBookView.fxml"));
+        loader.setController(this);
+        try {
+            Parent addBookParent = loader.load();
+            Scene addBookScene = new Scene(addBookParent);
+            Stage addBookStage = new Stage();
+            addBookStage.setScene(addBookScene);
+            addBookStage.initModality(Modality.APPLICATION_MODAL);
+            addBookStage.initOwner(stage);
+            addBookStage.show();
+            mainMenuController.registerForAddBook(addBookStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -12,6 +12,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CSVExporter implements DataExporter {
+
+    /**
+     * Xuất dữ liệu sang tệp CSV tại đường dẫn chỉ định.
+     * @param data danh sách dữ liệu cần xuất
+     * @param filePath đường dẫn tệp CSV
+     * @throws ExportException nếu có lỗi trong quá trình xuất
+     */
     @Override
     public void exportData(List<?> data, String filePath) throws ExportException {
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -37,11 +44,20 @@ public class CSVExporter implements DataExporter {
         }
     }
 
+    /**
+     * Lấy phần mở rộng của tệp xuất.
+     * @return phần mở rộng tệp (".csv")
+     */
     @Override
     public String getFileExtension() {
         return ".csv";
     }
 
+    /**
+     * Lấy tất cả các trường của lớp (bao gồm các trường kế thừa).
+     * @param clazz lớp cần lấy trường
+     * @return danh sách các trường
+     */
     public List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         if (clazz != null) {

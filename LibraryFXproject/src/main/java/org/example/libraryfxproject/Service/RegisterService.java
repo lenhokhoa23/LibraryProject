@@ -3,9 +3,6 @@ package org.example.libraryfxproject.Service;
 import org.example.libraryfxproject.Dao.AccountDAO;
 import org.example.libraryfxproject.Model.Account;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import static org.example.libraryfxproject.Util.ValidationUtils.*;
 
 public class RegisterService {
@@ -17,6 +14,7 @@ public class RegisterService {
         LoadService.loadData(accountDAO);
     }
 
+
     public static synchronized RegisterService getInstance() {
         if (registerService == null) {
             registerService = new RegisterService();
@@ -24,14 +22,14 @@ public class RegisterService {
         return registerService;
     }
 
-    public AccountDAO getAccountDAO() {
-        return accountDAO;
-    }
-
-    public void refreshAccountDAO() {
-        LoadService.loadData(accountDAO);
-    }
-
+    /**
+     * Kiểm tra tính hợp lệ của thông tin đầu vào.
+     * @param username Tên người dùng
+     * @param phoneNumber Số điện thoại
+     * @param email Địa chỉ email
+     * @return Mã lỗi (1: Tên người dùng không hợp lệ, 2: Số điện thoại không hợp lệ,
+     *         3: Email không hợp lệ, 4: Tên người dùng đã tồn tại, 0: Thành công)
+     */
     public int validateInput(String username, String phoneNumber, String email) {
         if (!isValidUsername(username)) {
             return 1;

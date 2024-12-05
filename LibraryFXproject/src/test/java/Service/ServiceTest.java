@@ -34,13 +34,10 @@ public class ServiceTest {
         String URL = "http://example.com";
         String bookType = "Hardcover";
         String quantity = "5";
-
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
         // Kiểm tra phương thức validateAddBookInput
-        int result = bookService.validateAddBookInput(
-                title, author, pubdateStr, releaseDateStr,
-                ISBN, price, subject, category,
-                URL, bookType, quantity
-        );
+        int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả trả về (1 có nghĩa là ISBN không hợp lệ)
         assertEquals(1, result, "ISBN should be invalid");
@@ -61,12 +58,10 @@ public class ServiceTest {
         String bookType = "Hardcover";
         String quantity = "5";
 
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
         // Kiểm tra phương thức validateAddBookInput
-        int result = bookService.validateAddBookInput(
-                title, author, pubdateStr, releaseDateStr,
-                ISBN, price, subject, category,
-                URL, bookType, quantity
-        );
+        int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả trả về (2 có nghĩa là title không hợp lệ)
         assertEquals(2, result, "Title should be invalid due to special characters");
@@ -87,12 +82,10 @@ public class ServiceTest {
         String bookType = "Hardcover";
         String quantity = "5";
 
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
         // Kiểm tra phương thức validateAddBookInput
-        int result = bookService.validateAddBookInput(
-                title, author, pubdateStr, releaseDateStr,
-                ISBN, price, subject, category,
-                URL, bookType, quantity
-        );
+        int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả trả về (3 có nghĩa là price không hợp lệ)
         assertEquals(3, result, "Price should be invalid due to non-numeric value");
@@ -113,12 +106,10 @@ public class ServiceTest {
         String bookType = "Hardcover";
         String quantity = "5";
 
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
         // Kiểm tra phương thức validateAddBookInput
-        int result = bookService.validateAddBookInput(
-                title, author, pubdateStr, releaseDateStr,
-                ISBN, price, subject, category,
-                URL, bookType, quantity
-        );
+        int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả trả về (4 có nghĩa là subject không hợp lệ)
         assertEquals(4, result, "Subject should be invalid due to numbers");
@@ -139,12 +130,10 @@ public class ServiceTest {
         String bookType = "Hardcover";
         String quantity = "five"; // Quantity invalid
 
-        // test method validateAddBookInput
-        int result = bookService.validateAddBookInput(
-                title, author, pubdateStr, releaseDateStr,
-                ISBN, price, subject, category,
-                URL, bookType, quantity
-        );
+        Book book = new Book(9999, title, author, pubdateStr, releaseDateStr,
+                ISBN, price, subject, category, URL, bookType, quantity);
+        // Kiểm tra phương thức validateAddBookInput
+        int result = bookService.validateAddBookInput(book);
 
         // Kiểm tra kết quả
         assertEquals(5, result, "Quantity should be invalid due to non-numeric value");
