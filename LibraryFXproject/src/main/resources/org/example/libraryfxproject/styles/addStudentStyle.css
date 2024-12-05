@@ -3,7 +3,7 @@
 }
 
 .root {
-     -fx-background-image: url('images/add_Student.jpg');
+     -fx-background-image: url('add_Student.jpg');
      -fx-background-size: cover;
      -fx-background-position: center center;
 }

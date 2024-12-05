@@ -1,5 +1,6 @@
 package org.example.libraryfxproject.Controller;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -317,6 +318,8 @@ public class MainMenuController extends BaseController {
                         mainMenuView.getUsernameField().getText(),
                         mainMenuView.getPasswordField().getText(),
                         mainMenuView.getMembershipTypeComboBox().getValue());
+                UpdateService.getInstance().updateAccountDAO();
+                UpdateService.getInstance().updateUserDAO();
                 studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values()); // Cập nhật bookList
                 showSuccessMessage("Add user successfully!!");
                 addStudentStage.close();
