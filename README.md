@@ -4,7 +4,7 @@ Lê Nho Khoa: Nhóm trưởng
 Nguyễn Anh Khang: Thành viên
 Khổng Quốc Anh: Thành viên
 
-![image](https://github.com/user-attachments/assets/2e4f11d9-d413-4de8-a1d1-4792a4653ec2)
+![image](https://github.com/user-attachments/assets/5d881e41-8d90-4339-9643-524eeff011aa)
 
 > Đây là sơ đồ thiết kế của nhóm chúng em:
 https://drive.google.com/drive/u/2/home
