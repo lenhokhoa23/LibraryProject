@@ -283,12 +283,15 @@ public class UserMenuController extends BaseController {
         // Kiểm tra sách tồn kho và ngày trả sách hợp lệ
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+            return;
         }
         if (!bookService.hasEnoughQuantity(isbn)) {
             showErrorMessage("Sách này hiện không còn trong kho, bạn vui lòng chờ dịp khác nhé!");
+            return;
         }
         if (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) {
             showErrorMessage("Ngày được chọn không hợp lệ!\nVui lòng thử lại");
+            return;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // Thêm vào giỏ hàng

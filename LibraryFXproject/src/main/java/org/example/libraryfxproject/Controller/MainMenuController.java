@@ -322,6 +322,7 @@ public class MainMenuController extends BaseController {
                 addStudentStage.close();
             }
         });
+        UpdateService.getInstance().updateUserDAO();
     }
 
     /**
@@ -352,6 +353,7 @@ public class MainMenuController extends BaseController {
             }
         });
         mainMenuView.getBackButton1().setOnAction(event -> stage.close());
+        UpdateService.getInstance().updateUserDAO();
     }
 
     /**
@@ -370,7 +372,9 @@ public class MainMenuController extends BaseController {
                 String attribute = mainMenuView.getAttributeBookComboBox().getValue();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    showErrorMessage("Please fill in all fields!");
+                    showErrorMessage("Vui lòng nhập đầy đủ thông tin!");
+                } else if (!bookService.hasBookWithISBN(ISBN)) {
+                    showErrorMessage("Không tìm thấy sách này!");
                 } else {
                     bookService.modifyBook(ISBN, attribute, newValue);
                     showSuccessMessage("Book updated successfully!");
@@ -381,6 +385,7 @@ public class MainMenuController extends BaseController {
             }
         });
         mainMenuView.getBackButton().setOnAction(event -> stage.close());
+        UpdateService.getInstance().updateBookDAO();
     }
 
     /**
@@ -536,9 +541,11 @@ public class MainMenuController extends BaseController {
         }
         if (!userService.hasIDInUser(Integer.parseInt(studentId))) {
             showErrorMessage("Không tìm thấy ID người dùng!\nVui lòng thử lại");
+            return;
         }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+            return;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
@@ -579,6 +586,7 @@ public class MainMenuController extends BaseController {
         }
         if (!userService.hasIDInUser(Integer.parseInt(studentId))) {
             showErrorMessage("Không tìm thấy ID người dùng!\nVui lòng thử lại");
+            return;
         }
         if (!cartService.hasBookInCart(isbn, Integer.parseInt(studentId))) {
             showErrorMessage("Kho hàng của bạn không có sách này!");
@@ -871,6 +879,7 @@ public class MainMenuController extends BaseController {
                 mainMenuView.getBookType().setText(book.getBookType());
             }
         });
+        UpdateService.getInstance().updateBookDAO();
     }
 
     /**
