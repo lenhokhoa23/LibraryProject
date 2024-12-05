@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import static org.example.libraryfxproject.Util.ValidationUtils.*;
 
 public class RegisterService {
-    AccountDAO accountDAO;
+    private AccountDAO accountDAO;
     private static RegisterService registerService;
 
     private RegisterService() {

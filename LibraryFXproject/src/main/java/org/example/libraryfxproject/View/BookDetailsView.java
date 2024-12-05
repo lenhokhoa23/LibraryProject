@@ -18,10 +18,6 @@ import java.io.IOException;
 public class BookDetailsView {
     private Stage stage;
 
-    private AlertDisplayer alertDisplayer;
-
-    private String username;
-
     @FXML
     Label titleLabel;
     @FXML
@@ -56,6 +52,10 @@ public class BookDetailsView {
     Button submitButton;
     @FXML
     ListView<Comment> commentsListView;
+
+    private AlertDisplayer alertDisplayer;
+
+    private String username;
 
 
     public String getUsername() {

@@ -20,6 +20,8 @@ public class SearchService {
         userDAO = UserDAO.getInstance();
         bookDAO = BookDAO.getInstance();
     }
+
+
     // synchronized giup ho tro da luong khong tao ra nhieu thuc the
     public static synchronized SearchService getInstance() {
         if (searchService == null) {

@@ -9,8 +9,8 @@ import org.example.libraryfxproject.Model.User;
 import java.lang.reflect.AccessFlag;
 
 public class UserService {
-    private final UserDAO userDAO;
-    private final AccountDAO accountDAO;
+    private UserDAO userDAO;
+    private AccountDAO accountDAO;
     private static UserService userService;
 
     private UserService() {

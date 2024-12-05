@@ -2,7 +2,7 @@
 
 .login-root {
     -fx-background-color: linear-gradient(to bottom, #4A90E2, #50C9C3);
-    -fx-background-image: url("images/login.png");
+    -fx-background-image: url("login.png");
     -fx-background-size: cover; /* Đảm bảo hình nền phủ kín */
 }
 

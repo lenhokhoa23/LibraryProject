@@ -348,14 +348,7 @@ public class BookDAO extends GeneralDAO<String, Book> {
         }
     }
 
-    private LocalDate parseDate(String dateStr, DateTimeFormatter formatter) {
-        try {
-            return LocalDate.parse(dateStr, formatter);
-        } catch (DateTimeParseException e) {
-            System.err.println("Invalid date format: " + dateStr);
-            return null;
-        }
-    }
+
     public Book getBookByBookname(String title) {
         return dataMap.get(title);
     }

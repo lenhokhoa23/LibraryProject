@@ -25,8 +25,6 @@ import org.example.libraryfxproject.Util.JavaFXAlertDisplayer;
 import java.io.IOException;
 
 public class MainMenuView {
-    private String username;
-    private Librarian librarian;
 
     @FXML
     private TextField title;
@@ -64,6 +62,8 @@ public class MainMenuView {
     @FXML
     private Button addBookButton;
 
+    private String username;
+
     @FXML
     private Button backButton;
 
@@ -72,6 +72,8 @@ public class MainMenuView {
 
     @FXML
     private Pagination catalogPagination;
+
+    private Librarian librarian;
 
     @FXML
     private TableColumn<Book, Integer> itemIdColumn;
