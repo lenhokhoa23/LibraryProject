@@ -16,13 +16,13 @@ public class SearchService {
     private final BookDAO bookDAO;
     private final UserDAO userDAO;
     private static SearchService searchService;
+
     private SearchService() {
         userDAO = UserDAO.getInstance();
         bookDAO = BookDAO.getInstance();
     }
 
 
-    // synchronized giup ho tro da luong khong tao ra nhieu thuc the
     public static synchronized SearchService getInstance() {
         if (searchService == null) {
             searchService = new SearchService();
@@ -30,17 +30,18 @@ public class SearchService {
         return searchService;
     }
 
-
+    /**
+     * Tìm kiếm sách theo tiền tố (prefix) trong danh sách sách.
+     * @param prefix Tiền tố cần tìm kiếm
+     * @return Danh sách các tên sách tìm được
+     */
     public List<String> searchBookByPrefix(String prefix) {
         prefix = prefix.toUpperCase();
         List<String> results = new ArrayList<>();
         TrieNode current = bookDAO.getTrie().getRoot();
         for (char ch : prefix.toCharArray()) {
-            System.out.println("Checking character: " + ch);
-            System.out.println("Current node children: " + current.getChildren().keySet());
             TrieNode node = current.getChildren().get(ch);
             if (node == null) {
-                System.out.println("Character not found: " + ch);
                 return results;
             }
             current = node;
@@ -49,6 +50,12 @@ public class SearchService {
         return results;
     }
 
+    /**
+     * Tìm tất cả các từ (tên sách) trong trie bắt đầu với tiền tố đã cho.
+     * @param node    Node hiện tại trong trie
+     * @param prefix  Tiền tố đã cho
+     * @param results Danh sách kết quả tìm được
+     */
     private void findAllWordsOfBook(TrieNode node, StringBuilder prefix, List<String> results) {
         if (node.isEndOfWord()) {
             results.add(prefix.toString());
@@ -60,14 +67,24 @@ public class SearchService {
         }
     }
 
+    /**
+     * Tìm kiếm sách theo thuộc tính và giá trị đã cho.
+     * @param attribute Tên thuộc tính của sách
+     * @param value     Giá trị của thuộc tính cần tìm
+     * @return Danh sách sách tìm được dưới dạng ObservableList
+     */
     public ObservableList<Book> searchBookByAttribute(String attribute, String value) {
         List<Book> books = bookDAO.findBooksByAttribute(attribute, value);
         return FXCollections.observableArrayList(books);
     }
 
+    /**
+     * Tìm kiếm người dùng theo tên người dùng.
+     * @param username Tên người dùng cần tìm
+     * @return Danh sách người dùng tìm được dưới dạng ObservableList
+     */
     public ObservableList<User> searchUserByUsername(String username) {
         List<User> users = userDAO.findUserByComponentOfUserName(username);
         return FXCollections.observableArrayList(users);
     }
-
 }

@@ -8,12 +8,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lớp này chịu trách nhiệm thao tác với cơ sở dữ liệu Cart, bao gồm các phương thức
+ * để tải dữ liệu từ cơ sở dữ liệu, tìm kiếm các giỏ hàng theo username, kiểm tra
+ * tình trạng sách, số lượng sách đã mượn, số lượng sách quá hạn, và lấy các hoạt động.
+ */
 public class CartDAO extends GeneralDAO<Integer, Cart> {
 
     private static CartDAO cartDAO;
-    private CartDAO() {
-
-    }
 
     public static synchronized CartDAO getInstance() {
         if (cartDAO == null) {
@@ -21,6 +23,10 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         }
         return cartDAO;
     }
+
+    /**
+     * Tải tất cả dữ liệu từ bảng Cart trong cơ sở dữ liệu .
+     */
     @Override
     public void loadData() {
         String sql = "SELECT * FROM cart";
@@ -35,10 +41,8 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
                 String isbn = resultSet.getString("ISBN");
                 String title = resultSet.getString("title");
 
-                // Tạo đối tượng Cart
+                // Tạo đối tượng Cart và thêm vào HashMap
                 Cart cart = new Cart(cartId, startDate, endDate, isbn, title);
-
-                // Thêm cart vào HashMap (giả sử dataMap là một HashMap<Integer, Cart>)
                 dataMap.put(cartId, cart);
             }
         } catch (SQLException e) {
@@ -46,31 +50,36 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         }
     }
 
+    /**
+     * Lấy thông tin giỏ hàng của người dùng theo tên đăng nhập.
+     *
+     * @param username tên đăng nhập của người dùng.
+     * @return đối tượng {@link Cart} của người dùng hoặc null nếu không tìm thấy.
+     */
     public Cart fetchCartByUsername(String username) {
         Cart cart = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            // Query to get Cart details for the given username using JOIN
+            // Truy vấn giỏ hàng theo username sử dụng JOIN
             String query = "SELECT c.Cart_ID, c.startDate, c.endDate, c.ISBN, c.title " +
                     "FROM user u JOIN cart c ON u.Cart_ID = c.Cart_ID " +
                     "WHERE u.username = ?";
             pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, username); // Set the username parameter
+            pstmt.setString(1, username); // Đặt tham số username
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                // Create the Cart object with details from the result set
+                // Tạo đối tượng Cart với thông tin từ resultSet
                 int cartID = rs.getInt("Cart_ID");
                 String startDate = rs.getString("startDate");
                 String endDate = rs.getString("endDate");
                 String isbn = rs.getString("ISBN");
                 String title = rs.getString("title");
-                cart = new Cart(cartID, startDate, endDate, title, isbn); // Create Cart object
+                cart = new Cart(cartID, startDate, endDate, title, isbn); // Tạo đối tượng Cart
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Close resources
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
@@ -78,9 +87,15 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
                 e.printStackTrace();
             }
         }
-        return cart; // Return the Cart object or null if not found
+        return cart; // Trả về đối tượng Cart hoặc null nếu không tìm thấy
     }
 
+    /**
+     * Lấy danh sách các giỏ hàng có sách với tiêu đề nhất định.
+     *
+     * @param bookTitle tiêu đề sách cần tìm.
+     * @return danh sách {@link Cart} chứa sách với tiêu đề tìm được.
+     */
     public static List<Cart> getBooksStatus(String bookTitle) {
         List<Cart> cartList = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -105,8 +120,11 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return cartList;
     }
 
-
-
+    /**
+     * Lấy số lượng sách đã mượn từ bảng Cart.
+     *
+     * @return số lượng sách đã mượn.
+     */
     public int getBooksBorrowedCount() {
         String sql = "SELECT COUNT(*) AS borrowedCount FROM Cart";
         int borrowedCount = 0;
@@ -123,6 +141,11 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return borrowedCount;
     }
 
+    /**
+     * Lấy số lượng sách quá hạn từ bảng Cart.
+     *
+     * @return số lượng sách quá hạn.
+     */
     public int getOverdueBooksCount() {
         String sql = "SELECT COUNT(*) AS overdueCount FROM Cart WHERE endDate < ?";
         int overdueCount = 0;
@@ -140,6 +163,12 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return overdueCount;
     }
 
+    /**
+     * Lấy danh sách các hoạt động (giỏ hàng) gần đây trong hệ thống, giới hạn bởi tham số.
+     *
+     * @param limit giới hạn số lượng hoạt động cần lấy (nếu có).
+     * @return danh sách {@link ObservableList} chứa các hoạt động.
+     */
     public ObservableList<ObservableList<String>> getActivities(int limit) {
         ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
 
@@ -232,6 +261,12 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return activities;
     }
 
+    /**
+     * Lấy các hoạt động giỏ hàng theo Cart_ID.
+     *
+     * @param cartId ID của giỏ hàng.
+     * @return Danh sách các hoạt động giỏ hàng theo Cart_ID.
+     */
     public ObservableList<ObservableList<String>> getActivitiesByCartId(int cartId) {
         ObservableList<ObservableList<String>> activities = FXCollections.observableArrayList();
 
@@ -265,6 +300,11 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         return activities;
     }
 
+    /**
+     * Thêm một giỏ hàng mới vào cơ sở dữ liệu.
+     *
+     * @param cart Đối tượng Cart cần thêm.
+     */
     public void addCart(Cart cart) {
         String sql = "INSERT INTO cart (Cart_ID, startDate, endDate, title, ISBN) "
                 + "VALUES (?, ?, ?, ?, ?)";
@@ -286,6 +326,12 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         }
     }
 
+    /**
+     * Xóa sách khỏi giỏ hàng theo ISBN và Cart_ID.
+     *
+     * @param isbn ISBN của sách cần xóa.
+     * @param cartId ID của giỏ hàng.
+     */
     public void deleteCart(String isbn, int cartId) {
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = null;
@@ -315,6 +361,13 @@ public class CartDAO extends GeneralDAO<Integer, Cart> {
         }
     }
 
+    /**
+     * Kiểm tra xem sách có tồn tại trong giỏ hàng hay không.
+     *
+     * @param isbn ISBN của sách.
+     * @param cartId ID của giỏ hàng.
+     * @return true nếu sách có trong giỏ hàng, false nếu không.
+     */
     public boolean hasBookInCart(String isbn, int cartId) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

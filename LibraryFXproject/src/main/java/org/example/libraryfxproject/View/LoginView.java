@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 public class LoginView implements Initializable {
     private final Stage stage;
 
+    /** FXML buttons declaration with getters and setters. */
     @FXML
     private TextField username;
     @FXML

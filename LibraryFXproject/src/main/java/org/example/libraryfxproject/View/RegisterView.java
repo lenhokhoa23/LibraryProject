@@ -18,6 +18,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class RegisterView implements Initializable {
+
+    /** FXML buttons declaration with getters and setters. */
     @FXML
     private TextField name;
     @FXML
@@ -93,12 +95,22 @@ public class RegisterView implements Initializable {
         this.backButton = backButton;
     }
 
+    /**
+     * Constructor khởi tạo đối tượng RegisterView.
+     * Phương thức này nhận một đối tượng `Stage` để hiển thị giao diện và gọi phương thức
+     * `initializeRegisterView()` để khởi tạo giao diện đăng kí tài khoản.
+     * @param stage Đối tượng `Stage` dùng để hiển thị giao diện.
+     */
     public RegisterView(Stage stage) {
         this.stage = stage;
         alertDisplayer = JavaFXAlertDisplayer.getInstance();
         initializeRegisterView();
     }
 
+    /** Khởi tạo cửa sổ cho view đăng kí tài khoản.
+     * Ném ra ngoại lệ nếu lỗi khi load view
+     *
+     */
     public void initializeRegisterView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/Register.fxml"));
         fxmlLoader.setController(this); // Đặt controller là đối tượng hiện tại
@@ -112,6 +124,13 @@ public class RegisterView implements Initializable {
         }
     }
 
+    /**
+     * Khởi tạo và đăng ký các sự kiện cho giao diện người.
+     * Phương thức này thiết lập bộ điều khiển RegisterController và gọi phương thức
+     * registerEvent() để đăng ký các sự kiện cho register.
+     * @param url URL của tệp FXML.
+     * @param resourceBundle Đối tượng chứa các tài nguyên được sử dụng trong FXML.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         alertDisplayer = JavaFXAlertDisplayer.getInstance();

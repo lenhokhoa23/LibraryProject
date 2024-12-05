@@ -20,6 +20,5 @@ public class LibraryApp extends Application {
 //       LoginController loginController = new LoginController(loginView);
 //       MainMenuView mainMenuView = new MainMenuView(primaryStage);
 //       UserView userMenuView = new UserView(primaryStage, "viettran97");
-
     }
 }

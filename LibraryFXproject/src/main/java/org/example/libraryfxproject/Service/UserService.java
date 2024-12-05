@@ -8,6 +8,7 @@ import org.example.libraryfxproject.Model.User;
 
 import java.lang.reflect.AccessFlag;
 
+/** Cung cấp các dịch vụ chung cho thao tác với user. */
 public class UserService {
     private UserDAO userDAO;
     private AccountDAO accountDAO;
