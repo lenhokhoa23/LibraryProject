@@ -21,7 +21,7 @@ public class ContextMenuController extends BaseController {
     /**
      * Khởi tạo ContextMenuController với các đối tượng cần thiết.
      *
-     * @param catalogTableView bảng sách chứa các sách cần thực hiện các hành động.
+     * @param catalogTableView bảng hiển thị catalog để làm việc với các records.
      * @param alertDisplayer đối tượng hiển thị thông báo cho người dùng.
      * @param username tên người dùng hiện tại.
      */

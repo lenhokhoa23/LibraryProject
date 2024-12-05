@@ -105,7 +105,7 @@ public class MainMenuController extends BaseController {
             mainMenuView.getSearchToggle().setSelected(false);
             mainMenuView.getSearchToggle().getStyleClass().remove("view-toggle:selected");
             if (!mainMenuView.getSearchToggle().getStyleClass().contains("view-toggle")) {
-                mainMenuView.getSearchToggle().getStyleClass().add("view-toggle"); // Đảm bảo thêm lại lớp mặc định
+                mainMenuView.getSearchToggle().getStyleClass().add("view-toggle");
             }
             mainMenuView.getSearchCatalog().setText("");
             loadTableData();
