@@ -3,7 +3,10 @@
 Lê Nho Khoa: Nhóm trưởng
 Nguyễn Anh Khang: Thành viên
 Khổng Quốc Anh: Thành viên
-Đây là sơ đồ thiết kế của nhóm chúng em:
+
+![image](https://github.com/user-attachments/assets/2e4f11d9-d413-4de8-a1d1-4792a4653ec2)
+
+> Đây là sơ đồ thiết kế của nhóm chúng em:
 https://drive.google.com/drive/u/2/home
 
 Công việc từng thành viên:
