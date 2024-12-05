@@ -1,5 +1,6 @@
 package org.example.libraryfxproject.Controller;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.example.libraryfxproject.Model.Book;
 import org.example.libraryfxproject.Model.User;
 import org.example.libraryfxproject.Service.*;
@@ -347,7 +349,7 @@ public class UserMenuController extends BaseController {
     private void handleUsingTextField(TextField textField, ListView<String> listView, int x) {
         textField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                performSearch(listView);
+                hideSuggestions(listView);
             } else {
                 scheduleSearch(textField, listView);
             }
@@ -371,31 +373,32 @@ public class UserMenuController extends BaseController {
             }
         });
 
-        textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                showSuggestionsIfNotEmpty(listView);
-            } else {
-                Platform.runLater(() -> {
-                    if (!userView.isSelecting() && x == 0) {
-                        hideSuggestions(listView);
-                    }
-                    if (!userView.isSelecting1() && x == 1) {
-                        hideSuggestions(listView);
-                    }
-                    if (!userView.isSelecting2() && x == 2) {
-                        hideSuggestions(listView);
-                    }
-                });
+        listView.setOnMouseClicked((MouseEvent event) -> {
+            // Cập nhật trạng thái chọn cho trường tương ứng
+            if (event.getClickCount() == 1) {
+                if (x == 0) {
+                    userView.setSelecting(false);
+                } else if (x == 1) {
+                    userView.setSelecting1(false);
+                } else if (x == 2) {
+                    userView.setSelecting2(false);
+                }
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    textField.setText(selectedItem);
+                    Platform.runLater(() -> {
+                        textField.requestFocus();
+                        textField.positionCaret(textField.getText().length());
+
+                        // Delay ẩn suggestions :D
+                        PauseTransition pause = new PauseTransition(Duration.millis(100));
+                        pause.setOnFinished(e -> hideSuggestions(listView));
+                        pause.play();
+                    });
+                }
             }
         });
 
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                hideSuggestions(listView);
-            } else {
-                scheduleSearch(textField, listView);
-            }
-        });
     }
 
     /**
