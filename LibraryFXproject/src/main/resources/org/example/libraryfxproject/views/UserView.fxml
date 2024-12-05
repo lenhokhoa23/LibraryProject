@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -9,6 +10,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?> -->
+
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
@@ -125,8 +127,8 @@
                                        <children>
                                           <ListView fx:id="suggestions" layoutX="7.0" layoutY="46.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="106.0" prefWidth="885.0" />
                                               <TextField fx:id="searchField" layoutX="7.0" layoutY="6.0" prefHeight="40.0" prefWidth="885.0" promptText="Search books, authors, genres..." />
-                                           <Button fx:id="searchBookButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="77.0" text="Search" />
-                                           <TableView fx:id="activityDueTable" layoutX="963.0" layoutY="-27.0" maxHeight="147.0" maxWidth="550.0" minHeight="100.0" minWidth="442.0" prefHeight="147.0" prefWidth="496.0" visible="false">
+                                           <Button fx:id="searchBookButton" layoutX="892.0" layoutY="6.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="58.0" text="Search" />
+                                           <TableView fx:id="activityDueTable" layoutX="979.0" layoutY="-27.0" maxHeight="147.0" maxWidth="550.0" minHeight="100.0" minWidth="442.0" prefHeight="147.0" prefWidth="480.0" visible="false">
                                              <columns>
                                                 <TableColumn fx:id="timeDueColumn" text="Thời gian" />
                                                 <TableColumn fx:id="userIdDueColumn" text="Mã người dùng" />
