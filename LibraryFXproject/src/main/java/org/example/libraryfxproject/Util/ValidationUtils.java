@@ -10,8 +10,7 @@ public class ValidationUtils {
     private static final String TITLE_PATTERN = "^[\\p{L}\\p{M}\\W0-9]+$";
     private static final String SUBJECT_PATTERN = "^[A-Za-z\\W ]+$";
     private static final String CATEGORY_PATTERN = "^[A-Za-z\\W ]+$";
-    private static final String URL_PATTERN = "^(http:\\/\\/|https:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[^\\s]*)?$";
-    private static final String AUTHOR_PATTERN = "^[\\p{L}\\p{M}\\W. ]+$";
+    private static final String URL_PATTERN = "^(https?|ftp):\\/\\/(?:www\\.)?([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(\\/[^\\s]*)?$";    private static final String AUTHOR_PATTERN = "^[\\p{L}\\p{M}\\W. ]+$";
     private static final String USERNAME_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*_\\S]{8,20}$";
     private static final String PHONE_PATTERN = "^0\\d{9,}$";
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@gmail\\.com$";

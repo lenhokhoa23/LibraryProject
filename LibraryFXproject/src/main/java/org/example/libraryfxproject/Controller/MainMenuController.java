@@ -88,7 +88,6 @@ public class MainMenuController extends BaseController {
         // Đặt giá trị cho librarian
         mainMenuView.setLibrarian(loginService.findLibrarianByUsername(mainMenuView.getUsername()));
 
-
         // sự kiện search chính ở main view
         mainMenuView.getSearchBookButton().setOnAction(e -> {
             performSearch(mainMenuView.getSearchField().getText());
@@ -162,6 +161,7 @@ public class MainMenuController extends BaseController {
         // Sự kiện refresh
         mainMenuView.getRefreshStudentButton().setOnAction(event -> {
             mainMenuView.getStudentSearch().setText("");
+            UpdateService.getInstance().updateUserDAO();
             loadTableData();
             initializePagination();
         });
@@ -404,6 +404,7 @@ public class MainMenuController extends BaseController {
     public void loadTableData() {
         bookList = FXCollections.observableArrayList(bookService.getBookDAO().getDataMap().values());
         updateBookTableView(bookList);
+        UpdateService.getInstance().updateUserDAO();
         studentList = FXCollections.observableArrayList(userService.getUserDAO().getDataMap().values());
         updateUserTableView(studentList);
     }
@@ -437,7 +438,6 @@ public class MainMenuController extends BaseController {
         VBox.setVgrow(mainMenuView.getStudentPagination(), Priority.ALWAYS);
 
         mainMenuView.getStudentPagination().setMaxHeight(Double.MAX_VALUE);
-        mainMenuView.getSuggestions().setOnMousePressed(event -> mainMenuView.setSelecting(true));
 
     }
 
@@ -729,6 +729,7 @@ public class MainMenuController extends BaseController {
     private void updateTable(int pageIndex) {
         int start = pageIndex * ROWS_PER_PAGE;
         int end = Math.min(start + ROWS_PER_PAGE, studentList.size());
+
         mainMenuView.getStudentTableView().setItems(FXCollections.observableArrayList(studentList.subList(start, end)));
     }
 
@@ -935,6 +936,7 @@ public class MainMenuController extends BaseController {
                         if (selectedUser != null) {
                             userService.deleteUser(selectedUser.getUsername());
                             mainMenuView.getStudentTableView().getItems().remove(selectedUser);
+                            UpdateService.getInstance().updateUserDAO();
                         }
                     }
                 });
