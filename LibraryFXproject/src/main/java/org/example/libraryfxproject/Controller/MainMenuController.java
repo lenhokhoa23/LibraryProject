@@ -369,9 +369,12 @@ public class MainMenuController extends BaseController {
     public void registerForModifyBook(Stage stage) {
         mainMenuView.getAttributeBookComboBox().getItems().addAll("no", "title", "author" , "pubdate",
                 "releaseDate", "ISBN", "price", "subject", "category", "URL", "bookType", "quantity");
+        hideSuggestions(mainMenuView.getSuggestions3());
+        handleUsingTextField(mainMenuView.getIsbnField(), mainMenuView.getSuggestions3(), 3);
         mainMenuView.getUpdateButton().setOnAction(event -> {
             try {
-                String ISBN = mainMenuView.getIsbnField().getText();
+                String title = mainMenuView.getIsbnField().getText();
+                String ISBN = bookService.fetchISBNByTitle(title);
                 String attribute = mainMenuView.getAttributeBookComboBox().getValue();
                 String newValue = mainMenuView.getNewValueField().getText();
                 if (ISBN.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
@@ -548,6 +551,10 @@ public class MainMenuController extends BaseController {
         }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+            return;
+        }
+        if (!bookService.hasEnoughQuantity(isbn)) {
+            showErrorMessage("Sách này hiện không còn trong kho, bạn vui lòng chờ dịp khác nhé!");
             return;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
