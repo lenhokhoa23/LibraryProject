@@ -69,4 +69,13 @@ public class CartService {
         return cartDAO.hasBookInCart(isbn, cartId); // Kiểm tra trong CartDAO
     }
 
+    /**
+     * Trả về mã người dùng khi nhận vào username.
+     * @param username username của người dùng
+     * @return mã người dùng
+     */
+    public int getCartIDByUsername(String username) {
+        return userDAO.fetchCartIdByUsername(username);
+    }
+
 }

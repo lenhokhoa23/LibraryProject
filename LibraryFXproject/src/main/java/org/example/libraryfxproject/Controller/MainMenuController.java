@@ -341,14 +341,17 @@ public class MainMenuController extends BaseController {
         // Xử lý sự kiện nút "Update"
         mainMenuView.getUpdateButton1().setOnAction(event -> {
             try {
-                String Student_ID = mainMenuView.getStudentIdField1().getText();
+                String username = mainMenuView.getStudentIdField1().getText();
+                int Student_ID = cartService.getCartIDByUsername(username);
                 String attribute = mainMenuView.getAttributeStudentComboBox().getValue();
                 String newValue = mainMenuView.getNewValueField1().getText();
-                if (Student_ID.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
-                    showErrorMessage("Vui lòng nhập đầy đủ thông tin");
+                if (username.isEmpty() || attribute.isEmpty() || newValue.isEmpty()) {
+                    showErrorMessage("Vui lòng nhập đầy đủ thông tin!");
+                } else if (!userService.hasIDInUser(Student_ID)) {
+                    showErrorMessage("Không tìm thấy người dùng!");
                 } else {
-                    userService.modifyStudent(Student_ID, attribute, newValue);
-                    showSuccessMessage("Student updated successfully!");
+                    userService.modifyStudent(String.valueOf(Student_ID), attribute, newValue);
+                    showSuccessMessage("Cập nhật thông tin thành công!");
                     stage.close();
                 }
             } catch (Exception e) {
