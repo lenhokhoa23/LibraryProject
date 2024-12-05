@@ -42,7 +42,7 @@ public class LoginController extends BaseController {
                 showErrorMessage("Please fill all blank fields!");
             } else if (loginService.authenticate(username, password) > -1) {
                 showSuccessMessage("Successfully login!");
-                // Mở màn hình phù hợp dựa trên vai trò của người dùng
+                // Mở view khác nhau dựa trên vai trò
                 if (loginService.authenticate(username, password) == 0) {
                     openLibrarianView((Stage) ((Node) event.getSource()).getScene().getWindow(), username);
                 } else {
