@@ -128,6 +128,9 @@ public class MainMenuView {
     private ListView<String> suggestions2 = new ListView<>();
 
     @FXML
+    private ListView<String> suggestions3 = new ListView<>();
+
+    @FXML
     private MenuItem logoutItem;
 
     @FXML
@@ -1041,6 +1044,14 @@ public class MainMenuView {
 
     public void setSuggestions2(ListView<String> suggestions2) {
         this.suggestions2 = suggestions2;
+    }
+
+    public ListView<String> getSuggestions3() {
+        return suggestions3;
+    }
+
+    public void setSuggestions3(ListView<String> suggestions3) {
+        this.suggestions3 = suggestions3;
     }
 
     public boolean isSelecting2() {
