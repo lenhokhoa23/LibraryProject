@@ -308,6 +308,8 @@ public class UserMenuController extends BaseController {
             showErrorMessage("An error occurred while adding the cart: " + e.getMessage());
         }
         initializeDueTable();
+        UpdateService.getInstance().updateUserDAO();
+        // updateUserInfo(userView.getUser());
     }
 
     /**
@@ -337,6 +339,8 @@ public class UserMenuController extends BaseController {
             showErrorMessage("An error occurred while removing the cart: " + e.getMessage());
         }
         initializeDueTable();
+        UpdateService.getInstance().updateUserDAO();
+        // updateUserInfo(userView.getUser());
     }
 
     /**

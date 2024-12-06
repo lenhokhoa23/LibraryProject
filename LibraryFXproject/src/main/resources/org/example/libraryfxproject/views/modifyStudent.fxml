@@ -13,7 +13,7 @@
         <VBox layoutX="25.0" layoutY="83.0" prefHeight="127.0" prefWidth="330.0" spacing="15.0">
             <children>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <TextField fx:id="studentIdField1" prefHeight="26.0" prefWidth="330.0" promptText="Student_ID" />
+                    <TextField fx:id="studentIdField1" prefHeight="26.0" prefWidth="330.0" promptText="Username" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                <ComboBox fx:id="attributeStudentComboBox" prefHeight="26.0" prefWidth="330.0" promptText="Attribute" />

@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="280.0" prefWidth="275.0" spacing="20" styleClass="user-view" stylesheets="@studentDetailsStyle.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
+<VBox alignment="CENTER" prefHeight="280.0" prefWidth="275.0" spacing="20" styleClass="user-view" stylesheets="@../styles/studentDetailsStyle.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
     <!-- Avatar and Username Section -->
     <HBox alignment="CENTER" spacing="20">
         <!-- Avatar -->
         <ImageView fx:id="userAvatar" fitHeight="80" fitWidth="80" styleClass="user-avatar">
             <image>
-                <Image url="@images/student.png" />
+                <Image url="@../images/student.png" />
             </image>
         </ImageView>
 
