@@ -1,45 +1,41 @@
-# LibraryProject
-**Với sự đóng góp của các thành viên:**
-Lê Nho Khoa: Nhóm trưởng
-Nguyễn Anh Khang: Thành viên
-Khổng Quốc Anh: Thành viên
+# Library Management System
 
-![image](https://github.com/user-attachments/assets/5d881e41-8d90-4339-9643-524eeff011aa)
+Một hệ thống quản lý thư viện với các chức năng cơ bản như mượn, trả sách, quản lý người dùng, tìm kiếm sách, và nhiều tính năng hữu ích khác.
 
-> Đây là sơ đồ thiết kế của nhóm chúng em:
-https://drive.google.com/drive/u/2/home
+## **Các thành viên tham gia**
+- **Lê Nho Khoa** - Nhóm trưởng
+- **Nguyễn Anh Khang** - Thành viên
+- **Khổng Quốc Anh** - Thành viên
 
-Công việc từng thành viên:
-+ Khang:
-- Hiển thị thông tin tổng quan, biểu đồ
-- Hiển thị bảng hoạt động gần đây, lịch sử hoạt động (kèm filter)
-- Dịch vụ mượn, trả sách ở UserView, MainMenuView
-- Chỉnh sửa sách, người dùng
-- Giá sách cá nhân
-- Notification cá nhân
-- Thiết kế giao diện đăng ký
-- Kiểm tra điều kiện khi mượn, trả sách
+## **Mục tiêu dự án**
+Dự án này nhằm tạo ra một hệ thống quản lý thư viện giúp người dùng dễ dàng mượn và trả sách, quản lý thông tin người dùng và sách, hỗ trợ tìm kiếm và các chức năng tiện ích khác.
 
-+ Quốc Anh:
-- Hiển thị danh sách sách ở UserView, MainMenuView
-- Thêm, xóa sách
-- Xóa người dùng
-- Filter sách
-- Hồ sơ người dùng
-- JUnit Test
-- Exception
-- Kiểm tra điều kiện khi mượn, trả sách
+## **Các tính năng chính**
+- **Hiển thị thông tin tổng quan:** Biểu đồ thống kê, lịch sử hoạt động, danh sách sách và người dùng.
+- **Quản lý sách:** Thêm, sửa, xóa sách, tìm kiếm sách theo tiêu chí.
+- **Quản lý người dùng:** Thêm, tìm kiếm người dùng, xóa người dùng, xuất danh sách người dùng.
+- **Mượn và trả sách:** Kiểm tra điều kiện mượn sách, xử lý các giao dịch mượn/trả.
+- **Thông báo cá nhân:** Cảnh báo các vấn đề liên quan đến mượn/trả sách.
+- **Cộng đồng sách:** Tính năng trao đổi, thảo luận sách giữa các thành viên.
+- **Tích hợp Google Books API:** Tìm kiếm và lấy thông tin sách từ Google Books.
 
-+ Khoa:
-- Hiển thị danh sách người dùng
-- Thêm, tìm kiếm người dùng
-- Xuất danh sách người dùng
-- Tìm kiếm sách
-- Cộng đồng sách
-- Thiết kế giao diện UserView, MainMenuView
-- Thiết kế Design Pattern
-- Tích hợp GoogleBookAPI, QRCode, comment sách
+## **Yêu cầu hệ thống**
+- Java 8+ 
+- Maven  để quản lý các phụ thuộc
 
-+ Chung:
-- Thiết kế giao diện đăng nhập
-- Package DAO
+## **Cài đặt và chạy dự án**
+### **1. Cài đặt phần mềm**
+- Cài đặt [JDK 8+](https://adoptopenjdk.net/) (Java Development Kit).
+- Cài đặt [Maven](https://maven.apache.org/)
+- Cài đặt IDE hỗ trợ Java [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+### **2. Cài đặt dự án**
+Clone repository về máy tính của bạn:
+git clone https://github.com/lenhokhoa23/LibraryProject.git
+
+| **Công việc**                              | **Lê Nho Khoa**                | **Nguyễn Anh Khang**            | **Khổng Quốc Anh**             | **Chung**                      |
+|--------------------------------------------|--------------------------------|---------------------------------|--------------------------------|--------------------------------|
+| **Thiết kế giao diện**                     | - Giao diện UserView           |                                 |                                | - Đăng nhập                   |
+| **Hiển thị thông tin**                     |                                | - Biểu đồ, thống kê             |                                |                                |
+| **Quản lý hoạt động**                      |                                | - Lịch sử hoạt động             |                                |                                |
+| **Mượn, trả sách**                         |                                | - Dịch vụ mượn/trả sách         | - Kiểm tra điều kiện mượn/trả |                                |
+| **Quản lý sách**                           |                                |                                
