@@ -34,12 +34,13 @@ git clone https://github.com/lenhokhoa23/LibraryProject.git
 ### **3. Phân chia công việc**
 | **Tên**                 | **Lê Nho Khoa**                     | **Nguyễn Anh Khang**             | **Khổng Quốc Anh**             | **Chung**                      |
 |-------------------------|-------------------------------------|----------------------------------|--------------------------------|--------------------------------|
-| **Công việc**           | - Thiết kế giao diện UserView       | - Hiển thị thông tin tổng quan   | - Hiển thị danh sách sách      | - Thiết kế giao diện đăng nhập |
+| **Công việc**           | - Thiết kế giao diện UserView       | - Hiển thị thông tin tổng quan, biểu đồ   | - Hiển thị danh sách sách      | - Thiết kế giao diện đăng nhập 
 |                         | - Biểu đồ, thống kê                 | - Hiển thị bảng hoạt động gần đây| - Thêm, xóa sách               | - Viết README chuyên nghiệp   |
-|                         | - Lịch sử hoạt động                 | - Dịch vụ mượn/trả sách           | - Xóa người dùng               |                                |
-|                         | - Dịch vụ mượn/trả sách             | - Kiểm tra điều kiện mượn/trả sách| - Filter sách                  |                                |
-|                         | - Tìm kiếm sách                     |                                 | - Hồ sơ người dùng             |                                |
-|                         | - Hiển thị danh sách người dùng     |                                 | - JUnit Test                   |                                |
-|                         | - Cộng đồng sách                    |                                 | - Exception Handling           |                                |
-|                         | - Tích hợp GoogleBooks API, QRCode  |                                 | - Kiểm tra điều kiện mượn/trả  |                                |
-|                         | - Thiết kế Design Pattern           |                                 |                                |                                |
+|                         | - Lịch sử hoạt động                 | - Dịch vụ mượn/trả sách           | - Xóa người dùng               |                              |
+|                         | - Dịch vụ mượn/trả sách             | - Kiểm tra điều kiện mượn/trả sách| - Filter sách                  |                              |
+|                         | - Tìm kiếm sách                     | - Chỉnh sửa sách, người dùng      | - Hồ sơ người dùng             |                               |
+|                         | - Hiển thị danh sách người dùng     | - Notification cá nhân           | - JUnit Test                   |                                |
+|                         | - Cộng đồng sách                    | - Thiết kế giao diện đăng ký     | - Exception Handling           |                                |
+|                         | - Tích hợp GoogleBooks API, QRCode
+|                         | , bình luận                         | - Kiểm tra điều kiện mượn/trả  |                                |
+|                         | - Thiết kế Design Pattern           |                                  |                                |                                |
