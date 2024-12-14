@@ -31,11 +31,15 @@ Dự án này nhằm tạo ra một hệ thống quản lý thư viện giúp ng
 ### **2. Cài đặt dự án**
 Clone repository về máy tính của bạn:
 git clone https://github.com/lenhokhoa23/LibraryProject.git
-
-| **Công việc**                              | **Lê Nho Khoa**                | **Nguyễn Anh Khang**            | **Khổng Quốc Anh**             | **Chung**                      |
-|--------------------------------------------|--------------------------------|---------------------------------|--------------------------------|--------------------------------|
-| **Thiết kế giao diện**                     | - Giao diện UserView           |                                 |                                | - Đăng nhập                   |
-| **Hiển thị thông tin**                     |                                | - Biểu đồ, thống kê             |                                |                                |
-| **Quản lý hoạt động**                      |                                | - Lịch sử hoạt động             |                                |                                |
-| **Mượn, trả sách**                         |                                | - Dịch vụ mượn/trả sách         | - Kiểm tra điều kiện mượn/trả |                                |
-| **Quản lý sách**                           |                                |                                
+### **3. Phân chia công việc**
+| **Tên**                 | **Lê Nho Khoa**                     | **Nguyễn Anh Khang**             | **Khổng Quốc Anh**             | **Chung**                      |
+|-------------------------|-------------------------------------|----------------------------------|--------------------------------|--------------------------------|
+| **Công việc**           | - Thiết kế giao diện UserView       | - Hiển thị thông tin tổng quan   | - Hiển thị danh sách sách      | - Thiết kế giao diện đăng nhập |
+|                         | - Biểu đồ, thống kê                 | - Hiển thị bảng hoạt động gần đây| - Thêm, xóa sách               | - Viết README chuyên nghiệp   |
+|                         | - Lịch sử hoạt động                 | - Dịch vụ mượn/trả sách           | - Xóa người dùng               |                                |
+|                         | - Dịch vụ mượn/trả sách             | - Kiểm tra điều kiện mượn/trả sách| - Filter sách                  |                                |
+|                         | - Tìm kiếm sách                     |                                 | - Hồ sơ người dùng             |                                |
+|                         | - Hiển thị danh sách người dùng     |                                 | - JUnit Test                   |                                |
+|                         | - Cộng đồng sách                    |                                 | - Exception Handling           |                                |
+|                         | - Tích hợp GoogleBooks API, QRCode  |                                 | - Kiểm tra điều kiện mượn/trả  |                                |
+|                         | - Thiết kế Design Pattern           |                                 |                                |                                |
