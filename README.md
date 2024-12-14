@@ -1,6 +1,16 @@
 # Library Management System
+Bài tập lớn thiết kế app quản lý thư viện. 
+Môn học OOP - INT2204 18, Nhóm 13
 
-Một hệ thống quản lý thư viện với các chức năng cơ bản như mượn, trả sách, quản lý người dùng, tìm kiếm sách, và nhiều tính năng hữu ích khác.
+## **Mục lục**
+1. [Các thành viên tham gia](#các-thành-viên-tham-gia)
+2. [Mục tiêu dự án](#mục-tiêu-dự-án)
+3. [Các tính năng chính](#các-tính-năng-chính)
+4. [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
+5. [Cài đặt và chạy dự án](#cài-đặt-và-chạy-dự-án)
+   - [1. Cài đặt phần mềm](#1-cài-đặt-phần-mềm)
+   - [2. Cài đặt dự án](#2-cài-đặt-dự-án)
+6. [Phân chia công việc](#phân-chia-công-việc)
 
 ## **Các thành viên tham gia**
 - **Lê Nho Khoa** - Nhóm trưởng
@@ -32,15 +42,12 @@ Dự án này nhằm tạo ra một hệ thống quản lý thư viện giúp ng
 Clone repository về máy tính của bạn:
 git clone https://github.com/lenhokhoa23/LibraryProject.git
 ### **3. Phân chia công việc**
-| **Tên**                 | **Lê Nho Khoa**                     | **Nguyễn Anh Khang**             | **Khổng Quốc Anh**             | **Chung**                      |
-|-------------------------|-------------------------------------|----------------------------------|--------------------------------|--------------------------------|
-| **Công việc**           | - Thiết kế giao diện UserView       | - Hiển thị thông tin tổng quan, biểu đồ   | - Hiển thị danh sách sách      | - Thiết kế giao diện đăng nhập 
-|                         | - Biểu đồ, thống kê                 | - Hiển thị bảng hoạt động gần đây| - Thêm, xóa sách               | - Viết README chuyên nghiệp   |
-|                         | - Lịch sử hoạt động                 | - Dịch vụ mượn/trả sách           | - Xóa người dùng               |                              |
-|                         | - Dịch vụ mượn/trả sách             | - Kiểm tra điều kiện mượn/trả sách| - Filter sách                  |                              |
-|                         | - Tìm kiếm sách                     | - Chỉnh sửa sách, người dùng      | - Hồ sơ người dùng             |                               |
-|                         | - Hiển thị danh sách người dùng     | - Notification cá nhân           | - JUnit Test                   |                                |
-|                         | - Cộng đồng sách                    | - Thiết kế giao diện đăng ký     | - Exception Handling           |                                |
-|                         | - Tích hợp GoogleBooks API, QRCode
-|                         | , bình luận                         | - Kiểm tra điều kiện mượn/trả  |                                |
-|                         | - Thiết kế Design Pattern           |                                  |                                |                                |
+
+|                         | **Công việc**                                                                                                                   |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| **Lê Nho Khoa**         | - Thiết kế giao diện UserView<br>- Biểu đồ, thống kê<br>- Lịch sử hoạt động<br>- Dịch vụ mượn/trả sách<br>- Hiển thị danh sách người dùng<br>- Thêm, tìm kiếm người dùng<br>- Xuất danh sách người dùng<br>- Tìm kiếm sách<br>- Cộng đồng sách<br>- Thiết kế giao diện UserView, MainMenuView<br>- Thiết kế Design Pattern<br>- Tích hợp GoogleBookAPI, QRCode, comment sách |
+| **Nguyễn Anh Khang**    | - Hiển thị thông tin tổng quan, biểu đồ<br>- Hiển thị bảng hoạt động gần đây, lịch sử hoạt động (kèm filter)<br>- Dịch vụ mượn, trả sách ở UserView, MainMenuView<br>- Chỉnh sửa sách, người dùng<br>- Giá sách cá nhân<br>- Notification cá nhân<br>- Thiết kế giao diện đăng ký<br>- Kiểm tra điều kiện khi mượn, trả sách |
+| **Khổng Quốc Anh**      | - Hiển thị danh sách sách ở UserView, MainMenuView<br>- Thêm, xóa sách<br>- Xóa người dùng<br>- Filter sách<br>- Hồ sơ người dùng<br>- JUnit Test<br>- Exception<br>- Kiểm tra điều kiện khi mượn, trả sách |
+| **Chung**               | - Thiết kế giao diện đăng nhập<br>- Package DAO<br>- Viết README chuyên nghiệp |
+
+
