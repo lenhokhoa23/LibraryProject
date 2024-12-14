@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -692,7 +690,7 @@ public class UserView {
      * @throws RuntimeException nếu có lỗi khi tải tệp FXML.
      */
     public void initializeStudentDetailsView(UserMenuController userMenuController) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/StudentProfileDetails.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/libraryfxproject/views/StudentProfileDetails.fxml"));
         loader.setController(this);
         try {
             Parent studentDetails = loader.load();

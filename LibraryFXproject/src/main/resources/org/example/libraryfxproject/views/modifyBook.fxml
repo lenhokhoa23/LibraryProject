@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="327.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="287.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <VBox layoutX="22.0" layoutY="137.0" prefHeight="103.0" prefWidth="335.0" spacing="15.0">
+        <VBox layoutX="22.0" layoutY="116.0" prefHeight="103.0" prefWidth="335.0" spacing="15.0">
             <children>
                 <HBox alignment="CENTER_LEFT" spacing="10.0" />
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -22,10 +22,10 @@
                 </HBox>
             </children>
         </VBox>
-        <Button fx:id="updateButton" layoutX="108.0" layoutY="268.0" text="Update" />
-        <Button fx:id="backButton" layoutX="216.0" layoutY="268.0" text="Back" />
-           <TextField fx:id="isbnField" layoutX="24.0" layoutY="94.0" prefHeight="26.0" prefWidth="330.0" promptText="Title" />
-      <ListView fx:id="suggestions3" layoutX="24.0" layoutY="121.0" prefHeight="83.0" prefWidth="330.0" />
-      <Label layoutX="150.0" layoutY="28.0" text="MODIFY BOOK" />
+        <Button fx:id="updateButton" layoutX="107.0" layoutY="229.0" text="Update" />
+        <Button fx:id="backButton" layoutX="216.0" layoutY="229.0" text="Back" />
+           <TextField fx:id="isbnField" layoutX="22.0" layoutY="89.0" prefHeight="26.4" prefWidth="330.4" promptText="Title" />
+      <ListView fx:id="suggestions3" layoutX="22.0" layoutY="115.0" prefHeight="83.0" prefWidth="330.0" />
+      <Label layoutX="150.0" layoutY="38.0" text="MODIFY BOOK" />
     </children>
 </AnchorPane>

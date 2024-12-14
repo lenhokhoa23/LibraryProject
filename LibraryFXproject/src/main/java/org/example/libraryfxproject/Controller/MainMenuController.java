@@ -269,7 +269,7 @@ public class MainMenuController extends BaseController {
                         textField.positionCaret(textField.getText().length());
 
                         // Delay ẩn suggestions :D
-                        PauseTransition pause = new PauseTransition(Duration.millis(100));
+                        PauseTransition pause = new PauseTransition(Duration.millis(200));
                         pause.setOnFinished(e -> hideSuggestions(listView));
                         pause.play();
                     });
@@ -554,6 +554,10 @@ public class MainMenuController extends BaseController {
         }
         if (!bookService.hasBookWithISBN(isbn)) {
             showErrorMessage("Không tìm thấy sách bạn muốn mượn!\nVui lòng thử lại");
+            return;
+        }
+        if (LocalDate.now().isAfter(dueDate) || LocalDate.now().isEqual(dueDate)) {
+            showErrorMessage("Ngày được chọn không hợp lệ!\nVui lòng thử lại");
             return;
         }
         if (!bookService.hasEnoughQuantity(isbn)) {

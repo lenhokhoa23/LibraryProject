@@ -24,10 +24,11 @@ public class UpdateService {
     private BookDAO bookDAO;
     private CartDAO cartDAO;
     private UserDAO userDAO;
-    private AccountDAO accountDAO = AccountDAO.getInstance();
+    private AccountDAO accountDAO;
     private static UpdateService updateService;
 
     private UpdateService() {
+        accountDAO = AccountDAO.getInstance();
         bookDAO = BookDAO.getInstance();
         cartDAO = CartDAO.getInstance();
         userDAO = UserDAO.getInstance();
