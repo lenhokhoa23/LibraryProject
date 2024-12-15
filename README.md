@@ -59,8 +59,8 @@ Clone repository về máy: git clone https://github.com/lenhokhoa23/LibraryProj
 
 |                         | **Công việc**                                                                                                                   |
 |-------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| **Lê Nho Khoa**         | - Thiết kế giao diện UserView<br>- Biểu đồ, thống kê<br>- Lịch sử hoạt động<br>- Dịch vụ mượn/trả sách<br>- Hiển thị danh sách người dùng<br>- Thêm, tìm kiếm người dùng<br>- Xuất danh sách người dùng<br>- Tìm kiếm sách<br>- Cộng đồng sách<br>- Thiết kế giao diện UserView, MainMenuView<br>- Thiết kế Design Pattern<br>- Tích hợp GoogleBookAPI, QRCode, comment sách |
-| **Nguyễn Anh Khang**    | - Hiển thị thông tin tổng quan, biểu đồ<br>- Hiển thị bảng hoạt động gần đây, lịch sử hoạt động (kèm filter)<br>- Dịch vụ mượn, trả sách ở UserView, MainMenuView<br>- Chỉnh sửa sách, người dùng<br>- Giá sách cá nhân<br>- Notification cá nhân<br>- Thiết kế giao diện đăng ký<br>- Kiểm tra điều kiện khi mượn, trả sách |
+| **Lê Nho Khoa**         | - Hiển thị danh sách người dùng<br>- Thêm, tìm kiếm người dùng<br>- Xuất danh sách người dùng<br>- Tìm kiếm sách<br>- Cộng đồng sách<br>- Thiết kế giao diện UserView, MainMenuView<br>- Thiết kế Design Pattern<br>- Tích hợp GoogleBookAPI, QRCode, comment sách |
+| **Nguyễn Anh Khang**    | - Hiển thị thông tin tổng quan, biểu đồ<br>- Hiển thị bảng hoạt động gần đây, lịch sử hoạt động <br>- Dịch vụ mượn, trả sách ở UserView, MainMenuView<br>- Chỉnh sửa sách, người dùng<br>- Giá sách cá nhân<br>- Notification cá nhân<br>- Thiết kế giao diện đăng ký<br>- Kiểm tra điều kiện khi mượn, trả sách |
 | **Khổng Quốc Anh**      | - Hiển thị danh sách sách ở UserView, MainMenuView<br>- Thêm, xóa sách<br>- Xóa người dùng<br>- Filter sách<br>- Hồ sơ người dùng<br>- JUnit Test<br>- Exception<br>- Kiểm tra điều kiện khi mượn, trả sách |
 | **Chung**               | - Thiết kế giao diện đăng nhập<br>- Package DAO<br> |
 
