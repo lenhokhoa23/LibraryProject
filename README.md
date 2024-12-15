@@ -6,7 +6,7 @@ Môn học OOP - INT2204 18, Nhóm 13
 - **EER Diagram:** 
 ![image](https://github.com/user-attachments/assets/5d881e41-8d90-4339-9643-524eeff011aa)
 
-> **Sơ đồ thiết kế:** [Link Google Drive](https://drive.google.com/drive/u/2/home)
+> **Sơ đồ thiết kế:** [Link Google Drive](https://drive.google.com/file/d/1rGBA92pjuLWtgmDpb62q98R7Uro14WyK/view?usp=sharing)
 
 ---
 
